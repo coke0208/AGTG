@@ -7,4 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".IntroActivity">
 
+    <ImageView
+        android:id="@+id/introlmage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="56dp"
+        tools:layout_editor_absoluteY="80dp"
+        tools:srcCompat="@drawable/intro" />
 </androidx.constraintlayout.widget.ConstraintLayout>
