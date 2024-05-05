@@ -9,7 +9,7 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="user"
+        android:text="냉동고"
         android:gravity="center"
         android:textSize="70dp"
         app:layout_constraintBottom_toBottomOf="parent"
