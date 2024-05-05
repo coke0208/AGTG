@@ -18,14 +18,15 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:layout_weight="0"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                android:text="BK" />
+                android:src="@drawable/ic_action_arrow_back"/>
 
             <TextView
                 android:id="@+id/textView7"
@@ -33,6 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textColor="#FFFFFF"
+                android:layout_gravity="center"
                 android:textSize="25dp"
                 android:text="회원가입" />
         </LinearLayout>

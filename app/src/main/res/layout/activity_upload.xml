@@ -22,14 +22,15 @@
             android:background="#FFBE98"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/back"
-                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
+                android:layout_weight="0"
                 android:background="#FFBE98"
-                android:text="bk"
-                android:textColor="#FFFFFF" />
+                android:src="@drawable/ic_action_arrow_back"/>
 
             <TextView
                 android:id="@+id/textView2"

@@ -19,15 +19,15 @@
             android:orientation="horizontal"
             android:background="#FFBE98">
 
-            <Button
-                android:id="@+id/button2"
+            <ImageButton
+                android:id="@+id/back"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:layout_weight="0"
-                android:text="BK"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:src="@drawable/ic_action_arrow_back"/>
 
             <TextView
                 android:id="@+id/textView6"
@@ -40,28 +40,29 @@
                 android:background="#FFBE98"
                 android:textColor="#FFFFFF"/>
 
-            <Button
-                android:id="@+id/button6"
+            <ImageButton
+                android:id="@+id/search"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:layout_weight="0"
-                android:text="SR"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"/>
+                android:src="@drawable/ic_action_search"/>
 
         </LinearLayout>
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/add"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="60dp"
-        android:background="#FFBE98"
-        android:text="Button"
-        android:textColor="#FFFFFF"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/circle"
+        android:src="@drawable/ic_action_filter_center_focus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

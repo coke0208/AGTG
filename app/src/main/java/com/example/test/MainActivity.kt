@@ -2,6 +2,7 @@ package com.example.test
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.test.databinding.ActivityMainBinding
@@ -28,7 +29,7 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         val viewPager = binding.swipe
         val tabLayout = binding.tapview
-        val tabtitle = arrayOf("냉장고","냉동고","실온")
+        val tabtitle = arrayOf("냉장고", "냉동고", "실온")
 
         val fragmentList = ArrayList<Fragment>()
         fragmentList.add(ColdActivity())
@@ -41,6 +42,21 @@ class MainActivity : AppCompatActivity() {
             tab.text = tabtitle[position]
         }.attach()
     }
+
+
+    private fun initSearchView() {
+        // init SearchView
+        binding.search.isSubmitButtonEnabled = true
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // @TODO
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                // @TODO
+                return true
+            }
+        })
+    }
 }
-
-

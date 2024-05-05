@@ -20,14 +20,16 @@
             android:background="#FFBE98"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/group"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="gr" />
+                android:src="@drawable/ic_action_group"
+                />
 
             <TextView
                 android:id="@+id/textView2"
@@ -35,27 +37,29 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:textColor="#FFFFFF"
                 android:text="석빙고"
+                android:textColor="#FFFFFF"
                 android:textSize="25dp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/upload"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="up" />
+                android:src="@drawable/ic_action_file_upload"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/mypage"
+                style="?android:attr/borderlessButtonStyle"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="my" />
+                android:src="@drawable/ic_action_person"/>
         </LinearLayout>
 
         <LinearLayout
@@ -65,37 +69,29 @@
             android:layout_weight="1"
             android:orientation="horizontal">
 
-            <Button
+            <SearchView
                 android:id="@+id/search"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="search" />
-
-            <EditText
-                android:id="@+id/editTextText"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_gravity="center"
-                android:ems="10"
+                android:searchIcon="@drawable/ic_action_search"
+                android:focusable="true"
+                android:iconifiedByDefault="false"
                 android:inputType="text"
-                android:textSize="25dp"
-                android:hint="search"
-                android:background="#FFFFFF" />
+                android:queryHint="Search"
+                android:queryBackground="@drawable/search"/>
 
-            <Button
+            <ImageButton
                 android:id="@+id/filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:padding="10dp"
+                android:scaleType="fitXY"
+                android:layout_weight="0"
                 android:background="#FFBE98"
-                android:textColor="#FFFFFF"
-                style="?android:attr/borderlessButtonStyle"
-                android:text="filter" />
+                android:src="@drawable/ic_action_filter_list"
+                style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -146,15 +142,16 @@
             app:layout_constraintVertical_bias="0.0" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/add"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_marginEnd="60dp"
         android:layout_marginBottom="60dp"
-        android:background="#FFBE98"
-        android:text="Button"
-        android:textColor="#FFFFFF"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/circle"
+        android:src="@drawable/ic_action_filter_center_focus"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
