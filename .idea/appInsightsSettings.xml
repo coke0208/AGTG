@@ -10,9 +10,9 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.test" />
-                  <option name="mobileSdkAppId" value="1:33575299184:android:15f9067cf51aad3b996cb5" />
-                  <option name="projectId" value="agtg-41162" />
-                  <option name="projectNumber" value="33575299184" />
+                  <option name="mobileSdkAppId" value="1:816991189703:android:b459688cbeb434f32d5ce2" />
+                  <option name="projectId" value="sukbinggotest" />
+                  <option name="projectNumber" value="816991189703" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

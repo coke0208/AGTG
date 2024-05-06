@@ -8,6 +8,12 @@ import androidx.fragment.app.Fragment
 import com.example.test.databinding.ActivityMainBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
+import android.graphics.BitmapFactory
+import android.view.View
+import android.widget.Toast
+import com.example.test.databinding.ActivityColdBinding
+import com.google.zxing.integration.android.IntentIntegrator
+
 class MainActivity : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,5 +64,33 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+    }
+
+    fun start(view: View){
+        IntentIntegrator(this).initiateScan()
+    }
+    fun startcustom(view: View){
+        val integrator=IntentIntegrator(this)
+        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
+        integrator.setPrompt("QR코드를 스캔해주세요")
+        integrator.setCameraId(0)
+        integrator.setBarcodeImageEnabled(true)
+        integrator.initiateScan()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        val result=IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result !=null){
+            if (result.contents!=null){
+                Toast.makeText(this, "scanned:${result.contents} format:${result.formatName}",Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this,"cancelled", Toast.LENGTH_LONG).show()
+            }
+            if (result.barcodeImagePath!=null){
+                val binding=ActivityColdBinding.inflate(layoutInflater)
+                val image= BitmapFactory.decodeFile(result.barcodeImagePath)
+                binding.image.setImageBitmap(image)
+            }
+        }
     }
 }

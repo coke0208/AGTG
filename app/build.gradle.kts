@@ -5,7 +5,6 @@ plugins {
 }
 
 android {
-
     namespace = "com.example.test"
     compileSdk = 34
 
@@ -54,6 +53,8 @@ android {
         implementation("androidx.multidex:multidex:2.0.1")
         implementation("com.google.firebase:firebase-analytics")
         implementation("com.google.gms:google-services:4.3.10")
+        implementation ("com.google.zxing:core:3.4.1")
+        implementation("com.journeyapps:zxing-android-embedded:4.2.0")
     }
 }
 
