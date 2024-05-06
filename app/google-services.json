@@ -1,26 +1,118 @@
 {
   "project_info": {
-    "project_number": "33575299184",
-    "project_id": "agtg-41162",
-    "storage_bucket": "agtg-41162.appspot.com"
+    "project_number": "816991189703",
+    "project_id": "sukbinggotest",
+    "storage_bucket": "sukbinggotest.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:33575299184:android:15f9067cf51aad3b996cb5",
+        "mobilesdk_app_id": "1:816991189703:android:03e5690f070675272d5ce2",
         "android_client_info": {
-          "package_name": "com.example.test"
+          "package_name": "com.example.logintest"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "816991189703-6d6v4k8apujpj84dskvkviuoscloc318.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.logintest",
+            "certificate_hash": "d4cd2293b2aa39c8180365ad5945daf17446d152"
+          }
+        },
+        {
+          "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
-          "current_key": "AIzaSyApj7SZ5NJNo44RrZFTR-ueqi1eTjQSHYM"
+          "current_key": "AIzaSyB7_VjyMqR3wDZgi6VTRiJeubCN5s2kIOI"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816991189703:android:b459688cbeb434f32d5ce2",
+        "android_client_info": {
+          "package_name": "com.example.test"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816991189703-gomfu4r74vu7h45pnipiv6gdtqdj5g31.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.test",
+            "certificate_hash": "a3560c7ca90ebcdfcea82d9fe6a9dc5ded2e97a4"
+          }
+        },
+        {
+          "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7_VjyMqR3wDZgi6VTRiJeubCN5s2kIOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:816991189703:android:c9f655ca80f603962d5ce2",
+        "android_client_info": {
+          "package_name": "sukbinggo.firebase"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "816991189703-2dpflpniq2fjau3ede7gbcs40lqglpov.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sukbinggo.firebase",
+            "certificate_hash": "d4cd2293b2aa39c8180365ad5945daf17446d152"
+          }
+        },
+        {
+          "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7_VjyMqR3wDZgi6VTRiJeubCN5s2kIOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "816991189703-itcr53fbe7bd0j5hg9par55d6tr6nfgn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -38,11 +38,22 @@ android {
     buildFeatures {
         viewBinding = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     viewBinding{
         enable = true
     }
     dependencies {
         implementation("androidx.viewpager2:viewpager2:1.0.0")
+
+        implementation("com.google.firebase:firebase-auth-ktx:22.3.1")
+        implementation("com.google.android.gms:play-services-auth:21.1.0")
+        implementation("com.google.firebase:firebase-bom:32.8.1")
+        implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
+        implementation("androidx.multidex:multidex:2.0.1")
+        implementation("com.google.firebase:firebase-analytics")
+        implementation("com.google.gms:google-services:4.3.10")
     }
 }
 
