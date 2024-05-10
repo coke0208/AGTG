@@ -41,11 +41,10 @@
             android:inputType="textPassword"
             android:hint="비밀번호"/>
 
-        <CheckBox
+        <RadioButton
             android:id="@+id/loginmemo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="0"
             android:text="로그인 기억" />
 
         <LinearLayout

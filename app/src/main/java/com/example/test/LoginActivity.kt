@@ -19,8 +19,8 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        var id: EditText = binding.email
-        var pw: EditText = binding.password
+        val id: EditText = binding.email
+        val pw: EditText = binding.password
         auth = Firebase.auth
 
         super.onCreate(savedInstanceState)
@@ -55,7 +55,10 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
+
+
     var pressedTime : Long=0
+    @Deprecated("Deprecated in Java")
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
         if (System.currentTimeMillis() - pressedTime <= 2000) {

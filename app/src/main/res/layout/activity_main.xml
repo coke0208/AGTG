@@ -27,6 +27,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:padding="10dp"
                 android:scaleType="fitXY"
+                android:background="#FFBE98"
                 android:src="@drawable/ic_action_group"
                 />
 
@@ -47,6 +48,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:padding="10dp"
                 android:scaleType="fitXY"
+                android:background="#FFBE98"
                 android:src="@drawable/ic_action_file_upload"/>
 
             <ImageButton
@@ -56,6 +58,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:padding="10dp"
                 android:scaleType="fitXY"
+                android:background="#FFBE98"
                 android:src="@drawable/ic_action_person"/>
         </LinearLayout>
 
@@ -86,6 +89,7 @@
                 android:padding="10dp"
                 android:scaleType="fitXY"
                 android:layout_weight="0"
+                android:background="#FFBE98"
                 android:src="@drawable/ic_action_filter_list"
                 style="?android:attr/borderlessButtonStyle"/>
         </LinearLayout>

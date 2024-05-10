@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.example.test.databinding.ActivityColdBinding
 import com.google.zxing.integration.android.IntentIntegrator
 
+
 class MainActivity : AppCompatActivity() {
     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -67,28 +68,6 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    fun start(view: View){
-        IntentIntegrator(this).initiateScan()
-    }
-    fun startcustom(view: View){
-        val integrator=IntentIntegrator(this)
-        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
-        integrator.setPrompt("QR코드를 스캔해주세요")
-        integrator.setCameraId(0)
-        integrator.setBarcodeImageEnabled(true)
-        integrator.initiateScan()
-    }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val result=IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result !=null){
-            if (result.contents!=null){
-                Toast.makeText(this, "scanned:${result.contents} format:${result.formatName}",Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this,"cancelled", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
     var pressedTime : Long=0
     @SuppressLint("MissingSuperCall")
     override fun onBackPressed() {
@@ -97,6 +76,23 @@ class MainActivity : AppCompatActivity() {
         } else {
             pressedTime = System.currentTimeMillis()
             Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun start(view: View) {
+        IntentIntegrator(this).initiateScan()
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        if (result != null && result.contents != null) {
+            // 스캔 결과를 ResultActivity로 전달
+            val intent = Intent(this, ResultActivity::class.java)
+            intent.putExtra("SCAN_RESULT", result.contents)
+            startActivity(intent)
         }
     }
 }
