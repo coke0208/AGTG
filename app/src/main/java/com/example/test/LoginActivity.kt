@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +22,6 @@ class LoginActivity : AppCompatActivity() {
         var id: EditText = binding.email
         var pw: EditText = binding.password
         auth = Firebase.auth
-
-
 
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -47,6 +46,7 @@ class LoginActivity : AppCompatActivity() {
 
                         val main = Intent(this, MainActivity::class.java)
                         startActivity(main)
+                        finish()
                     }
                     else {
                         Toast.makeText(this, "아이디와 비밀번호를 확인해주세요", Toast.LENGTH_SHORT).show()
@@ -54,6 +54,16 @@ class LoginActivity : AppCompatActivity() {
                 }
         }
 
+    }
+    var pressedTime : Long=0
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - pressedTime <= 2000) {
+            finish()
+        } else {
+            pressedTime = System.currentTimeMillis()
+            Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+        }
     }
 
 }

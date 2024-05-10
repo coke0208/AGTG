@@ -1,6 +1,5 @@
 package com.example.test
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityRegsiterBinding
@@ -32,8 +31,9 @@ class RegsiterActivity : AppCompatActivity() {
             init(email, pw)
         }
 
-        val back = Intent(this, LoginActivity::class.java)
-        binding.back.setOnClickListener { startActivity(back) }
+        binding.back.setOnClickListener {
+            finish()
+        }
     }
     private fun init(email: String, pw: String){
 

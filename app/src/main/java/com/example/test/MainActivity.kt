@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.widget.SearchView
@@ -86,11 +87,16 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this,"cancelled", Toast.LENGTH_LONG).show()
             }
-            if (result.barcodeImagePath!=null){
-                val binding=ActivityColdBinding.inflate(layoutInflater)
-                val image= BitmapFactory.decodeFile(result.barcodeImagePath)
-                binding.image.setImageBitmap(image)
-            }
+        }
+    }
+    var pressedTime : Long=0
+    @SuppressLint("MissingSuperCall")
+    override fun onBackPressed() {
+        if (System.currentTimeMillis() - pressedTime <= 2000) {
+            finish()
+        } else {
+            pressedTime = System.currentTimeMillis()
+            Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         }
     }
 }

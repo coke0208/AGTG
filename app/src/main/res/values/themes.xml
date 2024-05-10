@@ -13,6 +13,11 @@
         <item name="android:statusBarColor">#FFBE98</item>
         <!-- Customize your theme here. -->
         <item name="android:windowIsTranslucent">true</item>
+        <item name="toolbarNavigationButtonStyle">@style/AppTheme.Actionbar</item>
+    </style>
+
+    <style name="AppTheme.Actionbar" parent="Widget.AppCompat.Toolbar.Button.Navigation">
+        <item name="android:tint">@color/white</item>
     </style>
 
     <style name="Theme.Test.NoActionBar">
