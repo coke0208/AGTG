@@ -36,6 +36,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        dataBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -55,6 +56,9 @@ android {
         implementation("com.google.gms:google-services:4.3.10")
         implementation ("com.google.zxing:core:3.4.1")
         implementation("com.journeyapps:zxing-android-embedded:4.2.0")
+
+        implementation ("androidx.room:room-runtime:2.6.1")
+        annotationProcessor ("androidx.room:room-compiler:2.6.1")
     }
 }
 

@@ -3,23 +3,22 @@ package com.example.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
-import com.example.test.databinding.ActivityMainBinding
-import com.google.android.material.tabs.TabLayoutMediator
-
-import android.graphics.BitmapFactory
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
-import com.example.test.databinding.ActivityColdBinding
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentTransaction
+import com.example.test.databinding.ActivityMainBinding
 import com.google.zxing.integration.android.IntentIntegrator
 
 
 class MainActivity : AppCompatActivity() {
-    val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+    private lateinit var binding: ActivityMainBinding
+    private val fragmentManager = supportFragmentManager
+    private lateinit var transaction: FragmentTransaction
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         val group = Intent(this, GroupActivity::class.java)
@@ -31,26 +30,11 @@ class MainActivity : AppCompatActivity() {
         val upload = Intent(this, UploadActivity::class.java)
         binding.upload.setOnClickListener { startActivity(upload) }
 
-        initView()
+        // 2. Main Fragment 설정
+        transaction = fragmentManager.beginTransaction()
+        transaction.add(R.id.frameLayout, HomeFragment())
+        transaction.commit()
     }
-
-    private fun initView() {
-        val viewPager = binding.swipe
-        val tabLayout = binding.tapview
-        val tabtitle = arrayOf("냉장고", "냉동고", "실온")
-
-        val fragmentList = ArrayList<Fragment>()
-        fragmentList.add(ColdActivity())
-        fragmentList.add(FrozenActivity())
-        fragmentList.add(RoomActivity())
-
-        viewPager.adapter = ViewPagerAdapter(fragmentList, this)
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = tabtitle[position]
-        }.attach()
-    }
-
 
     private fun initSearchView() {
         // init SearchView
