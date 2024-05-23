@@ -11,7 +11,6 @@ import androidx.fragment.app.FragmentTransaction
 import com.example.test.databinding.ActivityMainBinding
 import com.google.zxing.integration.android.IntentIntegrator
 
-
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager = supportFragmentManager
@@ -21,8 +20,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val group = Intent(this, GroupActivity::class.java)
-        binding.group.setOnClickListener { startActivity(group) }
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
@@ -34,7 +31,11 @@ class MainActivity : AppCompatActivity() {
         transaction = fragmentManager.beginTransaction()
         transaction.add(R.id.frameLayout, HomeFragment())
         transaction.commit()
+
+
     }
+
+
 
     private fun initSearchView() {
         // init SearchView
@@ -50,7 +51,13 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
         })
+
+
+
     }
+
+
+
 
     var pressedTime : Long=0
     @SuppressLint("MissingSuperCall")
@@ -70,11 +77,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
         val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null && result.contents != null) {
             // 스캔 결과를 ResultActivity로 전달
-            val intent = Intent(this, ResultActivity::class.java)
+            val intent = Intent(this, AddFragment::class.java)
             intent.putExtra("SCAN_RESULT", result.contents)
             startActivity(intent)
         }

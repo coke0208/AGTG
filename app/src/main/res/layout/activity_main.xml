@@ -92,7 +92,16 @@
                 android:background="#FFBE98"
                 android:src="@drawable/ic_action_filter_list"
                 style="?android:attr/borderlessButtonStyle"/>
+
+
         </LinearLayout>
+
+        <!--테스트중-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycleView_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
 
     </LinearLayout>
 
