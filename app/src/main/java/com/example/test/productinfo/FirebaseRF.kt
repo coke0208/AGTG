@@ -1,6 +1,5 @@
 package com.example.test.productinfo
 
-import com.google.firebase.database.database
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 
