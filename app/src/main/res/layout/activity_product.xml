@@ -40,17 +40,58 @@
 
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
 
-        <TextView
-            android:id="@+id/textView4"
+        <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:id="@+id/textViewName"
+            android:text="Name" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/textViewaddres"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewcdate"
+            android:text="URL" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:id="@+id/textViewedate"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textViewinfo"
+            android:text="코드정보" />
+
+        <Button
+            android:id="@+id/btnSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/add"
+        android:onClick="start"
+        android:layout_width="?attr/actionBarSize"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_marginEnd="?attr/actionBarSize"
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:padding="10dp"
+        android:scaleType="fitXY"
+        android:background="@drawable/circle"
+        android:src="@drawable/ic_action_filter_center_focus"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
