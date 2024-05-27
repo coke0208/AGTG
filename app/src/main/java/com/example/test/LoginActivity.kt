@@ -11,14 +11,13 @@ import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.ktx.firestore
+
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
     private var db_data = ArrayList<String>()
-    val db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
 
 

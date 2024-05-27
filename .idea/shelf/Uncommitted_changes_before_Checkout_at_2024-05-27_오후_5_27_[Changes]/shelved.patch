@@ -1,0 +1,177 @@
+Index: app/src/main/java/com/example/test/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport android.widget.SearchView\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport com.example.test.databinding.ActivityMainBinding\r\nimport com.google.zxing.integration.android.IntentIntegrator\r\n\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    private lateinit var binding: ActivityMainBinding\r\n    private val fragmentManager = supportFragmentManager\r\n    private lateinit var transaction: FragmentTransaction\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        binding = ActivityMainBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n        val group = Intent(this, GroupActivity::class.java)\r\n        binding.group.setOnClickListener { startActivity(group) }\r\n\r\n        val mypage = Intent(this, MypageActivity::class.java)\r\n        binding.mypage.setOnClickListener { startActivity(mypage) }\r\n\r\n        val upload = Intent(this, UploadActivity::class.java)\r\n        binding.upload.setOnClickListener { startActivity(upload) }\r\n\r\n        // 2. Main Fragment 설정\r\n        transaction = fragmentManager.beginTransaction()\r\n        transaction.add(R.id.frameLayout, HomeFragment())\r\n        transaction.commit()\r\n    }\r\n\r\n    private fun initSearchView() {\r\n        // init SearchView\r\n        binding.search.isSubmitButtonEnabled = true\r\n        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\r\n            override fun onQueryTextSubmit(query: String?): Boolean {\r\n                // @TODO\r\n                return false\r\n            }\r\n\r\n            override fun onQueryTextChange(newText: String?): Boolean {\r\n                // @TODO\r\n                return true\r\n            }\r\n        })\r\n    }\r\n\r\n    var pressedTime : Long=0\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    override fun onBackPressed() {\r\n        if (System.currentTimeMillis() - pressedTime <= 2000) {\r\n            finish()\r\n        } else {\r\n            pressedTime = System.currentTimeMillis()\r\n            Toast.makeText(this, \"한 번 더 누르면 종료됩니다.\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n\r\n    fun start(view: View) {\r\n        IntentIntegrator(this).initiateScan()\r\n    }\r\n\r\n\r\n    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {\r\n        super.onActivityResult(requestCode, resultCode, data)\r\n\r\n        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)\r\n        if (result != null && result.contents != null) {\r\n            // 스캔 결과를 ResultActivity로 전달\r\n            val intent = Intent(this, ResultActivity::class.java)\r\n            intent.putExtra(\"SCAN_RESULT\", result.contents)\r\n            startActivity(intent)\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/MainActivity.kt b/app/src/main/java/com/example/test/MainActivity.kt
+--- a/app/src/main/java/com/example/test/MainActivity.kt	
++++ b/app/src/main/java/com/example/test/MainActivity.kt	
+@@ -30,6 +30,9 @@
+         val upload = Intent(this, UploadActivity::class.java)
+         binding.upload.setOnClickListener { startActivity(upload) }
+ 
++        val product =Intent(this, ProductActivity::class.java)
++        binding.add.setOnClickListener { startActivity(product) }
++
+         // 2. Main Fragment 설정
+         transaction = fragmentManager.beginTransaction()
+         transaction.add(R.id.frameLayout, HomeFragment())
+@@ -63,20 +66,8 @@
+         }
+     }
+ 
+-    fun start(view: View) {
+-        IntentIntegrator(this).initiateScan()
+-    }
+ 
+ 
+-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+-        super.onActivityResult(requestCode, resultCode, data)
+ 
+-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+-        if (result != null && result.contents != null) {
+-            // 스캔 결과를 ResultActivity로 전달
+-            val intent = Intent(this, ResultActivity::class.java)
+-            intent.putExtra("SCAN_RESULT", result.contents)
+-            startActivity(intent)
+-        }
+-    }
++
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_product.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ProductActivity\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_weight=\"0\"\r\n        android:orientation=\"vertical\"\r\n        android:background=\"@color/submain\"\r\n        tools:layout_editor_absoluteX=\"60dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@color/main\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/back\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:background=\"@color/main\"\r\n                android:src=\"@drawable/ic_action_arrow_back\"/>\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView2\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"상품정보\"\r\n                android:textColor=\"@color/white\"\r\n                android:textSize=\"20dp\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView2\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView4\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"TextView\" />\r\n    </LinearLayout>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_product.xml b/app/src/main/res/layout/activity_product.xml
+--- a/app/src/main/res/layout/activity_product.xml	
++++ b/app/src/main/res/layout/activity_product.xml	
+@@ -40,17 +40,82 @@
+ 
+         </LinearLayout>
+ 
+-        <ImageView
+-            android:id="@+id/imageView2"
++        <TextView
++            android:id="@+id/etTitle"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+-            tools:srcCompat="@tools:sample/avatars" />
++            android:layout_marginLeft="20dp"
++            android:layout_marginTop="124dp"
++            android:layout_marginRight="20dp"
++            android:hint="Title"
++            android:minHeight="48dp"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.0"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toTopOf="parent" />
+ 
+         <TextView
+-            android:id="@+id/textView4"
++            android:id="@+id/etContent"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+-            android:text="TextView" />
++            android:layout_marginLeft="20dp"
++            android:layout_marginTop="44dp"
++            android:layout_marginRight="20dp"
++            android:hint="Content"
++            android:minHeight="48dp"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.6"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/etTitle" />
++
++        <TextView
++            android:id="@+id/info"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginLeft="20dp"
++            android:layout_marginTop="44dp"
++            android:layout_marginRight="20dp"
++            android:hint="info"
++            android:minHeight="48dp"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.6"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/etContent" />
++
++        <TextView
++            android:id="@+id/result"
++            android:layout_width="match_parent"
++            android:layout_height="wrap_content"
++            android:layout_marginLeft="20dp"
++            android:layout_marginTop="44dp"
++            android:layout_marginRight="20dp"
++            android:minHeight="48dp"
++            app:layout_constraintEnd_toEndOf="parent"
++            app:layout_constraintHorizontal_bias="0.6"
++            app:layout_constraintStart_toStartOf="parent"
++            app:layout_constraintTop_toBottomOf="@+id/info"/>
++
++        <Button
++            android:id="@+id/btnQR"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginEnd="16dp"
++            android:layout_marginBottom="16dp"
++            android:text="ADD TASK"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toEndOf="parent" />
++        <Button
++            android:id="@+id/btnSave"
++            android:layout_width="wrap_content"
++            android:layout_height="wrap_content"
++            android:layout_marginEnd="16dp"
++            android:layout_marginBottom="16dp"
++            android:text="ADD TASK"
++            app:layout_constraintBottom_toBottomOf="parent"
++            app:layout_constraintEnd_toEndOf="parent" />
++
++
++
+     </LinearLayout>
+ 
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.3.0\"\r\nkotlin = \"1.9.0\"\r\ncoreKtx = \"1.12.0\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.1.5\"\r\nespressoCore = \"3.5.1\"\r\nappcompat = \"1.6.1\"\r\nmaterial = \"1.11.0\"\r\nactivity = \"1.8.0\"\r\nconstraintlayout = \"2.1.4\"\r\nannotation = \"1.7.1\"\r\nlifecycleLivedataKtx = \"2.7.0\"\r\nlifecycleViewmodelKtx = \"2.7.0\"\r\ngoogleServices = \"4.4.1\"\r\nfirebaseDatabase = \"21.0.0\"\r\nfirebaseAuth = \"23.0.0\"\r\nnavigationCommonKtx = \"2.7.7\"\r\n\r\n[libraries]\r\nandroidx-core-ktx = { group = \"androidx.core\", name = \"core-ktx\", version.ref = \"coreKtx\" }\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\nandroidx-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nandroidx-espresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nandroidx-appcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nandroidx-activity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nandroidx-constraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\nandroidx-annotation = { group = \"androidx.annotation\", name = \"annotation\", version.ref = \"annotation\" }\r\nandroidx-lifecycle-livedata-ktx = { group = \"androidx.lifecycle\", name = \"lifecycle-livedata-ktx\", version.ref = \"lifecycleLivedataKtx\" }\r\nandroidx-lifecycle-viewmodel-ktx = { group = \"androidx.lifecycle\", name = \"lifecycle-viewmodel-ktx\", version.ref = \"lifecycleViewmodelKtx\" }\r\ngoogle-services = { group = \"com.google.gms\", name = \"google-services\", version.ref = \"googleServices\" }\r\nfirebase-database = { group = \"com.google.firebase\", name = \"firebase-database\", version.ref = \"firebaseDatabase\" }\r\nfirebase-auth = { group = \"com.google.firebase\", name = \"firebase-auth\", version.ref = \"firebaseAuth\" }\r\nandroidx-navigation-common-ktx = { group = \"androidx.navigation\", name = \"navigation-common-ktx\", version.ref = \"navigationCommonKtx\" }\r\n\r\n[plugins]\r\nandroidApplication = { id = \"com.android.application\", version.ref = \"agp\" }\r\njetbrainsKotlinAndroid = { id = \"org.jetbrains.kotlin.android\", version.ref = \"kotlin\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	
++++ b/gradle/libs.versions.toml	
+@@ -1,5 +1,5 @@
+ [versions]
+-agp = "8.3.0"
++agp = "8.3.1"
+ kotlin = "1.9.0"
+ coreKtx = "1.12.0"
+ junit = "4.13.2"
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.androidApplication)\r\n    alias(libs.plugins.jetbrainsKotlinAndroid)\r\n    id(\"com.google.gms.google-services\")\r\n}\r\n\r\nandroid {\r\n    namespace = \"com.example.test\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.test\"\r\n        minSdk = 24\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        viewBinding = true\r\n        dataBinding = true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion = \"1.5.1\"\r\n    }\r\n    viewBinding{\r\n        enable = true\r\n    }\r\n    dependencies {\r\n        implementation(\"androidx.viewpager2:viewpager2:1.0.0\")\r\n\r\n        implementation(\"com.google.firebase:firebase-auth-ktx:22.3.1\")\r\n        implementation(\"com.google.android.gms:play-services-auth:21.1.0\")\r\n        implementation(\"com.google.firebase:firebase-bom:32.8.1\")\r\n        implementation(platform(\"com.google.firebase:firebase-bom:33.0.0\"))\r\n        implementation(\"androidx.multidex:multidex:2.0.1\")\r\n        implementation(\"com.google.firebase:firebase-analytics\")\r\n        implementation(\"com.google.gms:google-services:4.3.10\")\r\n        implementation (\"com.google.zxing:core:3.4.1\")\r\n        implementation(\"com.journeyapps:zxing-android-embedded:4.2.0\")\r\n\r\n        implementation (\"androidx.room:room-runtime:2.6.1\")\r\n        annotationProcessor (\"androidx.room:room-compiler:2.6.1\")\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.constraintlayout)\r\n    implementation(libs.androidx.annotation)\r\n    implementation(libs.androidx.lifecycle.livedata.ktx)\r\n    implementation(libs.androidx.lifecycle.viewmodel.ktx)\r\n    implementation(libs.firebase.database)\r\n    implementation(libs.firebase.auth)\r\n    implementation(libs.androidx.navigation.common.ktx)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	
++++ b/app/build.gradle.kts	
+@@ -59,6 +59,7 @@
+ 
+         implementation ("androidx.room:room-runtime:2.6.1")
+         annotationProcessor ("androidx.room:room-compiler:2.6.1")
++        implementation ("com.google.firebase:firebase-database-ktx")
+     }
+ }
+ 

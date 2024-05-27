@@ -1,0 +1,199 @@
+Index: app/src/main/java/com/example/test/LoginActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.test.databinding.ActivityLoginBinding\r\n\r\nimport android.widget.EditText\r\nimport android.widget.Toast\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.auth.ktx.auth\r\nimport com.google.firebase.ktx.Firebase\r\n\r\nclass LoginActivity : AppCompatActivity() {\r\n    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }\r\n\r\n    private var db_data = ArrayList<String>()\r\n    private lateinit var auth: FirebaseAuth\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        var id: EditText = binding.email\r\n        var pw: EditText = binding.password\r\n        auth = Firebase.auth\r\n\r\n\r\n\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        val login = Intent(this, MainActivity::class.java)\r\n        binding.login.setOnClickListener {\r\n            login(id.text.toString(), pw.text.toString()) }\r\n\r\n        val regsiter = Intent(this, RegsiterActivity::class.java)\r\n        binding.regsiter.setOnClickListener { startActivity(regsiter) }\r\n    }\r\n\r\n    private fun login(id: String, pw: String) {\r\n\r\n        if (id.isEmpty() || pw.isEmpty()) {\r\n            Toast.makeText(this, \"빈 값을 입력하셨습니다.\", Toast.LENGTH_SHORT).show()\r\n        } else {\r\n            auth.signInWithEmailAndPassword(id, pw)\r\n                .addOnCompleteListener { task ->\r\n                    if (task.isSuccessful) {\r\n                        Toast.makeText(this, \"로그인에 성공했습니다!\", Toast.LENGTH_SHORT).show()\r\n\r\n                        val main = Intent(this, MainActivity::class.java)\r\n                        startActivity(main)\r\n                    }\r\n                    else {\r\n                        Toast.makeText(this, \"아이디와 비밀번호를 확인해주세요\", Toast.LENGTH_SHORT).show()\r\n                    }\r\n                }\r\n        }\r\n\r\n    }\r\n\r\n}\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/LoginActivity.kt b/app/src/main/java/com/example/test/LoginActivity.kt
+--- a/app/src/main/java/com/example/test/LoginActivity.kt	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/app/src/main/java/com/example/test/LoginActivity.kt	(date 1715004510083)
+@@ -4,26 +4,28 @@
+ import android.os.Bundle
+ import androidx.appcompat.app.AppCompatActivity
+ import com.example.test.databinding.ActivityLoginBinding
+-
++import android.widget.Button
+ import android.widget.EditText
+ import android.widget.Toast
++import androidx.activity.enableEdgeToEdge
++import com.example.test.databinding.ActivityMainBinding
+ import com.google.firebase.auth.FirebaseAuth
+ import com.google.firebase.auth.ktx.auth
+ import com.google.firebase.ktx.Firebase
+ 
++
+ class LoginActivity : AppCompatActivity() {
+-    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
+ 
+     private var db_data = ArrayList<String>()
+     private lateinit var auth: FirebaseAuth
+ 
++    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
++
+     override fun onCreate(savedInstanceState: Bundle?) {
+         var id: EditText = binding.email
+         var pw: EditText = binding.password
+         auth = Firebase.auth
+ 
+-
+-
+         super.onCreate(savedInstanceState)
+         setContentView(binding.root)
+ 
+@@ -56,6 +58,7 @@
+ 
+     }
+ 
++
+ }
+ 
+ 
+Index: build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>buildscript {\r\n    dependencies {\r\n        classpath(libs.google.services)\r\n    }\r\n}\r\n// Top-level build file where you can add configuration options common to all sub-projects/modules.\r\nplugins {\r\n    alias(libs.plugins.androidApplication) apply false\r\n    alias(libs.plugins.jetbrainsKotlinAndroid) apply false\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/build.gradle.kts b/build.gradle.kts
+--- a/build.gradle.kts	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/build.gradle.kts	(date 1715004006556)
+@@ -7,4 +7,6 @@
+ plugins {
+     alias(libs.plugins.androidApplication) apply false
+     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
++    id("com.google.gms.google-services") version "4.4.1" apply false
++
+ }
+\ No newline at end of file
+Index: gradle/libs.versions.toml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>[versions]\r\nagp = \"8.3.0\"\r\nkotlin = \"1.9.0\"\r\ncoreKtx = \"1.12.0\"\r\njunit = \"4.13.2\"\r\njunitVersion = \"1.1.5\"\r\nespressoCore = \"3.5.1\"\r\nappcompat = \"1.6.1\"\r\nmaterial = \"1.11.0\"\r\nactivity = \"1.8.0\"\r\nconstraintlayout = \"2.1.4\"\r\nannotation = \"1.7.1\"\r\nlifecycleLivedataKtx = \"2.7.0\"\r\nlifecycleViewmodelKtx = \"2.7.0\"\r\ngoogleServices = \"4.4.1\"\r\nfirebaseDatabase = \"21.0.0\"\r\nfirebaseAuth = \"23.0.0\"\r\nnavigationCommonKtx = \"2.7.7\"\r\n\r\n[libraries]\r\nandroidx-core-ktx = { group = \"androidx.core\", name = \"core-ktx\", version.ref = \"coreKtx\" }\r\njunit = { group = \"junit\", name = \"junit\", version.ref = \"junit\" }\r\nandroidx-junit = { group = \"androidx.test.ext\", name = \"junit\", version.ref = \"junitVersion\" }\r\nandroidx-espresso-core = { group = \"androidx.test.espresso\", name = \"espresso-core\", version.ref = \"espressoCore\" }\r\nandroidx-appcompat = { group = \"androidx.appcompat\", name = \"appcompat\", version.ref = \"appcompat\" }\r\nmaterial = { group = \"com.google.android.material\", name = \"material\", version.ref = \"material\" }\r\nandroidx-activity = { group = \"androidx.activity\", name = \"activity\", version.ref = \"activity\" }\r\nandroidx-constraintlayout = { group = \"androidx.constraintlayout\", name = \"constraintlayout\", version.ref = \"constraintlayout\" }\r\nandroidx-annotation = { group = \"androidx.annotation\", name = \"annotation\", version.ref = \"annotation\" }\r\nandroidx-lifecycle-livedata-ktx = { group = \"androidx.lifecycle\", name = \"lifecycle-livedata-ktx\", version.ref = \"lifecycleLivedataKtx\" }\r\nandroidx-lifecycle-viewmodel-ktx = { group = \"androidx.lifecycle\", name = \"lifecycle-viewmodel-ktx\", version.ref = \"lifecycleViewmodelKtx\" }\r\ngoogle-services = { group = \"com.google.gms\", name = \"google-services\", version.ref = \"googleServices\" }\r\nfirebase-database = { group = \"com.google.firebase\", name = \"firebase-database\", version.ref = \"firebaseDatabase\" }\r\nfirebase-auth = { group = \"com.google.firebase\", name = \"firebase-auth\", version.ref = \"firebaseAuth\" }\r\nandroidx-navigation-common-ktx = { group = \"androidx.navigation\", name = \"navigation-common-ktx\", version.ref = \"navigationCommonKtx\" }\r\n\r\n[plugins]\r\nandroidApplication = { id = \"com.android.application\", version.ref = \"agp\" }\r\njetbrainsKotlinAndroid = { id = \"org.jetbrains.kotlin.android\", version.ref = \"kotlin\" }\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/gradle/libs.versions.toml b/gradle/libs.versions.toml
+--- a/gradle/libs.versions.toml	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/gradle/libs.versions.toml	(date 1715004076551)
+@@ -1,5 +1,5 @@
+ [versions]
+-agp = "8.3.0"
++agp = "8.3.1"
+ kotlin = "1.9.0"
+ coreKtx = "1.12.0"
+ junit = "4.13.2"
+Index: app/src/main/java/com/example/test/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.widget.SearchView\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.fragment.app.Fragment\r\nimport com.example.test.databinding.ActivityMainBinding\r\nimport com.google.android.material.tabs.TabLayoutMediator\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        val group = Intent(this, GroupActivity::class.java)\r\n        binding.group.setOnClickListener { startActivity(group) }\r\n\r\n        val mypage = Intent(this, MypageActivity::class.java)\r\n        binding.mypage.setOnClickListener { startActivity(mypage) }\r\n\r\n        val upload = Intent(this, UploadActivity::class.java)\r\n        binding.upload.setOnClickListener { startActivity(upload) }\r\n\r\n        initView()\r\n    }\r\n\r\n    private fun initView() {\r\n        val viewPager = binding.swipe\r\n        val tabLayout = binding.tapview\r\n        val tabtitle = arrayOf(\"냉장고\", \"냉동고\", \"실온\")\r\n\r\n        val fragmentList = ArrayList<Fragment>()\r\n        fragmentList.add(ColdActivity())\r\n        fragmentList.add(FrozenActivity())\r\n        fragmentList.add(RoomActivity())\r\n\r\n        viewPager.adapter = ViewPagerAdapter(fragmentList, this)\r\n\r\n        TabLayoutMediator(tabLayout, viewPager) { tab, position ->\r\n            tab.text = tabtitle[position]\r\n        }.attach()\r\n    }\r\n\r\n\r\n    private fun initSearchView() {\r\n        // init SearchView\r\n        binding.search.isSubmitButtonEnabled = true\r\n        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\r\n            override fun onQueryTextSubmit(query: String?): Boolean {\r\n                // @TODO\r\n                return false\r\n            }\r\n\r\n            override fun onQueryTextChange(newText: String?): Boolean {\r\n                // @TODO\r\n                return true\r\n            }\r\n        })\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/MainActivity.kt b/app/src/main/java/com/example/test/MainActivity.kt
+--- a/app/src/main/java/com/example/test/MainActivity.kt	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/app/src/main/java/com/example/test/MainActivity.kt	(date 1715193903192)
+@@ -8,6 +8,12 @@
+ import com.example.test.databinding.ActivityMainBinding
+ import com.google.android.material.tabs.TabLayoutMediator
+ 
++import android.graphics.BitmapFactory
++import android.view.View
++import android.widget.Toast
++import com.example.test.databinding.ActivityColdBinding
++import com.google.zxing.integration.android.IntentIntegrator
++
+ class MainActivity : AppCompatActivity() {
+     val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
+     override fun onCreate(savedInstanceState: Bundle?) {
+@@ -59,4 +65,32 @@
+             }
+         })
+     }
++
++    fun start(view: View){
++        IntentIntegrator(this).initiateScan()
++    }
++    fun startcustom(view: View){
++        val integrator=IntentIntegrator(this)
++        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE)
++        integrator.setPrompt("QR코드를 스캔해주세요")
++        integrator.setCameraId(0)
++        integrator.setBarcodeImageEnabled(true)
++        integrator.initiateScan()
++    }
++    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
++        super.onActivityResult(requestCode, resultCode, data)
++        val result=IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
++        if (result !=null){
++            if (result.contents!=null){
++                Toast.makeText(this, "scanned:${result.contents} format:${result.formatName}",Toast.LENGTH_LONG).show()
++            } else {
++                Toast.makeText(this,"cancelled", Toast.LENGTH_LONG).show()
++            }
++            if (result.barcodeImagePath!=null){
++                val binding=ActivityColdBinding.inflate(layoutInflater)
++                val image= BitmapFactory.decodeFile(result.barcodeImagePath)
++                //binding.image.setImageBitmap(image)
++            }
++        }
++    }
+ }
+\ No newline at end of file
+Index: app/src/main/res/layout/activity_login.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".LoginActivity\"\r\n    android:background=\"#FFBE98\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:orientation=\"vertical\">\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView4\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/email\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"textEmailAddress\"\r\n            android:hint=\"이메일\"/>\r\n\r\n        <EditText\r\n            android:id=\"@+id/password\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:ems=\"10\"\r\n            android:inputType=\"textPassword\"\r\n            android:hint=\"비밀번호\"/>\r\n\r\n        <RadioButton\r\n            android:id=\"@+id/loginmemo\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"로그인 기억\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <Button\r\n                android:id=\"@+id/regsiter\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"회원가입\" />\r\n\r\n            <Button\r\n                android:id=\"@+id/login\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"로그인\" />\r\n        </LinearLayout>\r\n    </LinearLayout>\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_login.xml b/app/src/main/res/layout/activity_login.xml
+--- a/app/src/main/res/layout/activity_login.xml	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/app/src/main/res/layout/activity_login.xml	(date 1715194218379)
+@@ -14,10 +14,14 @@
+         android:orientation="vertical">
+ 
+         <ImageView
+-            android:id="@+id/imageView4"
+-            android:layout_width="match_parent"
+-            android:layout_height="wrap_content"
+-            tools:srcCompat="@tools:sample/avatars" />
++            android:id="@+id/logo"
++            android:layout_width="200dp"
++            android:layout_height="300dp"
++            android:layout_margin="80dp"
++            android:layout_gravity="center"
++            android:scaleType="fitCenter"
++            android:layout_weight="0"
++            android:src="@drawable/logo" />
+ 
+         <EditText
+             android:id="@+id/email"
+Index: app/build.gradle.kts
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>plugins {\r\n    alias(libs.plugins.androidApplication)\r\n    alias(libs.plugins.jetbrainsKotlinAndroid)\r\n    id(\"com.google.gms.google-services\")\r\n}\r\n\r\nandroid {\r\n\r\n    namespace = \"com.example.test\"\r\n    compileSdk = 34\r\n\r\n    defaultConfig {\r\n        applicationId = \"com.example.test\"\r\n        minSdk = 24\r\n        targetSdk = 34\r\n        versionCode = 1\r\n        versionName = \"1.0\"\r\n\r\n        testInstrumentationRunner = \"androidx.test.runner.AndroidJUnitRunner\"\r\n    }\r\n\r\n    buildTypes {\r\n        release {\r\n            isMinifyEnabled = false\r\n            proguardFiles(\r\n                getDefaultProguardFile(\"proguard-android-optimize.txt\"),\r\n                \"proguard-rules.pro\"\r\n            )\r\n        }\r\n    }\r\n    compileOptions {\r\n        sourceCompatibility = JavaVersion.VERSION_1_8\r\n        targetCompatibility = JavaVersion.VERSION_1_8\r\n    }\r\n    kotlinOptions {\r\n        jvmTarget = \"1.8\"\r\n    }\r\n    buildFeatures {\r\n        viewBinding = true\r\n    }\r\n    composeOptions {\r\n        kotlinCompilerExtensionVersion = \"1.5.1\"\r\n    }\r\n    viewBinding{\r\n        enable = true\r\n    }\r\n    dependencies {\r\n        implementation(\"androidx.viewpager2:viewpager2:1.0.0\")\r\n\r\n        implementation(\"com.google.firebase:firebase-auth-ktx:22.3.1\")\r\n        implementation(\"com.google.android.gms:play-services-auth:21.1.0\")\r\n        implementation(\"com.google.firebase:firebase-bom:32.8.1\")\r\n        implementation(platform(\"com.google.firebase:firebase-bom:33.0.0\"))\r\n        implementation(\"androidx.multidex:multidex:2.0.1\")\r\n        implementation(\"com.google.firebase:firebase-analytics\")\r\n        implementation(\"com.google.gms:google-services:4.3.10\")\r\n    }\r\n}\r\n\r\ndependencies {\r\n\r\n    implementation(libs.androidx.core.ktx)\r\n    implementation(libs.androidx.appcompat)\r\n    implementation(libs.material)\r\n    implementation(libs.androidx.activity)\r\n    implementation(libs.androidx.constraintlayout)\r\n    implementation(libs.androidx.annotation)\r\n    implementation(libs.androidx.lifecycle.livedata.ktx)\r\n    implementation(libs.androidx.lifecycle.viewmodel.ktx)\r\n    implementation(libs.firebase.database)\r\n    implementation(libs.firebase.auth)\r\n    implementation(libs.androidx.navigation.common.ktx)\r\n    testImplementation(libs.junit)\r\n    androidTestImplementation(libs.androidx.junit)\r\n    androidTestImplementation(libs.androidx.espresso.core)\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/build.gradle.kts b/app/build.gradle.kts
+--- a/app/build.gradle.kts	(revision bf3f5afc41fe215cd5dc3342f61d030725ec5384)
++++ b/app/build.gradle.kts	(date 1715193801411)
+@@ -5,7 +5,6 @@
+ }
+ 
+ android {
+-
+     namespace = "com.example.test"
+     compileSdk = 34
+ 
+@@ -54,6 +53,8 @@
+         implementation("androidx.multidex:multidex:2.0.1")
+         implementation("com.google.firebase:firebase-analytics")
+         implementation("com.google.gms:google-services:4.3.10")
++        implementation ("com.google.zxing:core:3.4.1")
++        implementation("com.journeyapps:zxing-android-embedded:4.2.0")
+     }
+ }
+ 

@@ -1,0 +1,111 @@
+Index: app/src/main/java/com/example/test/ProductActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.test.databinding.ActivityProductBinding\r\n\r\nclass ProductActivity : AppCompatActivity() {\r\n    val binding by lazy { ActivityProductBinding.inflate(layoutInflater) }\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        binding.back.setOnClickListener {\r\n            finish()\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/ProductActivity.kt b/app/src/main/java/com/example/test/ProductActivity.kt
+--- a/app/src/main/java/com/example/test/ProductActivity.kt	
++++ b/app/src/main/java/com/example/test/ProductActivity.kt	
+@@ -1,17 +1,98 @@
+ package com.example.test
+ 
++import android.content.Intent
+ import android.os.Bundle
++import android.widget.Button
++import android.widget.TextView
++import android.widget.Toast
+ import androidx.appcompat.app.AppCompatActivity
+ import com.example.test.databinding.ActivityProductBinding
++import com.example.test.databinding.FragmentAddBinding
++import com.example.test.productinfo.FirebaseRF
++import com.example.test.productinfo.ProductDB
++import com.google.firebase.database.DatabaseReference
++import com.google.firebase.database.FirebaseDatabase
++import com.google.zxing.integration.android.IntentIntegrator
++import com.google.zxing.integration.android.IntentResult
++import org.json.JSONException
++import org.json.JSONObject
+ 
+ class ProductActivity : AppCompatActivity() {
+-    val binding by lazy { ActivityProductBinding.inflate(layoutInflater) }
++    private var btnSave: Button? = null
++    private var title: TextView? = null
++    private var content: TextView? = null
++    private var info: TextView? = null
++    private lateinit var binding: ActivityProductBinding
++    private var qrScan: IntentIntegrator? = null
++    private var mDatabase: DatabaseReference? = null
+     override fun onCreate(savedInstanceState: Bundle?) {
+         super.onCreate(savedInstanceState)
++        binding = ActivityProductBinding.inflate(layoutInflater)
+         setContentView(binding.root)
+ 
++        title=binding.etTitle as TextView
++        content=binding.etContent
++
++
++
+         binding.back.setOnClickListener {
+             finish()
+         }
++
++
++        //setContentView(R.layout.act)
++        btnSave = binding.btnSave
++        mDatabase = FirebaseDatabase.getInstance().getReference()
++
++
++         qrScan = IntentIntegrator(this)
++
++        //button onClick
++       binding.btnQR.setOnClickListener { //scan option
++            qrScan!!.setPrompt("Scanning...")
++            //qrScan.setOrientationLocked(false);
++            qrScan!!.initiateScan()
++        }
++
++
++
++        btnSave!!.setOnClickListener {
++            val title = binding.etTitle.text.toString()
++            val content = binding.etContent.toString()
++            val info = binding.info.text.toString()
++
++            val productdb = ProductDB(title, content)
++            FirebaseRF.productdb.child(title).setValue(productdb)
++            Toast.makeText(this, "저장성공", Toast.LENGTH_LONG).show()
++        }
++
++
++    }
++
++    //Getting the scan results
++    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
++        val result: IntentResult =
++            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
++        if (result != null) {
++            //qrcode 가 없으면
++            if (result.contents == null) {
++                Toast.makeText(this@ProductActivity, "취소!", Toast.LENGTH_SHORT).show()
++            } else {
++                //qrcode 결과가 있으면
++                Toast.makeText(this@ProductActivity, "스캔완료!", Toast.LENGTH_SHORT).show()
++                try {
++                    //data를 json으로 변환
++                    val obj = JSONObject(result.contents)
++                    title!!.text = obj.getString("name")
++                    content!!.text = obj.getString("addres")
++                } catch (e: JSONException) {
++                    e.printStackTrace()
++                    //Toast.makeText(MainActivity.this, result.getContents(), Toast.LENGTH_LONG).show();
++                    info?.setText(result.contents)
++                }
++            }
++        } else {
++            super.onActivityResult(requestCode, resultCode, data)
++        }
+     }
+ }
+\ No newline at end of file
