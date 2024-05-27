@@ -20,12 +20,17 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val group = Intent(this, GroupActivity::class.java)
+        binding.group.setOnClickListener { startActivity(group) }
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
 
         val upload = Intent(this, UploadActivity::class.java)
         binding.upload.setOnClickListener { startActivity(upload) }
+
+        val qradd= Intent(this, ProductActivity::class.java)
+        binding.add.setOnClickListener { startActivity(qradd) }
 
         // 2. Main Fragment 설정
         transaction = fragmentManager.beginTransaction()
@@ -70,19 +75,5 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun start(view: View) {
-        IntentIntegrator(this).initiateScan()
-    }
 
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        val result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
-        if (result != null && result.contents != null) {
-            // 스캔 결과를 ResultActivity로 전달
-            val intent = Intent(this, AddFragment::class.java)
-            intent.putExtra("SCAN_RESULT", result.contents)
-            startActivity(intent)
-        }
-    }
 }
