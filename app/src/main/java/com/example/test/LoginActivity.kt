@@ -9,23 +9,14 @@ import com.example.test.databinding.ActivityLoginBinding
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
-import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class LoginActivity : AppCompatActivity() {
     val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }
 
-    private var db_data = ArrayList<String>()
-    val db = Firebase.firestore
     private lateinit var auth: FirebaseAuth
-
-
-
-
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         val id: EditText = binding.email
@@ -35,12 +26,23 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        val login = Intent(this, MainActivity::class.java)
         binding.login.setOnClickListener {
             login(id.text.toString(), pw.text.toString()) }
 
         val regsiter = Intent(this, RegsiterActivity::class.java)
         binding.regsiter.setOnClickListener { startActivity(regsiter) }
+    }
+
+    public override fun onStart() {
+        super.onStart()
+        moveMainPage(auth?.currentUser)
+    }
+
+    fun moveMainPage(user: FirebaseUser?){
+        if( user!= null){
+            startActivity(Intent(this,MainActivity::class.java))
+            finish()
+        }
     }
 
     private fun login(id: String, pw: String) {
@@ -52,9 +54,8 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "로그인에 성공했습니다!", Toast.LENGTH_SHORT).show()
+                        moveMainPage(auth?.currentUser)
 
-                        val main = Intent(this, MainActivity::class.java)
-                        startActivity(main)
                         finish()
                     }
                     else {
@@ -64,7 +65,6 @@ class LoginActivity : AppCompatActivity() {
         }
 
     }
-
 
     var pressedTime : Long=0
     @Deprecated("Deprecated in Java")

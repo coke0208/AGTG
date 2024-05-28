@@ -121,7 +121,7 @@
         android:padding="10dp"
         android:scaleType="fitXY"
         android:background="@drawable/circle"
-        android:src="@drawable/ic_action_filter_center_focus"
+        android:src="@drawable/ic_action_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

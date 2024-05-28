@@ -42,15 +42,11 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:srcCompat="@tools:sample/avatars" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:src="@drawable/my" />
 
         <EditText
             android:id="@+id/editTextText2"
@@ -58,13 +54,14 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:inputType="text"
-            android:text="Name" />
+            android:hint="이름" />
 
         <EditText
             android:id="@+id/editTextTextPassword2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="비밀번호"
             android:inputType="textPassword" />
 
         <EditText
@@ -72,6 +69,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
+            android:hint="비밀번호 재입력"
             android:inputType="textPassword" />
 
         <LinearLayout
@@ -85,7 +83,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/button"
-                android:text="Button" />
+                android:text="로그아웃" />
 
             <Button
                 android:id="@+id/button4"
@@ -93,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:backgroundTint="@color/button"
-                android:text="Button" />
+                android:text="완료" />
         </LinearLayout>
 
     </LinearLayout>
