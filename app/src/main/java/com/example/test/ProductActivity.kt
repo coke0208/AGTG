@@ -34,7 +34,7 @@ class ProductActivity : AppCompatActivity() {
         textViewAddress = findViewById<View>(R.id.textViewaddres) as TextView
         textViewedate = findViewById<View>(R.id.textViewedate) as TextView
         textViewcdate = findViewById<View>(R.id.textViewcdate)as TextView
-        info=findViewById<View>(R.id.textViewcdate)as TextView
+        info=findViewById<View>(R.id.textViewinfo)as TextView
 
         binding.btnSave.setOnClickListener {
             saveProductData("ColdStorage")
@@ -112,5 +112,9 @@ class ProductActivity : AppCompatActivity() {
         binding.textViewinfo.text.clear()
     }
 
-
+    /*private fun startFragmentActivity(storageType: String) {
+        val intent = Intent(this, HomeFragment::class.java)
+        intent.putExtra("storageType", storageType)
+        startActivity(intent)
+    }*/
 }

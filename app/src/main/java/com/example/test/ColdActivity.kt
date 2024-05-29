@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.databinding.ActivityColdBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
-import com.google.firebase.database.*
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class ColdActivity : Fragment() {
     private var _binding: ActivityColdBinding? = null
@@ -24,7 +27,7 @@ class ColdActivity : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("ProductDB")
+            .getReference("ColdStorage")
         val productList = ArrayList<ProductDB>()
         val adapter = ProductAdapter(requireContext(), productList)
 
@@ -49,8 +52,8 @@ class ColdActivity : Fragment() {
         })
     }
 
-    override fun onDestroyView() {
+    /*override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
+    }*/
 }

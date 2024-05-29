@@ -29,6 +29,7 @@ class RoomActivity : Fragment() {
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 productList.clear()
+
                 for (productSnapshot in snapshot.children) {
                     val product = productSnapshot.getValue(ProductDB::class.java)
                     if (product != null) {
@@ -46,8 +47,10 @@ class RoomActivity : Fragment() {
         return binding.root
     }
 
-    override fun onDestroyView() {
+
+  /*  override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
+    }*/
+
 }
