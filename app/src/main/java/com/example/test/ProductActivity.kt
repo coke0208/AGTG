@@ -8,9 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityProductBinding
-import com.example.test.productinfo.FirebaseRF
 import com.example.test.productinfo.ProductDB
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -18,76 +16,63 @@ import org.json.JSONException
 import org.json.JSONObject
 
 class ProductActivity : AppCompatActivity() {
-    //view Objects
     private lateinit var binding: ActivityProductBinding
+    private var qrScan: IntentIntegrator? = null
     private var textViewName: TextView? = null
-    private var textViewAddres: TextView? = null
+    private var textViewAddress: TextView? = null
     private var textViewedate: TextView? = null
     private var textViewcdate: TextView? = null
-    private var textViewinfo: TextView? = null
+    private var info: TextView? = null
 
-    private var mDatabase: DatabaseReference? = null
-    private var btnSave: Button? = null
 
-    //qr code scanner object
-    private var qrScan: IntentIntegrator? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        //View Objects
         textViewName = findViewById<View>(R.id.textViewName) as TextView
-        textViewAddres = findViewById<View>(R.id.textViewaddres) as TextView
+        textViewAddress = findViewById<View>(R.id.textViewaddres) as TextView
         textViewedate = findViewById<View>(R.id.textViewedate) as TextView
-        textViewcdate = findViewById<View>(R.id.textViewcdate) as TextView
-        textViewinfo = findViewById<View>(R.id.textViewinfo) as TextView
+        textViewcdate = findViewById<View>(R.id.textViewcdate)as TextView
+        info=findViewById<View>(R.id.textViewcdate)as TextView
 
-        //intializing scan object
-        qrScan = IntentIntegrator(this)
-
-        //button onClick
-        binding.add.setOnClickListener(){ //scan option
-            qrScan!!.setPrompt("Scanning...")
-            //qrScan.setOrientationLocked(false);
-            qrScan!!.initiateScan()
+        binding.btnSave.setOnClickListener {
+            saveProductData("ColdStorage")
+            startFragmentActivity("ColdStorage")
         }
-        btnSave = binding.btnSave
-        mDatabase = FirebaseDatabase.getInstance().getReference()
-        btnSave!!.setOnClickListener {
-            val name = binding.textViewName.text.toString()
-            val addres = binding.textViewaddres.text.toString()
-            val edate = binding.textViewedate.text.toString()
-            val cdate = binding.textViewcdate.text.toString()
-            val info = binding.textViewinfo.text.toString()
 
+        binding.btnFrozenSave.setOnClickListener {
+            saveProductData("FrozenStorage")
+            startFragmentActivity("FrozenStorage")
+        }
 
-            val productdb= ProductDB(name,addres,edate,cdate,info)
-            FirebaseRF.productdb.child(name).setValue(productdb)
-            Toast.makeText(this,"저장성공",Toast.LENGTH_LONG).show()
+        binding.btnRoomSave.setOnClickListener {
+            saveProductData("RoomStorage")
+            startFragmentActivity("RoomStorage")
+        }
+
+        // QR Code Scanner
+        qrScan = IntentIntegrator(this)
+        binding.add.setOnClickListener {
+            qrScan!!.setPrompt("Scanning...")
+            qrScan!!.initiateScan()
         }
     }
 
-    //Getting the scan results
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val result: IntentResult =
-            IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
+        val result: IntentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data)
         if (result != null) {
-            //qrcode 가 없으면
-            if (result.getContents() == null) {
+            if (result.contents == null) {
                 Toast.makeText(this@ProductActivity, "취소!", Toast.LENGTH_SHORT).show()
             } else {
-                //qrcode 결과가 있으면
                 Toast.makeText(this@ProductActivity, "스캔완료!", Toast.LENGTH_SHORT).show()
                 try {
-                    //data를 json으로 변환
-                    val obj: JSONObject = JSONObject(result.getContents())
+                    val obj = JSONObject(result.contents)
                     textViewName!!.text = obj.getString("name")
-                    textViewAddres!!.text = obj.getString("addres")
+                    textViewAddress!!.text = obj.getString("addres")
                     textViewedate!!.text = obj.getString("edate")
                     textViewcdate!!.text = obj.getString("cdate")
-                    textViewinfo!!.text = obj.getString("info")
-
+                    info!!.text = obj.getString("info")
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -95,5 +80,41 @@ class ProductActivity : AppCompatActivity() {
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
+    }
+
+    private fun saveProductData(storageType: String) {
+        val name = binding.textViewName.text.toString()
+        val address = binding.textViewaddres.text.toString()
+        val cdate = binding.textViewcdate.text.toString()
+        val edate = binding.textViewedate.text.toString()
+        val info = binding.textViewinfo.text.toString()
+
+        val product = ProductDB(name, address, edate, cdate, info)
+
+        val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference(storageType)
+
+        databaseReference.push().setValue(product).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(this, "저장성공", Toast.LENGTH_LONG).show()
+                clearInputFields()
+            } else {
+                Toast.makeText(this, "저장실패", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun clearInputFields() {
+        binding.textViewName.text.clear()
+        binding.textViewaddres.text.clear()
+        binding.textViewcdate.text.clear()
+        binding.textViewedate.text.clear()
+        binding.textViewinfo.text.clear()
+    }
+
+    private fun startFragmentActivity(storageType: String) {
+        val intent = Intent(this, HomeFragment::class.java)
+        intent.putExtra("storageType", storageType)
+        startActivity(intent)
     }
 }

@@ -32,8 +32,8 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         val product = productList[position]
         holder.productName.text = product.name
         holder.productEdate.text = product.edate
-        // holder.productImage.setImageResource(...) // Set the image resource if needed
-        // holder.progressBar.progress = ... // Set the progress if needed
+        // Set image resource if needed
+        // holder.progressBar.progress = ... // Set progress if needed
 
         holder.deleteButton.setOnClickListener {
             // Handle delete button click

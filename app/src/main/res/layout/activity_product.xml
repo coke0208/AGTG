@@ -45,12 +45,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewName"
-            android:text="Name" />
+            android:hint="이름" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:hint="address"
             android:id="@+id/textViewaddres"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
@@ -58,12 +58,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewcdate"
-            android:text="URL" />
+            android:hint="유통기한" />
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""
+            android:hint="소비기한"
             android:id="@+id/textViewedate"
             android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
 
@@ -73,12 +73,43 @@
             android:id="@+id/textViewinfo"
             android:text="코드정보" />
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
         <Button
             android:id="@+id/btnSave"
+            android:text="냉장"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/btnFrozenSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="냉동" />
+
+            <Button
+                android:id="@+id/btnRoomSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="실온" />
+
+
+        </LinearLayout>
 
     </LinearLayout>
+
+
+
+
+
 
     <ImageButton
         android:id="@+id/add"
