@@ -5,15 +5,44 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.test.databinding.ActivityRoomBinding
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.test.databinding.ActivityFrozenBinding
+import com.example.test.productinfo.ProductDB
+import com.example.test.productutils.ProductAdapter
+import com.google.firebase.database.*
 
 class FrozenActivity : Fragment() {
 
-    private var _binding: ActivityRoomBinding? = null
+    private var _binding: ActivityFrozenBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = ActivityRoomBinding.inflate(inflater, container, false)
+        _binding = ActivityFrozenBinding.inflate(inflater, container, false)
+
+        val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("FrozenStorage")
+        val productList = ArrayList<ProductDB>()
+        val adapter = ProductAdapter(requireContext(), productList)
+        binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
+        binding.frozenlist.adapter = adapter
+
+        databaseReference.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                productList.clear()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(ProductDB::class.java)
+                    if (product != null) {
+                        productList.add(product)
+                    }
+                }
+                adapter.notifyDataSetChanged()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle possible errors.
+            }
+        })
+
         return binding.root
     }
 
