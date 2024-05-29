@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         binding.upload.setOnClickListener { startActivity(upload) }
 
         val group = Intent(this, GroupActivity::class.java)
-        binding.add.setOnClickListener { startActivity(group) }
+        binding.group.setOnClickListener { startActivity(group) }
 
         val product = Intent(this, ProductActivity::class.java)
         binding.add.setOnClickListener { startActivity(product) }
