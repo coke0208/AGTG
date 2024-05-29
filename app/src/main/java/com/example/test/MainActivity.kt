@@ -8,6 +8,7 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import com.example.test.databinding.ActivityColdBinding
 import com.example.test.databinding.ActivityMainBinding
 import com.google.zxing.integration.android.IntentIntegrator
 
@@ -39,6 +40,9 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
 
 
+
+
+
     }
 
 
@@ -61,6 +65,9 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+
+
+
     var pressedTime: Long = 0
 
     @SuppressLint("MissingSuperCall")
@@ -72,4 +79,8 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
 }

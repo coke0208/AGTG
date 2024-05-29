@@ -51,12 +51,30 @@ class ProductActivity : AppCompatActivity() {
             //startFragmentActivity("RoomStorage")
         }
 
+        val name=intent.getStringExtra("name")
+        val address=intent.getStringExtra("addres")
+        val edate=intent.getStringExtra("edate")
+        val cdate=intent.getStringExtra("cdate")
+        val pinfo=intent.getStringExtra("info")
+
+        textViewName!!.text=name
+        textViewAddress!!.text=address
+        textViewedate!!.text=edate
+        textViewcdate!!.text=cdate
+        info!!.text=pinfo
+
+
         // QR Code Scanner
         qrScan = IntentIntegrator(this)
         binding.add.setOnClickListener {
             qrScan!!.setPrompt("Scanning...")
             qrScan!!.initiateScan()
         }
+
+
+
+
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

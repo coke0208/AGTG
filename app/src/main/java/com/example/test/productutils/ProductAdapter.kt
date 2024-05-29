@@ -1,6 +1,7 @@
 package com.example.test.productutils
 
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
 
@@ -34,6 +36,18 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         holder.productEdate.text = product.edate
         // Set image resource if needed
         // holder.progressBar.progress = ... // Set progress if needed
+
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, ProductActivity::class.java).apply {
+                putExtra("name", product.name)
+                putExtra("address", product.addres)
+                putExtra("edate", product.edate)
+                putExtra("cdate", product.cdate)
+                putExtra("info", product.info)
+            }
+            context.startActivity(intent)
+        }
+
 
         holder.deleteButton.setOnClickListener {
             // Handle delete button click
