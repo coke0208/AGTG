@@ -38,17 +38,17 @@ class ProductActivity : AppCompatActivity() {
 
         binding.btnSave.setOnClickListener {
             saveProductData("ColdStorage")
-            startFragmentActivity("ColdStorage")
+            //startFragmentActivity("ColdStorage")
         }
 
         binding.btnFrozenSave.setOnClickListener {
             saveProductData("FrozenStorage")
-            startFragmentActivity("FrozenStorage")
+            //startFragmentActivity("FrozenStorage")
         }
 
         binding.btnRoomSave.setOnClickListener {
             saveProductData("RoomStorage")
-            startFragmentActivity("RoomStorage")
+            //startFragmentActivity("RoomStorage")
         }
 
         // QR Code Scanner
@@ -112,9 +112,5 @@ class ProductActivity : AppCompatActivity() {
         binding.textViewinfo.text.clear()
     }
 
-    private fun startFragmentActivity(storageType: String) {
-        val intent = Intent(this, HomeFragment::class.java)
-        intent.putExtra("storageType", storageType)
-        startActivity(intent)
-    }
+
 }
