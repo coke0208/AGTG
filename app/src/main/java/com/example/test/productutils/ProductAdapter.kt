@@ -74,7 +74,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
             return
         }
-// 비동기 작업을 위해 코루틴 사용
+// 비동기 작업(특정 코드를 수행하는 도중에도 아래로 계속 내려가며 수행함. 순서대로 진행하는 것이 아니라 한번에 여러개가 진행)을 위해 코루틴 사용
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 databaseReference.removeValue().await()
