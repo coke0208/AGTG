@@ -33,6 +33,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
         val deleteButton: Button = view.findViewById(R.id.btnDelete)
     }
+    //
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
