@@ -1,0 +1,114 @@
+Index: .idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml b/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_rebase__Changes_1.xml	
++++ /dev/null	
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_rebase_[Changes]1" date="1716457852812" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before rebase [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch b/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_rebase_[Changes]1/shelved.patch	
++++ /dev/null	
+@@ -1,53 +0,0 @@
+-Index: app/src/main/java/com/example/test/ProductActivity.kt
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+>package com.example.test\r\n\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.test.databinding.ActivityProductBinding\r\n\r\nclass ProductActivity : AppCompatActivity() {\r\n    val binding by lazy { ActivityProductBinding.inflate(layoutInflater) }\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        binding.back.setOnClickListener {\r\n            finish()\r\n        }\r\n    }\r\n}
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/java/com/example/test/ProductActivity.kt b/app/src/main/java/com/example/test/ProductActivity.kt
+---- a/app/src/main/java/com/example/test/ProductActivity.kt	
+-+++ b/app/src/main/java/com/example/test/ProductActivity.kt	
+-@@ -9,9 +9,11 @@
+-     override fun onCreate(savedInstanceState: Bundle?) {
+-         super.onCreate(savedInstanceState)
+-         setContentView(binding.root)
+--
+-         binding.back.setOnClickListener {
+-             finish()
+-         }
+-+
+-+
+-+
+-     }
+- }
+-\ No newline at end of file
+-Index: app/src/main/res/layout/activity_product.xml
+-IDEA additional info:
+-Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+-<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".ProductActivity\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_weight=\"0\"\r\n        android:orientation=\"vertical\"\r\n        android:background=\"@color/submain\"\r\n        tools:layout_editor_absoluteX=\"60dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@color/main\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/back\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:background=\"@color/main\"\r\n                android:src=\"@drawable/ic_action_arrow_back\"/>\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView2\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"상품정보\"\r\n                android:textColor=\"@color/white\"\r\n                android:textSize=\"20dp\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/imageView2\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            tools:srcCompat=\"@tools:sample/avatars\" />\r\n\r\n        <TextView\r\n            android:id=\"@+id/textView4\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:text=\"TextView\" />\r\n    </LinearLayout>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+-Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+-<+>UTF-8
+-===================================================================
+-diff --git a/app/src/main/res/layout/activity_product.xml b/app/src/main/res/layout/activity_product.xml
+---- a/app/src/main/res/layout/activity_product.xml	
+-+++ b/app/src/main/res/layout/activity_product.xml	
+-@@ -40,17 +40,7 @@
+- 
+-         </LinearLayout>
+- 
+--        <ImageView
+--            android:id="@+id/imageView2"
+--            android:layout_width="match_parent"
+--            android:layout_height="wrap_content"
+--            tools:srcCompat="@tools:sample/avatars" />
+- 
+--        <TextView
+--            android:id="@+id/textView4"
+--            android:layout_width="match_parent"
+--            android:layout_height="wrap_content"
+--            android:text="TextView" />
+-     </LinearLayout>
+- 
+- </androidx.constraintlayout.widget.ConstraintLayout>
+-\ No newline at end of file
+Index: app/src/main/res/layout/activity_cold.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<FrameLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    android:background=\"@color/submain\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\">\r\n\r\n    <androidx.constraintlayout.widget.ConstraintLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\">\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/coldlist\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"0dp\"\r\n            tools:listitem=\"@layout/item_view\"\r\n            tools:ignore=\"MissingConstraints\" />\r\n\r\n\r\n\r\n\r\n    </androidx.constraintlayout.widget.ConstraintLayout>\r\n</FrameLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_cold.xml b/app/src/main/res/layout/activity_cold.xml
+--- a/app/src/main/res/layout/activity_cold.xml	
++++ b/app/src/main/res/layout/activity_cold.xml	
+@@ -13,7 +13,7 @@
+         <androidx.recyclerview.widget.RecyclerView
+             android:id="@+id/coldlist"
+             android:layout_width="match_parent"
+-            android:layout_height="0dp"
++            android:layout_height="match_parent"
+             tools:listitem="@layout/item_view"
+             tools:ignore="MissingConstraints" />
+ 
+Index: app/src/main/java/com/example/test/LoginActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport com.example.test.databinding.ActivityLoginBinding\r\n\r\nimport android.widget.EditText\r\nimport android.widget.Toast\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.auth.FirebaseUser\r\nimport com.google.firebase.auth.ktx.auth\r\nimport com.google.firebase.database.ktx.database\r\n\r\nimport com.google.firebase.ktx.Firebase\r\n\r\nclass LoginActivity : AppCompatActivity() {\r\n    val binding by lazy { ActivityLoginBinding.inflate(layoutInflater) }\r\n\r\n    private var db_data = ArrayList<String>()\r\n    private lateinit var auth: FirebaseAuth\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        val id: EditText = binding.email\r\n        val pw: EditText = binding.password\r\n        auth = Firebase.auth\r\n\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        binding.login.setOnClickListener {\r\n            login(id.text.toString(), pw.text.toString()) }\r\n\r\n        val regsiter = Intent(this, RegsiterActivity::class.java)\r\n        binding.regsiter.setOnClickListener { startActivity(regsiter) }\r\n    }\r\n\r\n    public override fun onStart() {\r\n        super.onStart()\r\n        moveMainPage(auth?.currentUser)\r\n    }\r\n\r\n\r\n    fun moveMainPage(user: FirebaseUser?){\r\n        if( user!= null){\r\n            startActivity(Intent(this,MainActivity::class.java))\r\n            finish()\r\n        }\r\n    }\r\n\r\n    private fun login(id: String, pw: String) {\r\n\r\n        if (id.isEmpty() || pw.isEmpty()) {\r\n            Toast.makeText(this, \"빈 값을 입력하셨습니다.\", Toast.LENGTH_SHORT).show()\r\n        } else {\r\n            auth.signInWithEmailAndPassword(id, pw)\r\n                .addOnCompleteListener { task ->\r\n                    if (task.isSuccessful) {\r\n                        Toast.makeText(this, \"로그인에 성공했습니다!\", Toast.LENGTH_SHORT).show()\r\n                        moveMainPage(auth?.currentUser)\r\n\r\n                        finish()\r\n                    }\r\n                    else {\r\n                        Toast.makeText(this, \"아이디와 비밀번호를 확인해주세요\", Toast.LENGTH_SHORT).show()\r\n                    }\r\n                }\r\n        }\r\n\r\n    }\r\n\r\n\r\n    var pressedTime : Long=0\r\n    @Deprecated(\"Deprecated in Java\")\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    override fun onBackPressed() {\r\n        if (System.currentTimeMillis() - pressedTime <= 2000) {\r\n            finish()\r\n        } else {\r\n            pressedTime = System.currentTimeMillis()\r\n            Toast.makeText(this, \"한 번 더 누르면 종료됩니다.\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n\r\n}\r\n\r\n\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/LoginActivity.kt b/app/src/main/java/com/example/test/LoginActivity.kt
+--- a/app/src/main/java/com/example/test/LoginActivity.kt	
++++ b/app/src/main/java/com/example/test/LoginActivity.kt	
+@@ -21,12 +21,6 @@
+     private var db_data = ArrayList<String>()
+     private lateinit var auth: FirebaseAuth
+ 
+-
+-
+-
+-
+-
+-
+     override fun onCreate(savedInstanceState: Bundle?) {
+         val id: EditText = binding.email
+         val pw: EditText = binding.password

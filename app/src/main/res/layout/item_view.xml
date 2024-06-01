@@ -50,13 +50,13 @@
 
         </LinearLayout>
 
-        <Button
+        <ImageButton
             android:id="@+id/btnDelete"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:backgroundTint="@color/main"
-            android:text="X"/>
+            android:src="@drawable/x"/>
 
     </LinearLayout>
 
