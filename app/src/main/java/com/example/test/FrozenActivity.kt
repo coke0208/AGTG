@@ -25,7 +25,7 @@ class FrozenActivity : Fragment() {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("FrozenStorage")
         val productList = ArrayList<ProductDB>()
-        val adapter = ProductAdapter(requireContext(), productList)
+        val adapter = ProductAdapter(requireContext(), productList,"FrozenStorage")
         binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
         binding.frozenlist.adapter = adapter
 
@@ -34,6 +34,7 @@ class FrozenActivity : Fragment() {
                 productList.clear()
                 for (productSnapshot in snapshot.children) {
                     val product = productSnapshot.getValue(ProductDB::class.java)
+                    product?.id=productSnapshot.key?:""
                     if (product != null) {
                         productList.add(product)
                     }
@@ -49,7 +50,7 @@ class FrozenActivity : Fragment() {
         return binding.root
     }
 
-     /*override fun onDestroyView() {
+    /* override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }*/

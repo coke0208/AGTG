@@ -22,7 +22,7 @@ class RoomActivity : Fragment() {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("RoomStorage")
         val productList = ArrayList<ProductDB>()
-        val adapter = ProductAdapter(requireContext(), productList)
+        val adapter = ProductAdapter(requireContext(), productList,"RoomStorage")
         binding.roomlist.layoutManager = LinearLayoutManager(requireContext())
         binding.roomlist.adapter = adapter
 
@@ -32,6 +32,7 @@ class RoomActivity : Fragment() {
 
                 for (productSnapshot in snapshot.children) {
                     val product = productSnapshot.getValue(ProductDB::class.java)
+                    product?.id=productSnapshot.key?:""
                     if (product != null) {
                         productList.add(product)
                     }
@@ -48,7 +49,7 @@ class RoomActivity : Fragment() {
     }
 
 
-  /*  override fun onDestroyView() {
+  /* override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }*/

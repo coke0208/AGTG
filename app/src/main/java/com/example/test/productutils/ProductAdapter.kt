@@ -13,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
+import com.google.firebase.database.FirebaseDatabase
 
-class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>) :
+class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>,
+                     private val storagePath: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -48,12 +50,18 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             context.startActivity(intent)
         }
 
-
         holder.deleteButton.setOnClickListener {
-            // Handle delete button click
-            productList.removeAt(position)
-            notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
+            val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+                .getReference(storagePath)
+            databaseReference.child(product.id).removeValue().addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    productList.removeAt(position)
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, itemCount)
+                } else {
+                    // Handle error
+                }
+            }
         }
     }
 
