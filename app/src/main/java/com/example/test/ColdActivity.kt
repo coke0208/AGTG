@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,19 +35,20 @@ class ColdActivity : Fragment() {
         binding.coldlist.layoutManager = LinearLayoutManager(requireContext())
         binding.coldlist.adapter = adapter
 
-
-
         databaseReference.addValueEventListener(object : ValueEventListener {
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(ProductDB::class.java)
-                    product?.id=productSnapshot.key?:""
-                    if (product != null) {
-                        productList.add(product)
+                if (isAdded) { // Check if fragment is still attached to activity
+                    productList.clear()
+                    for (productSnapshot in snapshot.children) {
+                        val product = productSnapshot.getValue(ProductDB::class.java)
+                        if (product != null) {
+                            product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                            productList.add(product)
+                        }
                     }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -55,8 +57,8 @@ class ColdActivity : Fragment() {
         })
     }
 
-   /* override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }*/
+    }
 }

@@ -1,5 +1,6 @@
 package com.example.test
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,43 +16,50 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
 class FrozenActivity : Fragment() {
-
     private var _binding: ActivityFrozenBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityFrozenBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("FrozenStorage")
         val productList = ArrayList<ProductDB>()
-        val adapter = ProductAdapter(requireContext(), productList,"FrozenStorage")
+        val adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
+
         binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
         binding.frozenlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
+            //@SuppressLint("NotifyDataSetChanged")
+            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                for (productSnapshot in snapshot.children) {
-                    val product = productSnapshot.getValue(ProductDB::class.java)
-                    product?.id=productSnapshot.key?:""
-                    if (product != null) {
-                        productList.add(product)
+                if (isAdded) { // Check if fragment is still attached to activity
+                    productList.clear()
+                    for (productSnapshot in snapshot.children) {
+                        val product = productSnapshot.getValue(ProductDB::class.java)
+                        if (product != null) {
+                            product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                            productList.add(product)
+                        }
                     }
+                    adapter.notifyDataSetChanged()
                 }
-                adapter.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle possible errors.
             }
         })
-
-        return binding.root
     }
 
-    /* override fun onDestroyView() {
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }*/
+    }
 }

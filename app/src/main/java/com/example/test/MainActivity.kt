@@ -31,8 +31,8 @@ class MainActivity : AppCompatActivity() {
         val group = Intent(this, GroupActivity::class.java)
         binding.group.setOnClickListener { startActivity(group) }
 
-        val product = Intent(this, ProductActivity::class.java)
-        binding.add.setOnClickListener { startActivity(product) }
+        val product1 = Intent(this, ProductActivity::class.java)
+        binding.add.setOnClickListener { startActivity(product1) }
 
         // 2. Main Fragment 설정
         transaction = fragmentManager.beginTransaction()
