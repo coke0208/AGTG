@@ -80,6 +80,7 @@
                 android:iconifiedByDefault="false"
                 android:inputType="text"
                 android:queryHint="Search"
+
                 android:queryBackground="@drawable/search"/>
 
             <ImageButton

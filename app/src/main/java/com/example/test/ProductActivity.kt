@@ -31,7 +31,7 @@ class ProductActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         textViewName = findViewById<View>(R.id.textViewName) as TextView
-        textViewAddress = findViewById<View>(R.id.textViewaddres) as TextView
+        textViewAddress = findViewById<View>(R.id.imageViewAddress) as TextView
         textViewedate = findViewById<View>(R.id.textViewedate) as TextView
         textViewcdate = findViewById<View>(R.id.textViewcdate)as TextView
         info=findViewById<View>(R.id.textViewinfo)as TextView
@@ -102,7 +102,7 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveProductData(storageType: String) {
         val name = binding.textViewName.text.toString()
-        val address = binding.textViewaddres.text.toString()
+        val address = binding.imageViewAddress.text.toString()
         val cdate = binding.textViewcdate.text.toString()
         val edate = binding.textViewedate.text.toString()
         val info = binding.textViewinfo.text.toString()
@@ -124,7 +124,7 @@ class ProductActivity : AppCompatActivity() {
 
     private fun clearInputFields() {
         binding.textViewName.text.clear()
-        binding.textViewaddres.text.clear()
+        binding.imageViewAddress.text.clear()
         binding.textViewcdate.text.clear()
         binding.textViewedate.text.clear()
         binding.textViewinfo.text.clear()

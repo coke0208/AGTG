@@ -5,15 +5,21 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.logging.Filter
+
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +37,8 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         val productEdate: TextView = view.findViewById(R.id.ex_date)
         val productImage: ImageView = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
-        val deleteButton: Button = view.findViewById(R.id.btnDelete)
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -42,7 +49,28 @@ class ProductAdapter(private val context: Context, private val productList: Arra
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]// 해당 위치의 제품 가져오기
         holder.productName.text = product.name
-        holder.productEdate.text = product.edate
+
+        Glide.with(context)
+            .load(product.addres) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
+            .into(holder.productImage)
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+        val startDate: Date? = dateFormat.parse(product.cdate)
+        val endDate: Date? = dateFormat.parse(product.edate)
+
+        if (startDate != null && endDate != null) {
+            val totalDuration = endDate.time - startDate.time
+            val elapsedTime = currentDate.time - startDate.time
+
+            if (totalDuration > 0) {
+                holder.progressBar.max = totalDuration.toInt()
+                holder.progressBar.progress = elapsedTime.toInt()
+            } else {
+                holder.progressBar.max = 1
+                holder.progressBar.progress = 1
+            }
+        }
 
 // 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
         holder.itemView.setOnClickListener {
@@ -55,6 +83,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             }
             context.startActivity(intent)
         }
+
 
         holder.deleteButton.setOnClickListener {
             // Handle delete button click
