@@ -82,7 +82,7 @@
                 android:text="제조일자" />
 
             <EditText
-                android:id="@+id/textViewedate"
+                android:id="@+id/textViewcdate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
@@ -111,7 +111,7 @@
                 android:text="소비기한" />
 
             <EditText
-                android:id="@+id/textViewcdate"
+                android:id="@+id/textViewedate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"

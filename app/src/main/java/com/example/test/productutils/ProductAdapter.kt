@@ -2,6 +2,7 @@ package com.example.test.productutils
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
@@ -18,8 +20,6 @@ import com.example.test.productinfo.ProductDB
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import java.util.logging.Filter
-
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+@Suppress("DEPRECATION")
 class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>, private val storageType: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
@@ -37,7 +38,6 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         val productImage: ImageView = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -65,9 +65,31 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             if (totalDuration > 0) {
                 holder.progressBar.max = totalDuration.toInt()
                 holder.progressBar.progress = elapsedTime.toInt()
+
+
+                if (elapsedTime.toDouble() / totalDuration >= 0.9) {
+                    holder.progressBar.progressDrawable.setColorFilter(
+                        ContextCompat.getColor(context, R.color.red),
+                        PorterDuff.Mode.SRC_IN
+                    )
+                }else if (elapsedTime.toDouble() / totalDuration >= 0.5) {
+                    holder.progressBar.progressDrawable.setColorFilter(
+                        ContextCompat.getColor(context, R.color.orange),
+                        PorterDuff.Mode.SRC_IN
+                    )
+                } else {
+                    holder.progressBar.progressDrawable.setColorFilter(
+                        ContextCompat.getColor(context, R.color.green),
+                        PorterDuff.Mode.SRC_IN
+                    )
+                }
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1
+                holder.progressBar.progressDrawable.setColorFilter(
+                    ContextCompat.getColor(context, R.color.black),
+                    PorterDuff.Mode.SRC_IN
+                )
             }
         }
 
@@ -75,14 +97,13 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductActivity::class.java).apply {
                 putExtra("name", product.name)
-                putExtra("address", product.addres)
+                putExtra("addres", product.addres)
                 putExtra("edate", product.edate)
                 putExtra("cdate", product.cdate)
                 putExtra("info", product.info)
             }
             context.startActivity(intent)
         }
-
 
         holder.deleteButton.setOnClickListener {
             // Handle delete button click
@@ -127,5 +148,4 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             }
         }
     }
-
 }
