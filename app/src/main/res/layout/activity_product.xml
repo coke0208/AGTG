@@ -41,42 +41,108 @@
         </LinearLayout>
 
 
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/textViewName"
-            android:hint="이름" />
+            android:orientation="horizontal"
+            android:layout_margin="20dp">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="address"
-            android:id="@+id/textViewaddres"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+            <EditText
+                android:id="@+id/imageViewAddress"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_weight="0"/>
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/textViewcdate"
-            android:hint="유통기한" />
+            <EditText
+                android:id="@+id/textViewName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="50dp"
+                android:layout_marginLeft="50dp"
+                android:layout_weight="1"
+                android:hint="제품명" />
+        </LinearLayout>
 
-        <EditText
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="소비기한"
-            android:id="@+id/textViewedate"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large" />
+            android:orientation="horizontal"
+            android:layout_margin="20dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:text="제조일자" />
+
+            <EditText
+                android:id="@+id/textViewedate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="20dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="~"
+                android:textSize="50dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="소비기한" />
+
+            <EditText
+                android:id="@+id/textViewcdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:text="영양정보"
+            android:textSize="20dp"/>
 
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textViewinfo"
-            android:text="코드정보" />
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_weight="1" />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="170dp"
             android:orientation="horizontal">
 
         <Button
@@ -85,21 +151,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            />
+            android:backgroundTint="@color/button"/>
 
         <Button
             android:id="@+id/btnFrozenSave"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="냉동" />
+            android:text="냉동"
+            android:backgroundTint="@color/button"/>
 
             <Button
                 android:id="@+id/btnRoomSave"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="실온" />
+                android:text="실온"
+                android:backgroundTint="@color/button"/>
 
 
         </LinearLayout>
