@@ -19,7 +19,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import java.util.logging.Filter
-
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +33,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
     // RecyclerView 내 각 항목에 대한 뷰 홀더
         class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvTitle)
-        val productImage: ImageView = view.findViewById(R.id.tvImage)
+        val productImage: ImageView? = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
 
@@ -50,8 +49,8 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         holder.productName.text = product.name
 
         Glide.with(context)
-            .load(product.addres) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
-            .into(holder.productImage)
+            .load(product.address) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
+            .into(holder.productImage!!)
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date()
@@ -71,11 +70,11 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             }
         }
 
-// 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
+        // 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductActivity::class.java).apply {
                 putExtra("name", product.name)
-                putExtra("address", product.addres)
+                putExtra("address", product.address)
                 putExtra("edate", product.edate)
                 putExtra("cdate", product.cdate)
                 putExtra("info", product.info)
@@ -97,7 +96,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
     private fun deleteProduct(productId: String, position: Int) {
         val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference(storageType).child(productId)
-// 위치가 유효한지 확인
+        // 위치가 유효한지 확인
         if (position >= productList.size) {
             Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
             return

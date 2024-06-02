@@ -52,7 +52,7 @@ class ProductActivity : AppCompatActivity() {
         }
 
         val name=intent.getStringExtra("name")
-        val address=intent.getStringExtra("addres")
+        val address=intent.getStringExtra("address")
         val edate=intent.getStringExtra("edate")
         val cdate=intent.getStringExtra("cdate")
         val pinfo=intent.getStringExtra("info")
@@ -87,7 +87,7 @@ class ProductActivity : AppCompatActivity() {
                 try {
                     val obj = JSONObject(result.contents)
                     textViewName!!.text = obj.getString("name")
-                    textViewAddress!!.text = obj.getString("addres")
+                    textViewAddress!!.text = obj.getString("address")
                     textViewedate!!.text = obj.getString("edate")
                     textViewcdate!!.text = obj.getString("cdate")
                     info!!.text = obj.getString("info")
@@ -103,8 +103,8 @@ class ProductActivity : AppCompatActivity() {
     private fun saveProductData(storageType: String) {
         val name = binding.textViewName.text.toString()
         val address = binding.imageViewAddress.text.toString()
-        val cdate = binding.textViewcdate.text.toString()
         val edate = binding.textViewedate.text.toString()
+        val cdate = binding.textViewcdate.text.toString()
         val info = binding.textViewinfo.text.toString()
 
         val product = ProductDB(name, address, edate, cdate, info)
@@ -130,9 +130,4 @@ class ProductActivity : AppCompatActivity() {
         binding.textViewinfo.text.clear()
     }
 
-    /*private fun startFragmentActivity(storageType: String) {
-        val intent = Intent(this, HomeFragment::class.java)
-        intent.putExtra("storageType", storageType)
-        startActivity(intent)
-    }*/
 }
