@@ -1,0 +1,124 @@
+Index: app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test.productutils\r\n\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.ImageButton\r\nimport android.widget.ImageView\r\nimport android.widget.ProgressBar\r\nimport android.widget.TextView\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.bumptech.glide.Glide\r\nimport com.example.test.ProductActivity\r\nimport com.example.test.R\r\nimport com.example.test.productinfo.ProductDB\r\nimport java.text.SimpleDateFormat\r\nimport java.util.Date\r\nimport java.util.Locale\r\nimport java.util.logging.Filter\r\n\r\n\r\nclass ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>) :\r\n    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {\r\n\r\n    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {\r\n        val productName: TextView = view.findViewById(R.id.tvTitle)\r\n        val productImage: ImageView = view.findViewById(R.id.tvImage)\r\n        val progressBar: ProgressBar = view.findViewById(R.id.progress)\r\n        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)\r\n\r\n    }\r\n\r\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {\r\n        val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)\r\n        return ProductViewHolder(view)\r\n    }\r\n\r\n    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {\r\n        val product = productList[position]\r\n        holder.productName.text = product.name\r\n\r\n        Glide.with(context)\r\n            .load(product.addres) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.\r\n            .into(holder.productImage)\r\n\r\n        val dateFormat = SimpleDateFormat(\"yyyy-MM-dd\", Locale.getDefault())\r\n        val currentDate = Date()\r\n        val startDate: Date? = dateFormat.parse(product.cdate)\r\n        val endDate: Date? = dateFormat.parse(product.edate)\r\n\r\n        if (startDate != null && endDate != null) {\r\n            val totalDuration = endDate.time - startDate.time\r\n            val elapsedTime = currentDate.time - startDate.time\r\n\r\n            if (totalDuration > 0) {\r\n                holder.progressBar.max = totalDuration.toInt()\r\n                holder.progressBar.progress = elapsedTime.toInt()\r\n            } else {\r\n                holder.progressBar.max = 1\r\n                holder.progressBar.progress = 1\r\n            }\r\n        }\r\n\r\n        holder.itemView.setOnClickListener {\r\n            val intent = Intent(context, ProductActivity::class.java).apply {\r\n                putExtra(\"name\", product.name)\r\n                putExtra(\"addres\", product.addres)\r\n                putExtra(\"edate\", product.edate)\r\n                putExtra(\"cdate\", product.cdate)\r\n                putExtra(\"info\", product.info)\r\n            }\r\n            context.startActivity(intent)\r\n        }\r\n\r\n\r\n        holder.deleteButton.setOnClickListener {\r\n            // Handle delete button click\r\n            productList.removeAt(position)\r\n            notifyItemRemoved(position)\r\n            notifyItemRangeChanged(position, itemCount)\r\n        }\r\n    }\r\n\r\n    override fun getItemCount(): Int {\r\n        return productList.size\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+--- a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	
++++ b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	
+@@ -9,6 +9,7 @@
+ import android.widget.ImageView
+ import android.widget.ProgressBar
+ import android.widget.TextView
++import android.widget.Toast
+ import androidx.recyclerview.widget.RecyclerView
+ import com.bumptech.glide.Glide
+ import com.example.test.ProductActivity
+@@ -19,11 +20,11 @@
+ import java.util.Locale
+ import java.util.logging.Filter
+ 
+-
+-class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>) :
++class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>, private val storageType: String) :
+     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+ 
+-    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
++    // RecyclerView 내 각 항목에 대한 뷰 홀더
++        class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+         val productName: TextView = view.findViewById(R.id.tvTitle)
+         val productImage: ImageView = view.findViewById(R.id.tvImage)
+         val progressBar: ProgressBar = view.findViewById(R.id.progress)
+@@ -31,17 +32,18 @@
+ 
+     }
+ 
++    // RecyclerView에 표시될 각 아이템의 뷰 홀더 생성
+     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
+         return ProductViewHolder(view)
+     }
+-
++    // RecyclerView의 각 항목에 데이터를 바인딩
+     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
+-        val product = productList[position]
++        val product = productList[position]// 해당 위치의 제품 가져오기
+         holder.productName.text = product.name
+ 
+         Glide.with(context)
+-            .load(product.addres) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
++            .load(product.address) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
+             .into(holder.productImage)
+ 
+         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+@@ -62,10 +64,12 @@
+             }
+         }
+ 
++
++// 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
+         holder.itemView.setOnClickListener {
+             val intent = Intent(context, ProductActivity::class.java).apply {
+                 putExtra("name", product.name)
+-                putExtra("addres", product.addres)
++                putExtra("address", product.address)
+                 putExtra("edate", product.edate)
+                 putExtra("cdate", product.cdate)
+                 putExtra("info", product.info)
+@@ -73,16 +77,49 @@
+             context.startActivity(intent)
+         }
+ 
+-
+         holder.deleteButton.setOnClickListener {
+             // Handle delete button click
+-            productList.removeAt(position)
+-            notifyItemRemoved(position)
+-            notifyItemRangeChanged(position, itemCount)
++            deleteProduct(product.id, position)
+         }
+     }
+-
++    // RecyclerView에 표시되는 아이템의 수 반환
+     override fun getItemCount(): Int {
+         return productList.size
+     }
++
++    // Firebase에서 제품을 삭제하고 UI 업데이트
++    private fun deleteProduct(productId: String, position: Int) {
++        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
++            .getReference(storageType).child(productId)
++        // 위치가 유효한지 확인
++        if (position >= productList.size) {
++            Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
++            return
++        }
++        // 비동기 작업(특정 코드를 수행하는 도중에도 아래로 계속 내려가며 수행함. 순서대로 진행하는 것이 아니라 한번에 여러개가 진행)을 위해 코루틴 사용
++        CoroutineScope(Dispatchers.IO).launch {
++            try {
++                databaseReference.removeValue().await()
++                withContext(Dispatchers.Main) {// 메인 스레드에서 UI 업데이트
++                    synchronized(productList) {
++                        if (position < productList.size) {// 위치가 여전히 유효한지 확인
++                            productList.removeAt(position)
++                            notifyItemRemoved(position)// 어댑터에 항목 제거 알림
++                            notifyItemRangeChanged(position, productList.size) // 데이터 세트가 변경되었음을 어댑터에 알림
++                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
++                        } else {
++                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
++                            //삭제 되는데 왜 실패라 뜨는지 모르겠음/삭제 성공에 대한 토스트 메시지 표시 (인덱스가 범위를 벗어날 경우)
++                            //Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
++                        }
++                    }
++                }
++            } catch (e: Exception) {  // 예외 처리 및 삭제 실패에 대한 토스트 메시지 표시
++                withContext(Dispatchers.Main) {
++                    Toast.makeText(context, "삭제 실패: ${e.message}", Toast.LENGTH_LONG).show()
++                }
++            }
++        }
++    }
++
+ }

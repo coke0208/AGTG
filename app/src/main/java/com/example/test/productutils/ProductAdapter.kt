@@ -34,7 +34,6 @@ class ProductAdapter(private val context: Context, private val productList: Arra
     // RecyclerView 내 각 항목에 대한 뷰 홀더
         class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvTitle)
-        val productEdate: TextView = view.findViewById(R.id.ex_date)
         val productImage: ImageView = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
