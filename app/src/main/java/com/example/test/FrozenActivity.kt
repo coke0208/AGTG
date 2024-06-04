@@ -15,8 +15,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class FrozenActivity : Fragment() {
+class FrozenActivity : Fragment(), MainActivity.SearchableFragment {
     private var _binding: ActivityFrozenBinding? = null
+    private lateinit var adapter: ProductAdapter
+    private var productList = arrayListOf<ProductDB>()
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -56,6 +58,10 @@ class FrozenActivity : Fragment() {
                 // Handle possible errors.
             }
         })
+    }
+    override fun updateSearchQuery(query: String) {
+        val filteredList = productList.filter { it.name!!.contains(query, true) }
+        adapter.updateList(ArrayList(filteredList))
     }
 
     override fun onDestroyView() {

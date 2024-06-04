@@ -9,10 +9,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.test.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), MainActivity.SearchableFragment {
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
+
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,9 +44,14 @@ class HomeFragment : Fragment() {
             else -> null
         }
     }
-
-   /* override fun onDestroyView() {
+    override fun updateSearchQuery(query: String) {
+        val currentFragment = childFragmentManager.findFragmentByTag("f" + binding.vpTodo.currentItem)
+        if (currentFragment is MainActivity.SearchableFragment) {
+            currentFragment.updateSearchQuery(query)
+        }
+    }
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }*/
+    }
 }

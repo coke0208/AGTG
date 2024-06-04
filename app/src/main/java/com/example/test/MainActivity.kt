@@ -3,14 +3,11 @@ package com.example.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
-import com.example.test.databinding.ActivityColdBinding
 import com.example.test.databinding.ActivityMainBinding
-import com.google.zxing.integration.android.IntentIntegrator
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -38,11 +35,12 @@ class MainActivity : AppCompatActivity() {
         transaction = fragmentManager.beginTransaction()
         transaction.add(R.id.frameLayout, HomeFragment())
         transaction.commit()
+
+        setOnQueryTextListener()
     }
 
     private fun setOnQueryTextListener() {
-        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }

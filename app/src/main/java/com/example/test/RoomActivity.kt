@@ -15,8 +15,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class RoomActivity : Fragment() {
+class RoomActivity : Fragment(), MainActivity.SearchableFragment {
     private var _binding: ActivityRoomBinding? = null
+    private lateinit var adapter: ProductAdapter
+    private var productList = arrayListOf<ProductDB>()
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -53,6 +55,10 @@ class RoomActivity : Fragment() {
                 // Handle possible errors.
             }
         })
+    }
+    override fun updateSearchQuery(query: String) {
+        val filteredList = productList.filter { it.name!!.contains(query, true) }
+        adapter.updateList(ArrayList(filteredList))
     }
 
     override fun onDestroyView() {

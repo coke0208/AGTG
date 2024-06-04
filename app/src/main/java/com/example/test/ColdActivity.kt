@@ -14,7 +14,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class ColdActivity : Fragment() {
+class ColdActivity : Fragment(), MainActivity.SearchableFragment {
     private var _binding: ActivityColdBinding? = null
     private lateinit var adapter: ProductAdapter
     private var productList = arrayListOf<ProductDB>()
@@ -38,7 +38,6 @@ class ColdActivity : Fragment() {
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-
                 productList.clear()
                 for (productSnapshot in snapshot.children) {
                     val product = productSnapshot.getValue(ProductDB::class.java)
@@ -48,7 +47,6 @@ class ColdActivity : Fragment() {
                     }
                 }
                 adapter.notifyDataSetChanged()
-
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -58,7 +56,7 @@ class ColdActivity : Fragment() {
     }
 
     override fun updateSearchQuery(query: String) {
-        val filteredList = productList.filter { it.name.contains(query, true) }
+        val filteredList = productList.filter { it.name!!.contains(query, true) }
         adapter.updateList(ArrayList(filteredList))
     }
 
