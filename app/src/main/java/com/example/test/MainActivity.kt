@@ -40,24 +40,28 @@ class MainActivity : AppCompatActivity() {
         transaction.commit()
     }
 
-    /*private fun setOnQueryTextListener() {
+    private fun setOnQueryTextListener() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
             androidx.appcompat.widget.SearchView.OnQueryTextListener {
-            // 검색 버튼 입력시 호출, 검색 버튼이 없으므로 사용하지 않는다.
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
-            // 텍스트 입력, 수정시 호출
             override fun onQueryTextChange(newText: String?): Boolean {
-                *//*
-                 * SearchView는 Activity 내에 구현했으며
-                 * 입력 된 텍스트를 Fragment로 전달 하기 위한 함수
-                 *//*
                 updateItemCurrentFragment(newText)
                 return false
             }
         })
-    }*/
+    }
+    private fun updateItemCurrentFragment(newText: String?) {
+        val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
+        if (currentFragment is SearchableFragment) {
+            currentFragment.updateSearchQuery(newText ?: "")
+        }
+    }
+
+    interface SearchableFragment {
+        fun updateSearchQuery(query: String)
+    }
 
     var pressedTime: Long = 0
 

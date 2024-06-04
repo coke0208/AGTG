@@ -1,6 +1,5 @@
 package com.example.test
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,6 +16,8 @@ import com.google.firebase.database.ValueEventListener
 
 class ColdActivity : Fragment() {
     private var _binding: ActivityColdBinding? = null
+    private lateinit var adapter: ProductAdapter
+    private var productList = arrayListOf<ProductDB>()
     private val binding get() = _binding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -36,25 +37,29 @@ class ColdActivity : Fragment() {
         binding.coldlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
-            @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (isAdded) { // Check if fragment is still attached to activity
-                    productList.clear()
-                    for (productSnapshot in snapshot.children) {
-                        val product = productSnapshot.getValue(ProductDB::class.java)
-                        if (product != null) {
-                            product.id = productSnapshot.key.toString() // Assign the key to the product's id
-                            productList.add(product)
-                        }
+
+                productList.clear()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(ProductDB::class.java)
+                    if (product != null) {
+                        product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                        productList.add(product)
                     }
-                    adapter.notifyDataSetChanged()
                 }
+                adapter.notifyDataSetChanged()
+
             }
 
             override fun onCancelled(error: DatabaseError) {
                 // Handle possible errors.
             }
         })
+    }
+
+    override fun updateSearchQuery(query: String) {
+        val filteredList = productList.filter { it.name.contains(query, true) }
+        adapter.updateList(ArrayList(filteredList))
     }
 
     override fun onDestroyView() {

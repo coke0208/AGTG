@@ -29,11 +29,11 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 @Suppress("DEPRECATION")
-class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>, private val storageType: String) :
+class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     // RecyclerView 내 각 항목에 대한 뷰 홀더
-        class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvTitle)
         val productImage: ImageView = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
@@ -66,8 +66,12 @@ class ProductAdapter(private val context: Context, private val productList: Arra
                 holder.progressBar.max = totalDuration.toInt()
                 holder.progressBar.progress = elapsedTime.toInt()
 
-
-                if (elapsedTime.toDouble() / totalDuration >= 0.9) {
+                if (elapsedTime.toDouble() / totalDuration >= 1) {
+                    holder.progressBar.progressDrawable.setColorFilter(
+                        ContextCompat.getColor(context, R.color.black),
+                        PorterDuff.Mode.SRC_IN
+                    )
+                }else if (elapsedTime.toDouble() / totalDuration >= 0.9) {
                     holder.progressBar.progressDrawable.setColorFilter(
                         ContextCompat.getColor(context, R.color.red),
                         PorterDuff.Mode.SRC_IN
@@ -86,10 +90,6 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1
-                holder.progressBar.progressDrawable.setColorFilter(
-                    ContextCompat.getColor(context, R.color.black),
-                    PorterDuff.Mode.SRC_IN
-                )
             }
         }
 
@@ -147,5 +147,9 @@ class ProductAdapter(private val context: Context, private val productList: Arra
                 }
             }
         }
+    }
+    fun updateList(newList: ArrayList<ProductDB>) {
+        productList = newList
+        notifyDataSetChanged()
     }
 }
