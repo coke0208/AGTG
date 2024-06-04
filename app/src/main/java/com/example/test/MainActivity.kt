@@ -3,24 +3,35 @@ package com.example.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
+//import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+//import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import com.example.test.databinding.ActivityColdBinding
+//import androidx.recyclerview.widget.LinearLayoutManager
+//import androidx.recyclerview.widget.RecyclerView
+//import androidx.room.util.query
+//import com.example.test.databinding.ActivityColdBinding
 import com.example.test.databinding.ActivityMainBinding
-import com.google.zxing.integration.android.IntentIntegrator
+import com.example.test.productutils.ProductAdapter
+//import com.example.test.productinfo.ProductDB
+//import com.example.test.productutils.ProductAdapter
+import com.google.firebase.firestore.FirebaseFirestore
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager = supportFragmentManager
     private lateinit var transaction: FragmentTransaction
+    private lateinit var firestore: FirebaseFirestore
+    private lateinit var productAdapter: ProductAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        firestore = FirebaseFirestore.getInstance()
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
@@ -36,38 +47,25 @@ class MainActivity : AppCompatActivity() {
 
         // 2. Main Fragment 설정
         transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.frameLayout, HomeFragment())
+        transaction.add(R.id.frameLayout,HomeFragment(), "HomeFragment")
         transaction.commit()
 
-
-
-
+        setupSearchView()
 
     }
-    //
 
-
-    private fun initSearchView() {
-        // init SearchView
-        binding.search.isSubmitButtonEnabled = true
+    private fun setupSearchView() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                // @TODO
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                // @TODO
+                productAdapter.filter.filter(newText)
                 return true
             }
         })
-
-
     }
-
-
-
-
 
     var pressedTime: Long = 0
 
@@ -81,7 +79,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-
-
+    fun setProductAdapter(adapter: ProductAdapter){
+        this.productAdapter = adapter
+    }
 }

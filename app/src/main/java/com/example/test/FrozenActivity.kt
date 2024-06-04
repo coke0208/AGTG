@@ -13,6 +13,7 @@ import com.example.test.productutils.ProductAdapter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
 
 class FrozenActivity : Fragment() {
@@ -23,17 +24,14 @@ class FrozenActivity : Fragment() {
         _binding = ActivityFrozenBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("FrozenStorage")
+
         val productList = ArrayList<ProductDB>()
         val adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
-
-        binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
-        binding.frozenlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             //@SuppressLint("NotifyDataSetChanged")
@@ -44,7 +42,8 @@ class FrozenActivity : Fragment() {
                     for (productSnapshot in snapshot.children) {
                         val product = productSnapshot.getValue(ProductDB::class.java)
                         if (product != null) {
-                            product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                            product.id =
+                                productSnapshot.key.toString() // Assign the key to the product's id
                             productList.add(product)
                         }
                     }
@@ -58,8 +57,82 @@ class FrozenActivity : Fragment() {
         })
     }
 
+
+
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 }
+
+
+/*private var _binding: ActivityFrozenBinding? = null
+private val binding get() = _binding!!
+private lateinit var productList: MutableList<ProductDB>
+private lateinit var adapter: ProductAdapter
+//private lateinit var filterProductDBList: MutableList<ProductDB>
+
+override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    _binding = ActivityFrozenBinding.inflate(inflater, container, false)
+    return binding.root
+}
+
+
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    super.onViewCreated(view, savedInstanceState)
+    setupRecyclerView()
+    fetchProductsFromFirebase()
+
+
+    val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+        .getReference("FrozenStorage")
+    val productList = ArrayList<ProductDB>()
+
+    binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
+    binding.frozenlist.adapter = adapter
+    //val adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
+
+    databaseReference.addValueEventListener(object : ValueEventListener {
+        //@SuppressLint("NotifyDataSetChanged")
+        @SuppressLint("NotifyDataSetChanged")
+        override fun onDataChange(snapshot: DataSnapshot) {
+            if (isAdded) { // Check if fragment is still attached to activity
+                productList.clear()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(ProductDB::class.java)
+                    if (product != null) {
+                        product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                        productList.add(product)
+                    }
+                }
+                adapter.notifyDataSetChanged()
+                filter("")
+            }
+        }
+
+        override fun onCancelled(error: DatabaseError) {
+            // Handle possible errors.
+        }
+    })
+}
+
+fun filter(query: String?){
+    filterProductDBList.clear()
+    if (query.isNullOrEmpty()){
+        filterProductDBList.addAll(productList)
+    } else {
+        for(product in productList){
+            if(product.name?.contains(query,ignoreCase = true)==true){
+                filterProductDBList.add(product)
+            }
+        }
+    }
+
+}
+
+override fun onDestroyView() {
+    super.onDestroyView()
+    _binding = null
+}
+}*/

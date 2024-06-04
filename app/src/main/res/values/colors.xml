@@ -10,4 +10,5 @@
     <color name="main">#FFBE98</color>
     <color name="submain">#d8c8bd</color>
     <color name="button">#FDD5B2</color>
+    <color name="hint">#808080</color>
 </resources>
