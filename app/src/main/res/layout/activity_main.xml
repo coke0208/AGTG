@@ -75,13 +75,12 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_gravity="center"
-                app:searchIcon="@drawable/ic_action_search"
+                android:searchIcon="@drawable/ic_action_search"
                 android:focusable="true"
                 android:iconifiedByDefault="false"
                 android:inputType="text"
                 android:queryHint="Search"
-                android:textColorHint="@color/hint"
-                app:queryBackground="@drawable/search"/>
+                android:queryBackground="@drawable/search"/>
 
             <ImageButton
                 android:id="@+id/filter"
@@ -127,7 +126,4 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
-    <!--android:searchIcon="@drawable/ic_action_search"-->
-    <!--android:queryBackground="@drawable/search"-->

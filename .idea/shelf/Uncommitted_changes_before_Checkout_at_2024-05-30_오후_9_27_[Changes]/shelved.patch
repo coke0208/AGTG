@@ -1,0 +1,88 @@
+Index: app/src/main/java/com/example/test/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport android.widget.SearchView\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.fragment.app.FragmentTransaction\r\nimport com.example.test.databinding.ActivityColdBinding\r\nimport com.example.test.databinding.ActivityMainBinding\r\nimport com.google.zxing.integration.android.IntentIntegrator\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    private lateinit var binding: ActivityMainBinding\r\n    private val fragmentManager = supportFragmentManager\r\n    private lateinit var transaction: FragmentTransaction\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        binding = ActivityMainBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n\r\n        val mypage = Intent(this, MypageActivity::class.java)\r\n        binding.mypage.setOnClickListener { startActivity(mypage) }\r\n\r\n        val upload = Intent(this, UploadActivity::class.java)\r\n        binding.upload.setOnClickListener { startActivity(upload) }\r\n\r\n        val group = Intent(this, GroupActivity::class.java)\r\n        binding.group.setOnClickListener { startActivity(group) }\r\n\r\n        val product = Intent(this, ProductActivity::class.java)\r\n        binding.add.setOnClickListener { startActivity(product) }\r\n\r\n        // 2. Main Fragment 설정\r\n        transaction = fragmentManager.beginTransaction()\r\n        transaction.add(R.id.frameLayout, HomeFragment())\r\n        transaction.commit()\r\n\r\n\r\n\r\n\r\n\r\n    }\r\n\r\n\r\n    private fun initSearchView() {\r\n        // init SearchView\r\n        binding.search.isSubmitButtonEnabled = true\r\n        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\r\n            override fun onQueryTextSubmit(query: String?): Boolean {\r\n                // @TODO\r\n                return false\r\n            }\r\n\r\n            override fun onQueryTextChange(newText: String?): Boolean {\r\n                // @TODO\r\n                return true\r\n            }\r\n        })\r\n\r\n\r\n    }\r\n\r\n\r\n\r\n\r\n\r\n    var pressedTime: Long = 0\r\n\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    override fun onBackPressed() {\r\n        if (System.currentTimeMillis() - pressedTime <= 2000) {\r\n            finish()\r\n        } else {\r\n            pressedTime = System.currentTimeMillis()\r\n            Toast.makeText(this, \"한 번 더 누르면 종료됩니다.\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n\r\n\r\n\r\n\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/MainActivity.kt b/app/src/main/java/com/example/test/MainActivity.kt
+--- a/app/src/main/java/com/example/test/MainActivity.kt	
++++ b/app/src/main/java/com/example/test/MainActivity.kt	
+@@ -3,14 +3,11 @@
+ import android.annotation.SuppressLint
+ import android.content.Intent
+ import android.os.Bundle
+-import android.view.View
+ import android.widget.SearchView
+ import android.widget.Toast
+ import androidx.appcompat.app.AppCompatActivity
+ import androidx.fragment.app.FragmentTransaction
+-import com.example.test.databinding.ActivityColdBinding
+ import com.example.test.databinding.ActivityMainBinding
+-import com.google.zxing.integration.android.IntentIntegrator
+ 
+ class MainActivity : AppCompatActivity() {
+     private lateinit var binding: ActivityMainBinding
+@@ -21,7 +18,6 @@
+         binding = ActivityMainBinding.inflate(layoutInflater)
+         setContentView(binding.root)
+ 
+-
+         val mypage = Intent(this, MypageActivity::class.java)
+         binding.mypage.setOnClickListener { startActivity(mypage) }
+ 
+@@ -38,13 +34,7 @@
+         transaction = fragmentManager.beginTransaction()
+         transaction.add(R.id.frameLayout, HomeFragment())
+         transaction.commit()
+-
+-
+-
+-
+-
+     }
+-
+ 
+     private fun initSearchView() {
+         // init SearchView
+@@ -60,13 +50,7 @@
+                 return true
+             }
+         })
+-
+-
+     }
+-
+-
+-
+-
+ 
+     var pressedTime: Long = 0
+ 
+@@ -79,8 +63,4 @@
+             Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+         }
+     }
+-
+-
+-
+-
+ }
+\ No newline at end of file
+Index: app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test.productutils\r\n\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.ViewGroup\r\nimport android.widget.Button\r\nimport android.widget.ImageView\r\nimport android.widget.ProgressBar\r\nimport android.widget.TextView\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.example.test.ProductActivity\r\nimport com.example.test.R\r\nimport com.example.test.productinfo.ProductDB\r\n\r\nclass ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>) :\r\n    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {\r\n\r\n    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {\r\n        val productName: TextView = view.findViewById(R.id.tvTitle)\r\n        val productEdate: TextView = view.findViewById(R.id.ex_date)\r\n        val productImage: ImageView = view.findViewById(R.id.tvImage)\r\n        val progressBar: ProgressBar = view.findViewById(R.id.progress)\r\n        val deleteButton: Button = view.findViewById(R.id.btnDelete)\r\n    }\r\n\r\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {\r\n        val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)\r\n        return ProductViewHolder(view)\r\n    }\r\n\r\n    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {\r\n        val product = productList[position]\r\n        holder.productName.text = product.name\r\n        holder.productEdate.text = product.edate\r\n        // Set image resource if needed\r\n        // holder.progressBar.progress = ... // Set progress if needed\r\n\r\n        holder.itemView.setOnClickListener {\r\n            val intent = Intent(context, ProductActivity::class.java).apply {\r\n                putExtra(\"name\", product.name)\r\n                putExtra(\"address\", product.addres)\r\n                putExtra(\"edate\", product.edate)\r\n                putExtra(\"cdate\", product.cdate)\r\n                putExtra(\"info\", product.info)\r\n            }\r\n            context.startActivity(intent)\r\n        }\r\n\r\n\r\n        holder.deleteButton.setOnClickListener {\r\n            // Handle delete button click\r\n            productList.removeAt(position)\r\n            notifyItemRemoved(position)\r\n            notifyItemRangeChanged(position, itemCount)\r\n        }\r\n    }\r\n\r\n    override fun getItemCount(): Int {\r\n        return productList.size\r\n    }\r\n}\r\n
+===================================================================
+diff --git a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+--- a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	
++++ b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	
+@@ -57,6 +57,8 @@
+         }
+     }
+ 
++
++
+     override fun getItemCount(): Int {
+         return productList.size
+     }

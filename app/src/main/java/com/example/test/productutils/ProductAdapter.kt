@@ -8,14 +8,20 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import java.util.logging.Filter
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.DatabaseReference
 import kotlinx.coroutines.CoroutineScope
@@ -33,24 +39,43 @@ class ProductAdapter(private val context: Context, private var productList: Muta
     // RecyclerView 내 각 항목에 대한 뷰 홀더
     inner class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvTitle)
-        val productEdate: TextView = view.findViewById(R.id.ex_date)
-        val productImage: ImageView = view.findViewById(R.id.tvImage)
+        val productImage: ImageView? = view.findViewById(R.id.tvImage)
         val progressBar: ProgressBar = view.findViewById(R.id.progress)
-        val deleteButton: Button = view.findViewById(R.id.btnDelete)
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
+
     }
-    //
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
         return ProductViewHolder(view)
     }
-
     // RecyclerView의 각 항목에 데이터를 바인딩
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val productDB = filteredProductList[position]
         val product = productList[position]// 해당 위치의 제품 가져오기
         holder.productName.text = product.name
-        holder.productEdate.text = product.edate
+
+        Glide.with(context)
+            .load(product.address) // 여기에 Firebase Realtime Database에서 가져온 이미지 URL을 넣어줍니다.
+            .into(holder.productImage!!)
+
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+        val startDate: Date? = dateFormat.parse(product.cdate)
+        val endDate: Date? = dateFormat.parse(product.edate)
+
+        if (startDate != null && endDate != null) {
+            val totalDuration = endDate.time - startDate.time
+            val elapsedTime = currentDate.time - startDate.time
+
+            if (totalDuration > 0) {
+                holder.progressBar.max = totalDuration.toInt()
+                holder.progressBar.progress = elapsedTime.toInt()
+            } else {
+                holder.progressBar.max = 1
+                holder.progressBar.progress = 1
+            }
+        }
 
 // 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
         holder.itemView.setOnClickListener {
@@ -69,18 +94,19 @@ class ProductAdapter(private val context: Context, private var productList: Muta
             deleteProduct(product.id, position)
         }
     }
-
     // RecyclerView에 표시되는 아이템의 수 반환
     override fun getItemCount(): Int {
         return productList.size
     }
-
     // Firebase에서 제품을 삭제하고 UI 업데이트
     private fun deleteProduct(productId: String, position: Int) {
         val databaseReference: DatabaseReference =
             FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
                 .getReference(storageType).child(productId)
 // 위치가 유효한지 확인
+        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference(storageType).child(productId)
+        // 위치가 유효한지 확인
         if (position >= productList.size) {
             Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
             return

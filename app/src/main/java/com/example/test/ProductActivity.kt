@@ -31,7 +31,7 @@ class ProductActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         textViewName = findViewById<View>(R.id.textViewName) as TextView
-        textViewAddress = findViewById<View>(R.id.textViewaddres) as TextView
+        textViewAddress = findViewById<View>(R.id.imageViewAddress) as TextView
         textViewedate = findViewById<View>(R.id.textViewedate) as TextView
         textViewcdate = findViewById<View>(R.id.textViewcdate)as TextView
         info=findViewById<View>(R.id.textViewinfo)as TextView
@@ -52,7 +52,7 @@ class ProductActivity : AppCompatActivity() {
         }
 
         val name=intent.getStringExtra("name")
-        val address=intent.getStringExtra("addres")
+        val address=intent.getStringExtra("address")
         val edate=intent.getStringExtra("edate")
         val cdate=intent.getStringExtra("cdate")
         val pinfo=intent.getStringExtra("info")
@@ -87,7 +87,7 @@ class ProductActivity : AppCompatActivity() {
                 try {
                     val obj = JSONObject(result.contents)
                     textViewName!!.text = obj.getString("name")
-                    textViewAddress!!.text = obj.getString("addres")
+                    textViewAddress!!.text = obj.getString("address")
                     textViewedate!!.text = obj.getString("edate")
                     textViewcdate!!.text = obj.getString("cdate")
                     info!!.text = obj.getString("info")
@@ -102,9 +102,9 @@ class ProductActivity : AppCompatActivity() {
 
     private fun saveProductData(storageType: String) {
         val name = binding.textViewName.text.toString()
-        val address = binding.textViewaddres.text.toString()
-        val cdate = binding.textViewcdate.text.toString()
+        val address = binding.imageViewAddress.text.toString()
         val edate = binding.textViewedate.text.toString()
+        val cdate = binding.textViewcdate.text.toString()
         val info = binding.textViewinfo.text.toString()
 
         val product = ProductDB(name, address, edate, cdate, info)
@@ -124,15 +124,10 @@ class ProductActivity : AppCompatActivity() {
 
     private fun clearInputFields() {
         binding.textViewName.text.clear()
-        binding.textViewaddres.text.clear()
+        binding.imageViewAddress.text.clear()
         binding.textViewcdate.text.clear()
         binding.textViewedate.text.clear()
         binding.textViewinfo.text.clear()
     }
 
-    /*private fun startFragmentActivity(storageType: String) {
-        val intent = Intent(this, HomeFragment::class.java)
-        intent.putExtra("storageType", storageType)
-        startActivity(intent)
-    }*/
 }

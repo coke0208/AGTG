@@ -3,16 +3,12 @@ package com.example.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.SearchView
 import android.widget.Toast
-//import androidx.appcompat.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
-//import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-//import androidx.recyclerview.widget.LinearLayoutManager
-//import androidx.recyclerview.widget.RecyclerView
-//import androidx.room.util.query
-//import com.example.test.databinding.ActivityColdBinding
+import com.example.test.databinding.ActivityColdBinding
 import com.example.test.databinding.ActivityMainBinding
 import com.example.test.productutils.ProductAdapter
 //import com.example.test.productinfo.ProductDB
@@ -57,6 +53,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupSearchView() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                // @TODO
                 return false
             }
 
