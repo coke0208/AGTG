@@ -21,12 +21,6 @@ class LoginActivity : AppCompatActivity() {
     private var db_data = ArrayList<String>()
     private lateinit var auth: FirebaseAuth
 
-
-
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         val id: EditText = binding.email
         val pw: EditText = binding.password

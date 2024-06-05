@@ -9,16 +9,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.databinding.ActivityColdBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 
 class ColdActivity : Fragment(), MainActivity.SearchableFragment {
     private var _binding: ActivityColdBinding? = null
-    private lateinit var adapter: ProductAdapter
-    private var productList = arrayListOf<ProductDB>()
     private val binding get() = _binding!!
+
+    private lateinit var adapter: ProductAdapter
+    private var productList = ArrayList<ProductDB>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityColdBinding.inflate(inflater, container, false)
@@ -28,36 +26,43 @@ class ColdActivity : Fragment(), MainActivity.SearchableFragment {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("ColdStorage")
-        val productList = ArrayList<ProductDB>()
-        val adapter = ProductAdapter(requireContext(), productList, "ColdStorage")
-
+        // 어댑터 초기화
+        adapter = ProductAdapter(requireContext(), productList, "ColdStorage")
         binding.coldlist.layoutManager = LinearLayoutManager(requireContext())
         binding.coldlist.adapter = adapter
 
-        databaseReference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
+        // 데이터베이스에서 데이터 로드
+        loadDataFromDatabase()
+    }
+
+    private fun loadDataFromDatabase() {
+        val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("ColdStorage")
+
+        databaseReference.addValueEventListener(object : com.google.firebase.database.ValueEventListener {
+            override fun onDataChange(snapshot: com.google.firebase.database.DataSnapshot) {
                 productList.clear()
                 for (productSnapshot in snapshot.children) {
                     val product = productSnapshot.getValue(ProductDB::class.java)
                     if (product != null) {
-                        product.id = productSnapshot.key.toString() // Assign the key to the product's id
+                        product.id = productSnapshot.key.toString()
                         productList.add(product)
                     }
                 }
                 adapter.notifyDataSetChanged()
             }
 
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
                 // Handle possible errors.
             }
         })
     }
 
     override fun updateSearchQuery(query: String) {
-        val filteredList = productList.filter { it.name!!.contains(query, true) }
-        adapter.updateList(ArrayList(filteredList))
+        if (this::adapter.isInitialized) {  // 어댑터가 초기화되었는지 확인
+            val filteredList = productList.filter { it.name!!.contains(query, true) }
+            adapter.updateList(ArrayList(filteredList))
+        }
     }
 
     override fun onDestroyView() {
