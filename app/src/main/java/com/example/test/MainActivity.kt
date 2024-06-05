@@ -3,6 +3,8 @@ package com.example.test
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.MotionEvent
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +15,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private val fragmentManager = supportFragmentManager
     private lateinit var transaction: FragmentTransaction
+    private var isSearchViewOpen = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,12 +52,35 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
+        binding.search.setOnSearchClickListener {
+            isSearchViewOpen = true
+        }
+
+        binding.search.setOnCloseListener {
+            isSearchViewOpen = false
+            false
+        }
+        binding.search.setOnQueryTextFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) {
+                binding.search.onActionViewCollapsed()
+                isSearchViewOpen = false
+            }
+        }
     }
+
+
     private fun updateItemCurrentFragment(newText: String?) {
         val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
         if (currentFragment is SearchableFragment) {
             currentFragment.updateSearchQuery(newText ?: "")
         }
+    }
+
+    override fun onTouchEvent(event: MotionEvent?): Boolean {
+        if (isSearchViewOpen && event?.action == MotionEvent.ACTION_DOWN) {
+            binding.search.clearFocus()
+        }
+        return super.onTouchEvent(event)
     }
 
     interface SearchableFragment {
