@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.test.NotificationHelper
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
@@ -27,6 +28,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 
 @Suppress("DEPRECATION")
 class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
@@ -61,31 +63,42 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         if (startDate != null && endDate != null) {
             val totalDuration = endDate.time - startDate.time
             val elapsedTime = currentDate.time - startDate.time
+            val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()
 
             if (totalDuration > 0) {
                 holder.progressBar.max = totalDuration.toInt()
                 holder.progressBar.progress = elapsedTime.toInt()
 
-                if (elapsedTime.toDouble() / totalDuration >= 1) {
-                    holder.progressBar.progressDrawable.setColorFilter(
-                        ContextCompat.getColor(context, R.color.black),
-                        PorterDuff.Mode.SRC_IN
-                    )
-                }else if (elapsedTime.toDouble() / totalDuration >= 0.9) {
-                    holder.progressBar.progressDrawable.setColorFilter(
-                        ContextCompat.getColor(context, R.color.red),
-                        PorterDuff.Mode.SRC_IN
-                    )
-                }else if (elapsedTime.toDouble() / totalDuration >= 0.5) {
-                    holder.progressBar.progressDrawable.setColorFilter(
-                        ContextCompat.getColor(context, R.color.orange),
-                        PorterDuff.Mode.SRC_IN
-                    )
-                } else {
-                    holder.progressBar.progressDrawable.setColorFilter(
-                        ContextCompat.getColor(context, R.color.green),
-                        PorterDuff.Mode.SRC_IN
-                    )
+                when {
+                    elapsedTime.toDouble() / totalDuration >= 1 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.black),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
+                    elapsedTime.toDouble() / totalDuration >= 0.9 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.red),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
+                    elapsedTime.toDouble() / totalDuration >= 0.5 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.orange),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
+                    else -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.green),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
+                }
+
+                // 남은 기간이 7일일 때 알림 전송
+                if (remainingDays == 7) {
+                    NotificationHelper.sendExpiryNotification(context, product.name ?: "Unknown product")
                 }
             } else {
                 holder.progressBar.max = 1
