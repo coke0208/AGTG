@@ -1,0 +1,23 @@
+Index: app/src/main/java/com/example/test/productinfo/ProductDB.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test.productinfo\r\n\r\ndata class ProductDB(\r\n    var id: String=\"\",\r\n    var name:String?=null,\r\n    var address:String?=null,\r\n    var edate:String?=null,\r\n    var cdate:String?=null,\r\n    var info:String?=null\r\n)\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/productinfo/ProductDB.kt b/app/src/main/java/com/example/test/productinfo/ProductDB.kt
+--- a/app/src/main/java/com/example/test/productinfo/ProductDB.kt	(revision 90a2cd696d6dc29459c9687f2a8eed4e3c83ac73)
++++ b/app/src/main/java/com/example/test/productinfo/ProductDB.kt	(date 1717310516443)
+@@ -1,10 +1,10 @@
+ package com.example.test.productinfo
+ 
+ data class ProductDB(
+-    var id: String="",
+     var name:String?=null,
+     var address:String?=null,
+     var edate:String?=null,
+     var cdate:String?=null,
+-    var info:String?=null
++    var info:String?=null,
++
+ )

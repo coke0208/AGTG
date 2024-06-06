@@ -64,6 +64,7 @@ android {
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
 
         implementation("com.github.bumptech.glide:glide:4.16.0")
+        implementation ("com.squareup.picasso:picasso:2.8")
     }
 }
 
@@ -80,7 +81,9 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
 }
