@@ -11,12 +11,14 @@ import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
 import com.google.firebase.database.FirebaseDatabase
 
-class ColdActivity : Fragment(), MainActivity.SearchableFragment {
+class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
     private var _binding: ActivityColdBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var adapter: ProductAdapter
     private var productList = ArrayList<ProductDB>()
+    private var filteredList = ArrayList<ProductDB>()
+    private var currentQuery: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityColdBinding.inflate(inflater, container, false)
@@ -49,7 +51,7 @@ class ColdActivity : Fragment(), MainActivity.SearchableFragment {
                         productList.add(product)
                     }
                 }
-                adapter.notifyDataSetChanged()
+                updateSearchQuery(currentQuery)
             }
 
             override fun onCancelled(error: com.google.firebase.database.DatabaseError) {
@@ -59,9 +61,11 @@ class ColdActivity : Fragment(), MainActivity.SearchableFragment {
     }
 
     override fun updateSearchQuery(query: String) {
-        if (this::adapter.isInitialized) {  // 어댑터가 초기화되었는지 확인
-            val filteredList = productList.filter { it.name!!.contains(query, true) }
-            adapter.updateList(ArrayList(filteredList))
+        currentQuery = query
+        if (this::adapter.isInitialized) {
+            filteredList.clear()
+            filteredList.addAll(productList.filter { it.name!!.contains(query, true) })
+            adapter.updateList(filteredList)
         }
     }
 

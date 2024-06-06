@@ -28,6 +28,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
+@Suppress("DEPRECATION")
 class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
@@ -54,8 +55,8 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date()
-        val startDate: Date? = dateFormat.parse(product.cdate)
-        val endDate: Date? = dateFormat.parse(product.edate)
+        val startDate: Date? = dateFormat.parse(product.cdate ?: "")
+        val endDate: Date? = dateFormat.parse(product.edate ?: "")
 
         if (startDate != null && endDate != null) {
             val totalDuration = endDate.time - startDate.time

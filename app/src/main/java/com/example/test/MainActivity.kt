@@ -9,18 +9,23 @@ import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentTransaction
+import androidx.viewpager2.widget.ViewPager2
 import com.example.test.databinding.ActivityMainBinding
+import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private val fragmentManager = supportFragmentManager
-    private lateinit var transaction: FragmentTransaction
+    private lateinit var homeFragment: HomeFragment
     private var isSearchViewOpen = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        homeFragment = HomeFragment()
+        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
+
+        setOnQueryTextListener()
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
@@ -33,58 +38,29 @@ class MainActivity : AppCompatActivity() {
 
         val product1 = Intent(this, ProductActivity::class.java)
         binding.add.setOnClickListener { startActivity(product1) }
-
-        // 2. Main Fragment 설정
-        transaction = fragmentManager.beginTransaction()
-        transaction.add(R.id.frameLayout, HomeFragment())
-        transaction.commit()
-
-        setOnQueryTextListener()
     }
 
     private fun setOnQueryTextListener() {
-        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
+                binding.search.clearFocus()
                 return false
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 updateItemCurrentFragment(newText)
                 return false
             }
         })
-        binding.search.setOnSearchClickListener {
-            isSearchViewOpen = true
-        }
-
-        binding.search.setOnCloseListener {
-            isSearchViewOpen = false
-            false
-        }
-        binding.search.setOnQueryTextFocusChangeListener { _, hasFocus ->
-            if (!hasFocus) {
-                binding.search.onActionViewCollapsed()
-                isSearchViewOpen = false
-            }
-        }
     }
-
 
     private fun updateItemCurrentFragment(newText: String?) {
-        val currentFragment = supportFragmentManager.findFragmentById(R.id.frameLayout)
-        if (currentFragment is SearchableFragment) {
-            currentFragment.updateSearchQuery(newText ?: "")
+        val fragments = (homeFragment.childFragmentManager.fragments)
+        fragments.forEach { fragment ->
+            if (fragment is HomeFragment.SearchableFragment) {
+                fragment.updateSearchQuery(newText ?: "")
+            }
         }
-    }
-
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        if (isSearchViewOpen && event?.action == MotionEvent.ACTION_DOWN) {
-            binding.search.clearFocus()
-        }
-        return super.onTouchEvent(event)
-    }
-
-    interface SearchableFragment {
-        fun updateSearchQuery(query: String)
     }
 
     var pressedTime: Long = 0
