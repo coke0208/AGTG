@@ -63,6 +63,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
+        if (currentFocus != null) {
+            val outRect = android.graphics.Rect()
+            currentFocus?.getGlobalVisibleRect(outRect)
+            if (!outRect.contains(ev?.rawX?.toInt() ?: 0, ev?.rawY?.toInt() ?: 0)) {
+                currentFocus?.clearFocus()
+                binding.search.clearFocus()
+            }
+        }
+        return super.dispatchTouchEvent(ev)
+    }
+
     var pressedTime: Long = 0
 
     @SuppressLint("MissingSuperCall")
