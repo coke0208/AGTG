@@ -64,6 +64,8 @@ android {
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
 
         implementation("com.github.bumptech.glide:glide:4.16.0")
+
+        implementation ("com.google.firebase:firebase-messaging:23.2.1")
     }
 }
 
@@ -83,4 +85,10 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+}
+//푸시알림
+buildscript {
+    dependencies {
+        classpath ("com.google.gms:google-services:4.3.15") // Add this line
+    }
 }
