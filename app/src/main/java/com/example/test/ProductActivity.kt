@@ -2,6 +2,7 @@ package com.example.test
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -9,6 +10,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityProductBinding
 import com.example.test.productinfo.ProductDB
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
@@ -23,6 +26,9 @@ class ProductActivity : AppCompatActivity() {
     private var textViewedate: TextView? = null
     private var textViewcdate: TextView? = null
     private var info: TextView? = null
+    private lateinit var auth: FirebaseAuth
+    private lateinit var userUid: String
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,21 +42,17 @@ class ProductActivity : AppCompatActivity() {
         textViewcdate = findViewById<View>(R.id.textViewcdate)as TextView
         info=findViewById<View>(R.id.textViewinfo)as TextView
 
-        binding.btnSave.setOnClickListener {
-            saveProductData("ColdStorage")
-            //startFragmentActivity("ColdStorage")
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            // 사용자가 로그인되어 있지 않은 경우 처리
+            Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
         }
 
-        binding.btnFrozenSave.setOnClickListener {
-            saveProductData("FrozenStorage")
-            //startFragmentActivity("FrozenStorage")
-        }
-
-        binding.btnRoomSave.setOnClickListener {
-            saveProductData("RoomStorage")
-            //startFragmentActivity("RoomStorage")
-        }
-
+        // 사용자의 제품 데이터베이스 참조
+        userUid = currentUser.uid
         val name=intent.getStringExtra("name")
         val address=intent.getStringExtra("address")
         val edate=intent.getStringExtra("edate")
@@ -62,6 +64,18 @@ class ProductActivity : AppCompatActivity() {
         textViewedate!!.text=edate
         textViewcdate!!.text=cdate
         info!!.text=pinfo
+
+        binding.btnSave.setOnClickListener {
+            saveProduct("ColdStorage", ProductDB(name, address, cdate, edate, pinfo))
+        }
+
+        binding.btnFrozenSave.setOnClickListener {
+            saveProduct("FrozenStorage", ProductDB(name, address, cdate, edate, pinfo))
+        }
+
+        binding.btnRoomSave.setOnClickListener {
+            saveProduct("RoomStorage", ProductDB(name, address, cdate, edate, pinfo))
+        }
 
 
         // QR Code Scanner
@@ -100,34 +114,28 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
-    private fun saveProductData(storageType: String) {
-        val name = binding.textViewName.text.toString()
-        val address = binding.imageViewAddress.text.toString()
-        val edate = binding.textViewedate.text.toString()
-        val cdate = binding.textViewcdate.text.toString()
-        val info = binding.textViewinfo.text.toString()
 
-        val product = ProductDB(name, address, edate, cdate, info)
-
-        val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference(storageType)
-
-        databaseReference.push().setValue(product).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Toast.makeText(this, "저장성공", Toast.LENGTH_LONG).show()
-                clearInputFields()
-            } else {
-                Toast.makeText(this, "저장실패", Toast.LENGTH_LONG).show()
+    private fun saveProduct(storageType: String, product: ProductDB) {
+        try {
+            val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+                .getReference("users").child(userUid).child("products").child(storageType)
+            val newProductRef = databaseReference.push()
+            product.id = newProductRef.key.toString()  // Assigning ID to product
+            newProductRef.setValue(product).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(this, "저장 성공", Toast.LENGTH_SHORT).show()
+                    finish()
+                } else {
+                    Log.e("ProductActivity", "Firebase 저장 실패: ${task.exception}")
+                    Toast.makeText(this, "저장 실패", Toast.LENGTH_SHORT).show()
+                }
             }
+        } catch (e: Exception) {
+            Log.e("ProductActivity", "Exception: ${e.message}", e)
+            Toast.makeText(this, "예외 발생: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun clearInputFields() {
-        binding.textViewName.text.clear()
-        binding.imageViewAddress.text.clear()
-        binding.textViewcdate.text.clear()
-        binding.textViewedate.text.clear()
-        binding.textViewinfo.text.clear()
-    }
+
 
 }

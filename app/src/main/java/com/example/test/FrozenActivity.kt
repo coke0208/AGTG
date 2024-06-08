@@ -2,6 +2,7 @@ package com.example.test
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.test.databinding.ActivityFrozenBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -18,6 +20,9 @@ import com.google.firebase.database.ValueEventListener
 class FrozenActivity : Fragment() {
     private var _binding: ActivityFrozenBinding? = null
     private val binding get() = _binding!!
+    private lateinit var adapter: ProductAdapter
+    private lateinit var auth: FirebaseAuth
+    private lateinit var userUid: String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityFrozenBinding.inflate(inflater, container, false)
@@ -27,16 +32,26 @@ class FrozenActivity : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        auth = FirebaseAuth.getInstance()
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            Log.e("FrozenActivity", "로그인이 필요합니다.")
+            activity?.finish()
+            return
+        }
+
+        userUid = currentUser.uid
+
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("FrozenStorage")
+            .getReference("users").child(userUid).child("products").child("FrozenStorage")
+
         val productList = ArrayList<ProductDB>()
-        val adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
+        adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
 
         binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
         binding.frozenlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
-            //@SuppressLint("NotifyDataSetChanged")
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (isAdded) { // Check if fragment is still attached to activity
@@ -53,7 +68,7 @@ class FrozenActivity : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors.
+                Log.e("FrozenActivity", "Database error: ${error.message}", error.toException())
             }
         })
     }
