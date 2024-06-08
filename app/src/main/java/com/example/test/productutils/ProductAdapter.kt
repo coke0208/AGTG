@@ -14,9 +14,9 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.test.NotificationHelper
 import com.example.test.ProductActivity
 import com.example.test.R
+import com.example.test.WorkManager.NotificationHelper
 import com.example.test.productinfo.ProductDB
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -63,6 +63,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         if (startDate != null && endDate != null) {
             val totalDuration = endDate.time - startDate.time
             val elapsedTime = currentDate.time - startDate.time
+            //푸시알림
             val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()
 
             if (totalDuration > 0) {

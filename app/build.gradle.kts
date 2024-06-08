@@ -62,10 +62,9 @@ android {
         implementation ("androidx.recyclerview:recyclerview:1.1.0")
         implementation("com.google.firebase:firebase-firestore")
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
+        implementation ("androidx.work:work-runtime-ktx:2.8.1")
 
         implementation("com.github.bumptech.glide:glide:4.16.0")
-
-        implementation ("com.google.firebase:firebase-messaging:23.2.1")
     }
 }
 
@@ -82,6 +81,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

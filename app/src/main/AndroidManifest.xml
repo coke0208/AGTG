@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/Theme.Test.NoActionBar"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity
             android:name=".HomeFragment"
             android:exported="false" />
@@ -50,7 +50,12 @@
 
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="portrait"
             tools:replace="screenOrientation" />
+        <service
+            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            tools:ignore="ExportedService" />
     </application>
 
 </manifest>
