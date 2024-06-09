@@ -90,6 +90,10 @@ class ProductActivity : AppCompatActivity() {
         }
 
 
+        binding.back.setOnClickListener {
+            finish()
+        }
+
 
 
 

@@ -63,7 +63,7 @@ android {
         implementation("com.google.firebase:firebase-firestore")
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
         implementation ("androidx.work:work-runtime-ktx:2.8.1")
-
+            //ss
         implementation("com.github.bumptech.glide:glide:4.16.0")
         implementation ("com.google.zxing:core:3.4.1")
         implementation ("com.google.code.gson:gson:2.8.6")

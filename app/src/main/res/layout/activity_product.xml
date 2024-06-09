@@ -157,7 +157,8 @@
             android:layout_marginRight="20dp"
             android:inputType="textMultiLine"
             android:background="@drawable/border_line"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:gravity="top"/>
 
 
         <LinearLayout
