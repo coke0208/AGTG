@@ -14,6 +14,14 @@
         <!-- Customize your theme here. -->
         <item name="android:windowIsTranslucent">true</item>
         <item name="toolbarNavigationButtonStyle">@style/AppTheme.Actionbar</item>
+        <item name="android:datePickerDialogTheme">@style/MyDatePickerDialogTheme</item>
+    </style>
+    <style name="MyDatePickerDialogTheme" parent="android:Theme.Material.Light.Dialog">
+        <!-- 원하는 색 설정 -->
+        <item name="android:colorAccent">@color/main</item>
+
+        <!-- No need to override 'datePickerStyle' -->
+        <!-- <item name="android:datePickerStyle">@style/MyDatePickerStyle</item> -->
     </style>
 
     <style name="AppTheme.Actionbar" parent="Widget.AppCompat.Toolbar.Button.Navigation">

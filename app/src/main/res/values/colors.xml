@@ -10,4 +10,7 @@
     <color name="main">#FFBE98</color>
     <color name="submain">#d8c8bd</color>
     <color name="button">#FDD5B2</color>
+    <color name="red">#FF0000</color>
+    <color name="green">#2DD800</color>
+    <color name="orange">#FF7F00</color>
 </resources>

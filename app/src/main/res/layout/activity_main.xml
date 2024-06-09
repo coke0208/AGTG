@@ -76,7 +76,6 @@
                 android:layout_weight="1"
                 android:layout_gravity="center"
                 android:searchIcon="@drawable/ic_action_search"
-                android:focusable="true"
                 android:iconifiedByDefault="false"
                 android:inputType="text"
                 android:queryHint="Search"

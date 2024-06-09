@@ -14,6 +14,8 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var viewPagerAdapter: ViewPagerAdapter
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -26,8 +28,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.vpTodo.adapter = activity?.let { ViewPagerAdapter(it) }
-        binding.vpTodo.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+        //binding.vpTodo.adapter = activity?.let { ViewPagerAdapter(it) }
+        //binding.vpTodo.orientation = ViewPager2.ORIENTATION_HORIZONTAL
+
+        viewPagerAdapter = ViewPagerAdapter(this)
+        binding.vpTodo.adapter = viewPagerAdapter
 
         TabLayoutMediator(binding.tabLayout, binding.vpTodo) { tab, position ->
             tab.text = getTabTitle(position)
@@ -43,8 +48,18 @@ class HomeFragment : Fragment() {
         }
     }
 
-   /* override fun onDestroyView() {
+    interface SearchableFragment {
+        fun updateSearchQuery(query: String)
+    }
+
+    /*override fun updateSearchQuery(query: String) {
+        val currentFragment = childFragmentManager.findFragmentByTag("f" + binding.vpTodo.currentItem)
+        if (currentFragment is MainActivity.SearchableFragment) {
+            currentFragment.updateSearchQuery(query)
+        }
+    }*/
+    override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }*/
+    }
 }

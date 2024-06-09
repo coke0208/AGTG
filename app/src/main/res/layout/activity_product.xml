@@ -53,14 +53,30 @@
                 android:layout_height="150dp"
                 android:layout_weight="0"/>
 
-            <EditText
-                android:id="@+id/textViewName"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="50dp"
-                android:layout_marginLeft="50dp"
-                android:layout_weight="1"
-                android:hint="제품명" />
+                android:layout_gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:text="제품명" />
+
+                <EditText
+                    android:id="@+id/textViewName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="50dp"
+                    android:layout_marginLeft="50dp"
+                    android:layout_weight="1"/>
+
+            </LinearLayout>
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -86,6 +102,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="20dp"
+                android:hint="20XX-X-X"
                 android:layout_weight="1"/>
 
         </LinearLayout>
@@ -95,6 +112,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:text="~"
                 android:textSize="50dp"/>
 
@@ -115,6 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
+                android:hint="20XX-X-X"
                 android:layout_weight="1"/>
 
         </LinearLayout>
@@ -136,6 +155,8 @@
             android:id="@+id/textViewinfo"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
+            android:inputType="textMultiLine"
+            android:background="@drawable/border_line"
             android:layout_weight="1" />
 
 

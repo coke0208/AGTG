@@ -2,7 +2,6 @@ package com.example.test
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +22,9 @@ class FrozenActivity : Fragment() {
     private lateinit var adapter: ProductAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
+    private var productList = ArrayList<ProductDB>()
+    private var filteredList = ArrayList<ProductDB>()
+    private var currentQuery: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityFrozenBinding.inflate(inflater, container, false)
@@ -67,12 +69,22 @@ class FrozenActivity : Fragment() {
                     }
                     adapter.notifyDataSetChanged()
                 }
+                updateSearchQuery(currentQuery)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("FrozenActivity", "Database error: ${error.message}", error.toException())
+                // Handle possible errors.
             }
         })
+    }
+
+    override fun updateSearchQuery(query: String) {
+        currentQuery = query
+        if (this::adapter.isInitialized) {
+            filteredList.clear()
+            filteredList.addAll(productList.filter { it.name!!.contains(query, true) })
+            adapter.updateList(filteredList)
+        }
     }
 
     override fun onDestroyView() {

@@ -17,12 +17,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class ColdActivity : Fragment() {
+class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
     private var _binding: ActivityColdBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ProductAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
+    private var productList = ArrayList<ProductDB>()
+    private var filteredList = ArrayList<ProductDB>()
+    private var currentQuery: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityColdBinding.inflate(inflater, container, false)
@@ -66,12 +69,22 @@ class ColdActivity : Fragment() {
                     }
                     adapter.notifyDataSetChanged()
                 }
+                updateSearchQuery(currentQuery)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("ColdActivity", "Database error: ${error.message}", error.toException())
+                // Handle possible errors.
             }
         })
+    }
+
+    override fun updateSearchQuery(query: String) {
+        currentQuery = query
+        if (this::adapter.isInitialized) {
+            filteredList.clear()
+            filteredList.addAll(productList.filter { it.name!!.contains(query, true) })
+            adapter.updateList(filteredList)
+        }
     }
 
     override fun onDestroyView() {

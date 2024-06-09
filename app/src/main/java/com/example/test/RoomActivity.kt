@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.test.databinding.ActivityColdBinding
 import com.example.test.databinding.ActivityRoomBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
@@ -17,12 +18,15 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class RoomActivity : Fragment() {
+class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
     private var _binding: ActivityRoomBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ProductAdapter
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
+    private var productList = ArrayList<ProductDB>()
+    private var filteredList = ArrayList<ProductDB>()
+    private var currentQuery: String = ""
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityRoomBinding.inflate(inflater, container, false)
@@ -68,9 +72,18 @@ class RoomActivity : Fragment() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Log.e("RoomActivity", "Database error: ${error.message}", error.toException())
+                // Handle possible errors.
             }
         })
+    }
+
+    override fun updateSearchQuery(query: String) {
+        currentQuery = query
+        if (this::adapter.isInitialized) {
+            filteredList.clear()
+            filteredList.addAll(productList.filter { it.name!!.contains(query, true) })
+            adapter.updateList(filteredList)
+        }
     }
 
     override fun onDestroyView() {
