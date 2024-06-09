@@ -20,6 +20,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import java.util.UUID
 
+@Suppress("DEPRECATION")
 class RegsiterActivity : AppCompatActivity() {
     val binding by lazy { ActivityRegsiterBinding.inflate(layoutInflater) }
     private lateinit var email: EditText
@@ -93,6 +94,7 @@ class RegsiterActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
@@ -163,17 +165,19 @@ class RegsiterActivity : AppCompatActivity() {
                 db.collection("users").document(userId).set(user)
                     .addOnSuccessListener {
                         initializeStorageCollections(userId)
-                        Toast.makeText(this, "회원가입 완료", Toast.LENGTH_SHORT).show()
-                        finish()
                     }
                     .addOnFailureListener { e ->
                         Toast.makeText(this, "회원정보 저장 실패: ${e.message}", Toast.LENGTH_SHORT).show()
                     }
+                Toast.makeText(this, "회원가입 완료", Toast.LENGTH_SHORT).show()
+                finish()
+
             } else {
                 val exception = task.exception
                 val errorMessage = exception?.message
                 Toast.makeText(this, "회원가입 실패: $errorMessage", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 
@@ -189,8 +193,7 @@ class RegsiterActivity : AppCompatActivity() {
                     Toast.makeText(this, "$collection 초기화 실패: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
         }
-        Toast.makeText(this, "회원가입 완료", Toast.LENGTH_SHORT).show()
-        finish()
+
     }
 
     companion object {

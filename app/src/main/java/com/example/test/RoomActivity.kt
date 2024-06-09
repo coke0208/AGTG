@@ -60,7 +60,7 @@ class RoomActivity : Fragment() {
                         val product = productSnapshot.getValue(ProductDB::class.java)
                         if (product != null) {
                             product.id = productSnapshot.key.toString() // Assign the key to the product's id
-                            productList.add(product)
+                            product.let { productList.add(it) }
                         }
                     }
                     adapter.notifyDataSetChanged()

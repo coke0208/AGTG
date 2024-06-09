@@ -159,17 +159,18 @@ class MypageActivity : AppCompatActivity() {
                         db.collection("users").document(document.id).set(userInfo)
                             .addOnSuccessListener {
                                 Toast.makeText(this, "정보 업데이트 완료", Toast.LENGTH_SHORT).show()
-                                Log.d("MypageActivity", "User info updated, finishing activity")
-                                finish()
                             }
                             .addOnFailureListener { e ->
                                 Toast.makeText(this, "정보 업데이트 실패: ${e.message}", Toast.LENGTH_SHORT).show()
                             }
                     }
+
                 }
                 .addOnFailureListener { e ->
                     Toast.makeText(this, "오류 발생: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+            Toast.makeText(this, "정보 업데이트 완료", Toast.LENGTH_SHORT).show()
+            finish()
         }
     }
 

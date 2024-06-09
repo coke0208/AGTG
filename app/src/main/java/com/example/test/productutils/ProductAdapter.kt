@@ -28,7 +28,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ProductAdapter(private val context: Context, private val productList: ArrayList<ProductDB>, private val storageType: String) :
+class ProductAdapter(private val context: Context, private var productList: List<ProductDB>, private val storageType: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -53,12 +53,10 @@ class ProductAdapter(private val context: Context, private val productList: Arra
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date()
-        var startDate: Date?
-        var endDate: Date?
 
         try {
-            val startDate = product.cdate?.let { dateFormat.parse(it) }
-            val endDate = product.edate?.let { dateFormat.parse(it) }
+            val startDate = product.PROD?.let { dateFormat.parse(it) }
+            val endDate = product.Usebydate?.let { dateFormat.parse(it) }
 
             if (startDate != null && endDate != null) {
                 val totalDuration = endDate.time - startDate.time
@@ -83,8 +81,8 @@ class ProductAdapter(private val context: Context, private val productList: Arra
             val intent = Intent(context, ProductActivity::class.java).apply {
                 putExtra("name", product.name)
                 putExtra("address", product.address)
-                putExtra("edate", product.edate)
-                putExtra("cdate", product.cdate)
+                putExtra("PROD", product.PROD)
+                putExtra("UsebyDate", product.Usebydate)
                 putExtra("info", product.info)
             }
             context.startActivity(intent)
@@ -95,6 +93,7 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         }
     }
 
+
     override fun getItemCount(): Int {
         return productList.size
     }
@@ -103,25 +102,16 @@ class ProductAdapter(private val context: Context, private val productList: Arra
         val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("users").child(FirebaseAuth.getInstance().currentUser!!.uid).child("products").child(storageType).child(productId)
 
-        if (position >= productList.size) {
-            Toast.makeText(context, "삭제 실패: Index out of bounds", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 databaseReference.removeValue().await()
                 withContext(Dispatchers.Main) {
-                    synchronized(productList) {
-                        if (position < productList.size) {
-                            productList.removeAt(position)
-                            notifyItemRemoved(position)
-                            notifyItemRangeChanged(position, productList.size)
-                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
-                        } else {
-                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
-                        }
+                    productList = productList.toMutableList().apply {
+                        removeAt(position)
                     }
+                    notifyItemRemoved(position)
+                    notifyItemRangeChanged(position, productList.size)
+                    Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

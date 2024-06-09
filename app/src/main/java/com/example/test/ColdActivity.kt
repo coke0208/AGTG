@@ -52,15 +52,16 @@ class ColdActivity : Fragment() {
         binding.coldlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
+
             @SuppressLint("NotifyDataSetChanged")
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (isAdded) { // Check if fragment is still attached to activity
-                    productList.clear()
+                    //productList.clear()
                     for (productSnapshot in snapshot.children) {
                         val product = productSnapshot.getValue(ProductDB::class.java)
                         if (product != null) {
                             product.id = productSnapshot.key.toString() // Assign the key to the product's id
-                            productList.add(product)
+                            product.let { productList.add(it) }
                         }
                     }
                     adapter.notifyDataSetChanged()
