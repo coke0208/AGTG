@@ -137,6 +137,7 @@ class ProductActivity : AppCompatActivity() {
             newProductRef.setValue(product).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "저장 성공", Toast.LENGTH_SHORT).show()
+                    setResult(RESULT_OK)
                     finish()
                 } else {
                     Log.e("ProductActivity", "Firebase 저장 실패: ${task.exception}")

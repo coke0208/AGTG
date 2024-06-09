@@ -29,10 +29,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.text.ParseException
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import java.util.concurrent.TimeUnit
 
 @Suppress("DEPRECATION")
@@ -63,8 +59,8 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
         val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         val currentDate = Date()
-        val startDate: Date? = dateFormat.parse(product.cdate ?: "")
-        val endDate: Date? = dateFormat.parse(product.edate ?: "")
+        val startDate: Date? = dateFormat.parse(product.PROD ?: "")
+        val endDate: Date? = dateFormat.parse(product.Usebydate ?: "")
 
         if (startDate != null && endDate != null) {
             val totalDuration = endDate.time - startDate.time
@@ -145,12 +141,16 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             try {
                 databaseReference.removeValue().await()
                 withContext(Dispatchers.Main) {
-                    productList = productList.toMutableList().apply {
-                        removeAt(position)
+                    synchronized(productList) {
+                        if (position < productList.size) {
+                            productList.removeAt(position)
+                            notifyItemRemoved(position)
+                            notifyItemRangeChanged(position, productList.size)
+                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
+                        } else {
+                            Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
+                        }
                     }
-                    notifyItemRemoved(position)
-                    notifyItemRangeChanged(position, productList.size)
-                    Toast.makeText(context, "삭제 성공", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {

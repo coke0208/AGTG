@@ -49,7 +49,7 @@ class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("users").child(userUid).child("products").child("RoomStorage")
 
-        val productList = ArrayList<ProductDB>()
+        //val productList = ArrayList<ProductDB>()
         adapter = ProductAdapter(requireContext(), productList, "RoomStorage")
 
         binding.roomlist.layoutManager = LinearLayoutManager(requireContext())

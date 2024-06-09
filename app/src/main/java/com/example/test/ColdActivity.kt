@@ -48,7 +48,7 @@ class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("users").child(userUid).child("products").child("ColdStorage")
 
-        val productList = ArrayList<ProductDB>()
+        //val productList = ArrayList<ProductDB>()
         adapter = ProductAdapter(requireContext(), productList, "ColdStorage")
 
         binding.coldlist.layoutManager = LinearLayoutManager(requireContext())
@@ -64,9 +64,11 @@ class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
                         val product = productSnapshot.getValue(ProductDB::class.java)
                         if (product != null) {
                             product.id = productSnapshot.key.toString() // Assign the key to the product's id
-                            product.let { productList.add(it) }
+                            productList.add(product)
+                        //product.let { productList.add(it) }
                         }
                     }
+                    //filterProducts(currentQuery)
                     adapter.notifyDataSetChanged()
                 }
                 updateSearchQuery(currentQuery)
