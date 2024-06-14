@@ -57,7 +57,7 @@
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/inviteeIdEditText"
+                android:id="@+id/inviteIdEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="초대할 사용자 ID 입력" />
@@ -73,6 +73,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="초대 수락" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/groupRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
         </LinearLayout>
 

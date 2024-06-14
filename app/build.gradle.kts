@@ -44,6 +44,8 @@ android {
     viewBinding{
         enable = true
     }
+
+
     dependencies {
         implementation("androidx.viewpager2:viewpager2:1.0.0")
 

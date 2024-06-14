@@ -16,12 +16,20 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.test.productinfo.ProductDB
+import com.example.test.productutils.ProductAdapter
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeFragment: HomeFragment
-
+    private lateinit var database: DatabaseReference
     companion object {
         private const val REQUEST_NOTIFICATION_PERMISSION = 1
     }
@@ -30,6 +38,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val groupId = intent.getStringExtra("groupId")
+        if (groupId == null) {
+            Toast.makeText(this, "그룹 ID가 전달되지 않았습니다.", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        database = FirebaseDatabase.getInstance().reference
+
 
         homeFragment = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
@@ -52,6 +70,7 @@ class MainActivity : AppCompatActivity() {
         createNotificationChannel()
         requestNotificationPermission()
     }
+
 
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
