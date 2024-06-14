@@ -48,6 +48,34 @@
                 android:src="@drawable/ic_action_search" />
 
         </LinearLayout>
+
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <EditText
+                android:id="@+id/inviteeIdEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="초대할 사용자 ID 입력" />
+
+            <Button
+                android:id="@+id/inviteButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="초대 보내기" />
+
+            <Button
+                android:id="@+id/acceptInvitationButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="초대 수락" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <ImageButton
