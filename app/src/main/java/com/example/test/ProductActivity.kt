@@ -1,6 +1,8 @@
 package com.example.test
 
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -32,6 +34,10 @@ class ProductActivity : AppCompatActivity() {
     private var info: TextView? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
+    private var calender = Calendar.getInstance()
+    private var year = calender.get(Calendar.YEAR)
+    private var month = calender.get(Calendar.MONTH)
+    private var day = calender.get(Calendar.DAY_OF_MONTH)
 
 
 
@@ -94,9 +100,19 @@ class ProductActivity : AppCompatActivity() {
             finish()
         }
 
+        binding.sCalendar.setOnClickListener(){
+            val datePickerDialog = DatePickerDialog(this, {_,year, month, day ->
+                binding.Manufacturedate.text = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+            }, year, month, day)
+            datePickerDialog.show()
+        }
 
-
-
+        binding.eCalendar.setOnClickListener(){
+            val datePickerDialog = DatePickerDialog(this, {_,year, month, day ->
+                binding.Usebydate.text = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+            }, year, month, day)
+            datePickerDialog.show()
+        }
     }
 
     @Deprecated("Deprecated in Java")

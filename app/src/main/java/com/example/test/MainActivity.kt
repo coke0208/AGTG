@@ -17,10 +17,20 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.view.MotionEvent
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.ImageButton
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.test.productinfo.ProductDB
+import com.example.test.productutils.ProductAdapter
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeFragment: HomeFragment
+    //private lateinit var adapter: ProductAdapter
 
     companion object {
         private const val REQUEST_NOTIFICATION_PERMISSION = 1

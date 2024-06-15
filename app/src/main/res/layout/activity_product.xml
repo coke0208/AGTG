@@ -25,7 +25,7 @@
                 android:id="@+id/back"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/main"
+                android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_action_arrow_back"/>
 
             <TextView
@@ -94,16 +94,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
                 android:text="제조일자" />
 
-            <EditText
-                android:id="@+id/Manufacturedate"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="20dp"
-                android:hint="20XX-X-X"
-                android:layout_weight="1"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Manufacturedate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/sCalendar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/button"
+                    android:src="@drawable/calender"/>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 
@@ -125,16 +140,31 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
                 android:text="소비기한" />
 
-            <EditText
-                android:id="@+id/Usebydate"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:hint="20XX-X-X"
-                android:layout_weight="1"/>
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/Usebydate"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:textSize="20dp"
+                    android:layout_weight="1"/>
+
+                <ImageButton
+                    android:id="@+id/eCalendar"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:backgroundTint="@color/button"
+                    android:src="@drawable/calender"/>
+
+            </LinearLayout>
+
+
 
         </LinearLayout>
 

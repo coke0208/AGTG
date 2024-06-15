@@ -5,7 +5,11 @@ import android.content.Intent
 import android.graphics.PorterDuff
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.INVISIBLE
 import android.view.ViewGroup
+import android.view.animation.Animation
+import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -18,6 +22,7 @@ import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.WorkManager.NotificationHelper
 import com.example.test.productinfo.ProductDB
+import com.google.android.material.animation.AnimationUtils
 import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -37,11 +42,13 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
     // RecyclerView 내 각 항목에 대한 뷰 홀더
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val productName: TextView = view.findViewById(R.id.tvTitle)
-        val productImage: ImageView = view.findViewById(R.id.tvImage)
-        val progressBar: ProgressBar = view.findViewById(R.id.progress)
-        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
-
+        val productName: TextView = view.findViewById(R.id.tvTitle) ?: throw NullPointerException("TextView tvTitle not found")
+        val productImage: ImageView = view.findViewById(R.id.tvImage) ?: throw NullPointerException("ImageView tvImage not found")
+        val progressBar: ProgressBar = view.findViewById(R.id.progress) ?: throw NullPointerException("ProgressBar progress not found")
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete) ?: throw NullPointerException("ImageButton btnDelete not found")
+        val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException("TextView d_day not found")
+        //val roomBtn: ImageButton = view.findViewById(R.id.room_btn) ?: throw NullPointerException("ImageButton room_btn not found")
+        //val itemCheckbox: CheckBox = view.findViewById(R.id.move) ?: throw NullPointerException("CheckBox move not found")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -65,8 +72,9 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         if (startDate != null && endDate != null) {
             val totalDuration = endDate.time - startDate.time
             val elapsedTime = currentDate.time - startDate.time
-            //푸시알림
             val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()
+
+            holder.D_day.text="D-${remainingDays + 1}"
 
             if (totalDuration > 0) {
                 holder.progressBar.max = totalDuration.toInt()
@@ -78,6 +86,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                             ContextCompat.getColor(context, R.color.black),
                             PorterDuff.Mode.SRC_IN
                         )
+                        holder.D_day.text="X"
                     }
                     elapsedTime.toDouble() / totalDuration >= 0.9 -> {
                         holder.progressBar.progressDrawable.setColorFilter(
@@ -126,6 +135,26 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             // Handle delete button click
             deleteProduct(product.id, position)
         }
+
+        /*val moveAnim = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.trans)
+        val moveBackAnim = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.trans).apply {
+            duration = 500
+            fillAfter = true
+            startOffset = 500
+            repeatMode = Animation.REVERSE
+            repeatCount = 1
+        }
+
+        holder.itemCheckbox.setOnClickListener() { _ ->
+            if (holder.itemCheckbox.isChecked) {
+                //holder.roomBtn.visibility = GONE
+                holder.roomBtn.startAnimation(moveAnim)
+            } else {
+                //holder.roomBtn.visibility = INVISIBLE
+                holder.roomBtn.startAnimation(moveBackAnim)
+
+            }
+        }*/
     }
 
 

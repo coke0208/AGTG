@@ -1,4 +1,3 @@
-// MypageActivity.kt
 package com.example.test
 
 import android.app.Activity

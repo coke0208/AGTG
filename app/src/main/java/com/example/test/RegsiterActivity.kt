@@ -148,8 +148,8 @@ class RegsiterActivity : AppCompatActivity() {
                 }
         } else {
             // 기본 이미지 URL 사용
-            val defaultImageUrl = "https://firebasestorage.googleapis.com/v0/b/YOUR_FIREBASE_STORAGE_BUCKET/o/default_image.png?alt=media"
-            registerUser(email, password, name, defaultImageUrl)
+            val imageUrl = "firebasestorage.googleapis.com/v0/b/sukbinggotest.appspot.com/o/account_circle_24dp.svg?alt=media&token=362e3bd4-e6da-4f2e-a9af-f162b66c0452"
+            registerUser(email, password, name, imageUrl)
         }
     }
 
