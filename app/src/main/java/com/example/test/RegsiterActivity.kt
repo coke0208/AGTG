@@ -89,7 +89,6 @@ class RegsiterActivity : AppCompatActivity() {
 
         binding.defaultImage.setOnClickListener {
             imageView.setImageResource(R.drawable.my)
-            imageUri = null
             isDefaultImage = true // 기본 이미지 설정 시 true로 설정
         }
     }

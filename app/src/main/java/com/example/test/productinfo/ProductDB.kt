@@ -1,7 +1,5 @@
 package com.example.test.productinfo
 
-import android.widget.CheckBox
-
 data class ProductDB(
     var name:String?=null,
     var address:String?=null,
