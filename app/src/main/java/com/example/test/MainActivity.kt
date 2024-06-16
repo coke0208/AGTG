@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun scheduleExpiryCheckWork() {
         val periodicWorkRequest = PeriodicWorkRequestBuilder<ExpiryCheckWorker>(1, TimeUnit.DAYS)
-            .setInitialDelay(1, TimeUnit.MINUTES) // 처음 1분 후 실행
+            //.setInitialDelay(30, TimeUnit.SECONDS) // 처음 1분 후 실행
             .build()
 
         val oneTimeWorkRequest = OneTimeWorkRequestBuilder<ExpiryCheckWorker>().build()
