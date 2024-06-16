@@ -3,6 +3,7 @@ package com.example.test.productutils
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,6 +36,12 @@ import java.util.concurrent.TimeUnit
 class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
+    fun updateList(newProductList: ArrayList<ProductDB>) {
+        productList.clear()
+        productList.addAll(newProductList)
+        notifyDataSetChanged()
+    }
+
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -45,7 +52,6 @@ class ProductAdapter(private val context: Context, private var productList: Arra
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
         return ProductViewHolder(view)
@@ -53,6 +59,8 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
+
+        Log.d("ProductAdapter", "Binding product at position $position: ${product.name}")
         holder.productName.text = product.name
 
         Glide.with(context)
@@ -164,13 +172,6 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         }
     }
 
-    fun updateList(newList: ArrayList<ProductDB>) {
-        productList = newList
-        notifyDataSetChanged()
-    }
 
-    fun addProduct(newProduct: ProductDB) {
-        productList.add(newProduct)
-        notifyItemInserted(productList.size - 1)
-    }
+
 }

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.test.databinding.ActivityFrozenBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
@@ -27,9 +28,31 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
     private var filteredList = ArrayList<ProductDB>()
     private var currentQuery: String = ""
 
+
+    companion object {
+        private const val ARG_PRODUCT_LIST = "product_list"
+        private const val ARG_USER_ID = "user_id"
+        fun newInstance(productList: ArrayList<ProductDB>, userId: String): FrozenActivity {
+            val fragment = FrozenActivity()
+            val args = Bundle()
+            args.putParcelableArrayList(ARG_PRODUCT_LIST, productList)
+            args.putString(ColdActivity.ARG_USER_ID, userId)
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = ActivityFrozenBinding.inflate(inflater, container, false)
-        return binding.root
+        val view = binding.root
+
+        val productList = arguments?.getParcelableArrayList<ProductDB>(ARG_PRODUCT_LIST) ?: ArrayList()
+        adapter = ProductAdapter(requireContext(), productList.filter { it.storageType == "냉동실" } as ArrayList<ProductDB>, "냉동실")
+        val recyclerView: RecyclerView = binding.frozenlist
+        recyclerView.adapter = adapter
+        recyclerView.layoutManager = LinearLayoutManager(requireContext())
+
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,9 +67,10 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
         }
 
         userUid = currentUser.uid
+        val targetUserId = arguments?.getString("TARGET_USER_ID", userUid) ?: userUid
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("users").child(userUid).child("products").child("FrozenStorage")
+            .getReference("users").child(targetUserId).child("products").child("FrozenStorage")
 
         //val productList = ArrayList<ProductDB>()
         adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")

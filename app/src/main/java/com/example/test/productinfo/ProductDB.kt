@@ -9,15 +9,17 @@ data class ProductDB(
     var PROD: String? = null,
     var Usebydate: String? = null,
     var info: String? = null,
-    var id: String = ""
+    var id: String = "",
+    var storageType: String? = null,
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString() ?: ""
+        name = parcel.readString(),
+        address = parcel.readString(),
+        PROD = parcel.readString(),
+        Usebydate = parcel.readString(),
+        info = parcel.readString(),
+        id = parcel.readString() ?: "",
+        storageType = parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -27,6 +29,7 @@ data class ProductDB(
         parcel.writeString(Usebydate)
         parcel.writeString(info)
         parcel.writeString(id)
+        parcel.writeString(storageType)
     }
 
     override fun describeContents(): Int {

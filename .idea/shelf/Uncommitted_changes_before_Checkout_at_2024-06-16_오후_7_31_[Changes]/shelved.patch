@@ -1,0 +1,107 @@
+Index: app/src/main/res/layout/activity_group.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".GroupActivity\" >\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:orientation=\"vertical\"\r\n        android:background=\"@color/submain\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@color/main\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/back\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:background=\"@color/main\"\r\n                android:src=\"@drawable/ic_action_arrow_back\"/>\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView6\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:background=\"@color/main\"\r\n                android:text=\"가족관리\"\r\n                android:textColor=\"@color/white\"\r\n                android:textSize=\"20dp\" />\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/search\"\r\n                android:layout_width=\"60dp\"\r\n                android:layout_height=\"60dp\"\r\n                android:layout_weight=\"0\"\r\n                android:background=\"@color/main\"\r\n                android:padding=\"10dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:src=\"@drawable/ic_action_search\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"vertical\"\r\n            android:padding=\"16dp\">\r\n\r\n\r\n            <TextView\r\n                android:id=\"@+id/groupIdTextView\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"Group ID\"\r\n                android:textSize=\"20dp\"/>\r\n\r\n\r\n            <EditText\r\n                android:id=\"@+id/groupIdEditText\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:hint=\"그룹 ID 입력\" />\r\n\r\n            <Button\r\n                android:id=\"@+id/createGroupButton\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"그룹 만들기\" />\r\n\r\n            <Button\r\n                android:id=\"@+id/joinGroupButton\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"그룹 가입\" />\r\n\r\n            <androidx.recyclerview.widget.RecyclerView\r\n                android:id=\"@+id/groupRecyclerView\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"0dp\"\r\n                android:layout_weight=\"1\" />\r\n\r\n\r\n        </LinearLayout>\r\n\r\n    </LinearLayout>\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/add\"\r\n        android:layout_width=\"60dp\"\r\n        android:layout_height=\"60dp\"\r\n        android:layout_marginEnd=\"60dp\"\r\n        android:layout_marginBottom=\"60dp\"\r\n        android:padding=\"10dp\"\r\n        android:scaleType=\"fitXY\"\r\n        android:background=\"@drawable/circle\"\r\n        android:src=\"@drawable/ic_action_filter_center_focus\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_group.xml b/app/src/main/res/layout/activity_group.xml
+--- a/app/src/main/res/layout/activity_group.xml	(revision c1b3714367a29e52274be8403f2020b249ecdf16)
++++ b/app/src/main/res/layout/activity_group.xml	(date 1718532899636)
+@@ -83,6 +83,12 @@
+                 android:layout_height="wrap_content"
+                 android:text="그룹 가입" />
+ 
++            <Button
++                android:id="@+id/loadUserProductsButton"
++                android:layout_width="match_parent"
++                android:layout_height="wrap_content"
++                android:text="타사용자" />
++
+             <androidx.recyclerview.widget.RecyclerView
+                 android:id="@+id/groupRecyclerView"
+                 android:layout_width="match_parent"
+Index: app/src/main/java/com/example/test/GroupActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.content.Intent\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport com.example.test.databinding.ActivityGroupBinding\r\nimport com.example.test.productinfo.GroupDB\r\nimport com.example.test.productinfo.ProductDB\r\nimport com.example.test.productutils.ProductAdapter\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.database.*\r\n\r\n@Suppress(\"DEPRECATION\")\r\nclass GroupActivity : AppCompatActivity() {\r\n    private val binding by lazy { ActivityGroupBinding.inflate(layoutInflater) }\r\n    private lateinit var auth: FirebaseAuth\r\n    private lateinit var database: DatabaseReference\r\n    private lateinit var groupAdapter: GroupAdapter\r\n    private val groupList = ArrayList<GroupDB>()\r\n    private lateinit var currentUserUid: String\r\n    private lateinit var productAdapter: ProductAdapter\r\n    private lateinit var productList: ArrayList<ProductDB>\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        setContentView(binding.root)\r\n\r\n        auth = FirebaseAuth.getInstance()\r\n        database = FirebaseDatabase.getInstance().reference\r\n        currentUserUid = auth.currentUser!!.uid\r\n        productList = ArrayList()\r\n        productAdapter = ProductAdapter(this, productList, \"products\")\r\n\r\n\r\n        binding.back.setOnClickListener {\r\n            finish()\r\n        }\r\n\r\n        groupAdapter = GroupAdapter(groupList, { groupId ->\r\n            loadGroupProducts(groupId)\r\n        }, { groupId ->\r\n            binding.groupIdTextView.text = groupId\r\n        })\r\n\r\n        val receivedProductList = intent.getParcelableArrayListExtra<ProductDB>(\"PRODUCT_LIST\")\r\n        receivedProductList?.let {\r\n            productList.clear()\r\n            productList.addAll(it)\r\n            productAdapter.notifyDataSetChanged()\r\n        }\r\n\r\n\r\n        binding.groupRecyclerView.layoutManager = LinearLayoutManager(this)\r\n        binding.groupRecyclerView.adapter = groupAdapter\r\n\r\n        binding.createGroupButton.setOnClickListener {\r\n            createNewGroup()\r\n        }\r\n\r\n        binding.joinGroupButton.setOnClickListener {\r\n            val groupId = binding.groupIdEditText.text.toString().trim()\r\n            if (groupId.isNotEmpty()) {\r\n                joinGroup(groupId)\r\n            } else {\r\n                Toast.makeText(this, \"그룹 ID를 입력하세요\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        }\r\n\r\n        loadUserGroups()\r\n    }\r\n\r\n    private fun joinGroup(groupId: String) {\r\n        val userId = auth.currentUser?.uid ?: return\r\n        database.child(\"groups\").child(groupId).child(\"members\").child(userId).setValue(true)\r\n            .addOnCompleteListener { task ->\r\n                if (task.isSuccessful) {\r\n                    database.child(\"users\").child(userId).child(\"groupId\").child(groupId).setValue(true)\r\n                    Toast.makeText(this, \"그룹에 가입되었습니다.\", Toast.LENGTH_SHORT).show()\r\n                    loadUserGroups()\r\n                } else {\r\n                    Toast.makeText(this, \"그룹 가입에 실패했습니다.\", Toast.LENGTH_SHORT).show()\r\n                }\r\n            }\r\n    }\r\n\r\n    private fun createNewGroup() {\r\n        val userId = auth.currentUser?.uid ?: return\r\n        val groupId = database.child(\"groups\").push().key ?: return\r\n        val groupName = \"New Group\"\r\n        val group = GroupDB(groupId, groupName, mutableMapOf(userId to true))\r\n\r\n        database.child(\"groups\").child(groupId).setValue(group).addOnCompleteListener { task ->\r\n            if (task.isSuccessful) {\r\n                database.child(\"users\").child(userId).child(\"groupId\").child(groupId).setValue(true)\r\n                Toast.makeText(this, \"새 그룹이 생성되었습니다.\", Toast.LENGTH_SHORT).show()\r\n                loadUserGroups()\r\n            } else {\r\n                Log.e(\"GroupActivity\", \"그룹 생성 실패: ${task.exception}\")\r\n                Toast.makeText(this, \"그룹 생성에 실패했습니다.\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun loadUserGroups() {\r\n        val userId = auth.currentUser?.uid ?: return\r\n        database.child(\"users\").child(userId).child(\"groupId\").addListenerForSingleValueEvent(object : ValueEventListener {\r\n            override fun onDataChange(snapshot: DataSnapshot) {\r\n                groupList.clear()\r\n                for (groupSnapshot in snapshot.children) {\r\n                    val groupId = groupSnapshot.key ?: continue\r\n                    database.child(\"groups\").child(groupId).addListenerForSingleValueEvent(object : ValueEventListener {\r\n                        override fun onDataChange(groupSnap: DataSnapshot) {\r\n                            val group = groupSnap.getValue(GroupDB::class.java)\r\n                            group?.let { groupList.add(it) }\r\n                            groupAdapter.notifyDataSetChanged()\r\n                        }\r\n\r\n                        override fun onCancelled(error: DatabaseError) {}\r\n                    })\r\n                }\r\n            }\r\n\r\n            override fun onCancelled(error: DatabaseError) {}\r\n        })\r\n    }\r\n\r\n    private fun loadGroupProducts(groupId: String) {\r\n        database.child(\"groups\").child(groupId).child(\"products\").addListenerForSingleValueEvent(object : ValueEventListener {\r\n            override fun onDataChange(snapshot: DataSnapshot) {\r\n                val productList = ArrayList<ProductDB>()\r\n                for (productSnapshot in snapshot.children) {\r\n                    val product = productSnapshot.getValue(ProductDB::class.java)\r\n                    if (product != null) {\r\n                        productList.add(product)\r\n                    }\r\n                }\r\n                showProducts(productList)\r\n            }\r\n\r\n            override fun onCancelled(error: DatabaseError) {}\r\n        })\r\n    }\r\n\r\n    private fun showProducts(productList: List<ProductDB>) {\r\n        val intent = Intent(this, MainActivity::class.java).apply {\r\n            putParcelableArrayListExtra(\"PRODUCT_LIST\", ArrayList(productList))\r\n        }\r\n        startActivity(intent)\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/GroupActivity.kt b/app/src/main/java/com/example/test/GroupActivity.kt
+--- a/app/src/main/java/com/example/test/GroupActivity.kt	(revision c1b3714367a29e52274be8403f2020b249ecdf16)
++++ b/app/src/main/java/com/example/test/GroupActivity.kt	(date 1718532916723)
+@@ -52,6 +52,15 @@
+             productAdapter.notifyDataSetChanged()
+         }
+ 
++        binding.loadUserProductsButton.setOnClickListener {
++            val userId = binding.groupIdEditText.text.toString().trim()
++            if (userId.isNotEmpty()) {
++                loadGroupProducts(userId)
++            } else {
++                Toast.makeText(this, "사용자 아이디를 입력하세요.", Toast.LENGTH_SHORT).show()
++            }
++        }
++
+ 
+         binding.groupRecyclerView.layoutManager = LinearLayoutManager(this)
+         binding.groupRecyclerView.adapter = groupAdapter
+@@ -127,15 +136,16 @@
+         })
+     }
+ 
+-    private fun loadGroupProducts(groupId: String) {
+-        database.child("groups").child(groupId).child("products").addListenerForSingleValueEvent(object : ValueEventListener {
++    private fun loadGroupProducts(userId: String) {
++        val userProductsReference = FirebaseDatabase.getInstance()
++            .getReference("users").child(userId).child("products")
++
++        userProductsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+             override fun onDataChange(snapshot: DataSnapshot) {
+                 val productList = ArrayList<ProductDB>()
+                 for (productSnapshot in snapshot.children) {
+                     val product = productSnapshot.getValue(ProductDB::class.java)
+-                    if (product != null) {
+-                        productList.add(product)
+-                    }
++                    product?.let { productList.add(it) }
+                 }
+                 showProducts(productList)
+             }
+Index: app/src/main/res/layout/activity_main.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MainActivity\">\r\n\r\n    <LinearLayout\r\n        android:id=\"@+id/linearLayout2\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"wrap_content\"\r\n        android:orientation=\"vertical\"\r\n        tools:ignore=\"MissingConstraints\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"?attr/actionBarSize\"\r\n            android:layout_weight=\"1\"\r\n            android:background=\"@color/main\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/group\"\r\n                style=\"?android:attr/borderlessButtonStyle\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:padding=\"10dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:background=\"#FFBE98\"\r\n                android:src=\"@drawable/ic_action_group\"\r\n                />\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView2\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"석빙고\"\r\n                android:textColor=\"@color/white\"\r\n                android:textSize=\"20dp\" />\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/upload\"\r\n                style=\"?android:attr/borderlessButtonStyle\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:padding=\"10dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:background=\"#FFBE98\"\r\n                android:src=\"@drawable/ic_action_file_upload\"/>\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/mypage\"\r\n                style=\"?android:attr/borderlessButtonStyle\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:padding=\"10dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:background=\"#FFBE98\"\r\n                android:src=\"@drawable/ic_action_person\"/>\r\n        </LinearLayout>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"?attr/actionBarSize\"\r\n            android:background=\"@color/main\"\r\n            android:layout_weight=\"1\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <SearchView\r\n                android:id=\"@+id/search\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\"\r\n                android:layout_gravity=\"center\"\r\n                android:searchIcon=\"@drawable/ic_action_search\"\r\n                android:iconifiedByDefault=\"false\"\r\n                android:inputType=\"text\"\r\n                android:queryHint=\"Search\"\r\n\r\n                android:queryBackground=\"@drawable/search\"/>\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/filter\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:padding=\"10dp\"\r\n                android:scaleType=\"fitXY\"\r\n                android:layout_weight=\"0\"\r\n                android:background=\"#FFBE98\"\r\n                android:src=\"@drawable/ic_action_filter_list\"\r\n                style=\"?android:attr/borderlessButtonStyle\"/>\r\n\r\n\r\n        </LinearLayout>\r\n\r\n        <androidx.recyclerview.widget.RecyclerView\r\n            android:id=\"@+id/recyclerView\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"vertical\" />\r\n\r\n    </LinearLayout>\r\n\r\n    <FrameLayout\r\n        android:id=\"@+id/frameLayout\"\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"0dp\"\r\n        android:orientation=\"vertical\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\"\r\n        app:layout_constraintHorizontal_bias=\"0.0\"\r\n        app:layout_constraintStart_toStartOf=\"parent\"\r\n        app:layout_constraintTop_toBottomOf=\"@+id/linearLayout2\"\r\n        app:layout_constraintVertical_bias=\"0.0\">\r\n\r\n\r\n\r\n    </FrameLayout>\r\n\r\n\r\n\r\n    <ImageButton\r\n        android:id=\"@+id/add\"\r\n        android:onClick=\"start\"\r\n        android:layout_width=\"?attr/actionBarSize\"\r\n        android:layout_height=\"?attr/actionBarSize\"\r\n        android:layout_marginEnd=\"?attr/actionBarSize\"\r\n        android:layout_marginBottom=\"?attr/actionBarSize\"\r\n        android:padding=\"10dp\"\r\n        android:scaleType=\"fitXY\"\r\n        android:background=\"@drawable/circle\"\r\n        android:src=\"@drawable/ic_action_add\"\r\n        app:layout_constraintBottom_toBottomOf=\"parent\"\r\n        app:layout_constraintEnd_toEndOf=\"parent\" />\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_main.xml b/app/src/main/res/layout/activity_main.xml
+--- a/app/src/main/res/layout/activity_main.xml	(revision c1b3714367a29e52274be8403f2020b249ecdf16)
++++ b/app/src/main/res/layout/activity_main.xml	(date 1718533187912)
+@@ -96,11 +96,7 @@
+ 
+         </LinearLayout>
+ 
+-        <androidx.recyclerview.widget.RecyclerView
+-            android:id="@+id/recyclerView"
+-            android:layout_width="match_parent"
+-            android:layout_height="match_parent"
+-            android:orientation="vertical" />
++
+ 
+     </LinearLayout>
+ 
+@@ -116,6 +112,12 @@
+         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+         app:layout_constraintVertical_bias="0.0">
+ 
++        <androidx.recyclerview.widget.RecyclerView
++            android:id="@+id/recyclerView"
++            android:layout_width="match_parent"
++            android:layout_height="match_parent"
++            android:orientation="vertical" />
++
+ 
+ 
+     </FrameLayout>

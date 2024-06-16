@@ -50,44 +50,48 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
-
-            <TextView
-                android:id="@+id/groupIdTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Group ID"
-                android:textSize="20dp"/>
-
-
             <EditText
-                android:id="@+id/groupIdEditText"
+                android:id="@+id/targetUserIdEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="그룹 ID 입력" />
+                android:hint="사용자 ID" />
 
             <Button
-                android:id="@+id/createGroupButton"
+                android:id="@+id/idcheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="그룹 만들기" />
+                android:text="아이디확인" />
 
             <Button
-                android:id="@+id/joinGroupButton"
+                android:id="@+id/viewUserProductsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="그룹 가입" />
+                android:text="공유" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/groupRecyclerView"
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/main"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/white"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/white" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager2"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+
+
+
 
 
         </LinearLayout>
