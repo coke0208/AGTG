@@ -16,6 +16,7 @@ import android.Manifest
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.util.Log
 import android.view.MotionEvent
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
@@ -24,8 +25,14 @@ import android.widget.CheckBox
 import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.productinfo.ProductDB
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+//import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
+import com.google.firebase.FirebaseApp
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -41,10 +48,19 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        val pref = getSharedPreferences("token", Context.MODE_PRIVATE)
+        val token = pref.getString("token", "")
+
+        // 로그로 토큰 출력
+        Log.i("!!!!!!!!", token ?: "Token not found")
+
+
         homeFragment = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
 
         setOnQueryTextListener()
+
+        scheduleExpiryCheckWork()
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
@@ -58,32 +74,8 @@ class MainActivity : AppCompatActivity() {
         val product1 = Intent(this, ProductActivity::class.java)
         binding.add.setOnClickListener { startActivity(product1) }
 
-        //푸시알림
-        createNotificationChannel()
-        requestNotificationPermission()
-    }
+        FirebaseApp.initializeApp(this)
 
-    private fun requestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATION_PERMISSION)
-            }
-        }
-    }
-
-    //푸시알림
-    private fun createNotificationChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "ExpiryNotificationChannel"
-            val descriptionText = "Channel for expiry notifications"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel("expiry_notification_channel", name, importance).apply {
-                description = descriptionText
-            }
-            val notificationManager: NotificationManager =
-                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
     }
 
 
@@ -109,6 +101,24 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun scheduleExpiryCheckWork() {
+        val periodicWorkRequest = PeriodicWorkRequestBuilder<ExpiryCheckWorker>(1, TimeUnit.DAYS)
+            .setInitialDelay(1, TimeUnit.MINUTES) // 처음 1분 후 실행
+            .build()
+
+        val oneTimeWorkRequest = OneTimeWorkRequestBuilder<ExpiryCheckWorker>().build()
+
+        WorkManager.getInstance(this).enqueueUniquePeriodicWork(
+            "expiryCheckWork",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            periodicWorkRequest
+        )
+
+        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)
+    }
+
+
 
     override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {
         if (currentFocus != null) {

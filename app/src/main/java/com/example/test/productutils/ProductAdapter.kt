@@ -109,9 +109,9 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                 }
 
                 // 남은 기간이 7일일 때 알림 전송
-                if (remainingDays == 6) {
+                /*if (remainingDays == 6) {
                     NotificationHelper.sendExpiryNotification(context, product.name ?: "Unknown product")
-                }
+                }*/
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1

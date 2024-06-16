@@ -62,12 +62,23 @@ android {
         implementation ("androidx.recyclerview:recyclerview:1.1.0")
         implementation("com.google.firebase:firebase-firestore")
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
-        implementation ("androidx.work:work-runtime-ktx:2.8.1")
+        implementation ("androidx.work:work-runtime-ktx:2.9.0")
             //ss
         implementation("com.github.bumptech.glide:glide:4.16.0")
         implementation ("com.google.zxing:core:3.4.1")
         implementation ("com.google.code.gson:gson:2.8.6")
         implementation ("com.squareup.picasso:picasso:2.8")
+        implementation("com.google.firebase:firebase-messaging-ktx:24.0.0")
+        implementation("androidx.core:core-ktx:1.7.0")
+        implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.1")
+        implementation("androidx.activity:activity-compose:1.9.0")
+        implementation("com.google.firebase:firebase-analytics-ktx")
+        implementation("androidx.work:work-runtime-ktx:2.9.0")
+
+
+
+
+
     }
 }
 
@@ -85,6 +96,7 @@ dependencies {
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth)
     implementation(libs.androidx.navigation.common.ktx)
+    implementation(libs.firebase.messaging)
     implementation(libs.firebase.storage.ktx)
     implementation(libs.androidx.work.runtime.ktx)
     testImplementation(libs.junit)
@@ -97,3 +109,4 @@ buildscript {
         classpath ("com.google.gms:google-services:4.3.15") // Add this line
     }
 }
+apply(plugin = "com.google.gms.google-services")
