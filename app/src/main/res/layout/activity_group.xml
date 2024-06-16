@@ -56,29 +56,39 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+
+            <TextView
+                android:id="@+id/groupIdTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Group ID"
+                android:textSize="20dp"/>
+
+
             <EditText
-                android:id="@+id/inviteIdEditText"
+                android:id="@+id/groupIdEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="초대할 사용자 ID 입력" />
+                android:hint="그룹 ID 입력" />
 
             <Button
-                android:id="@+id/inviteButton"
+                android:id="@+id/createGroupButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="초대 보내기" />
+                android:text="그룹 만들기" />
 
             <Button
-                android:id="@+id/acceptInvitationButton"
+                android:id="@+id/joinGroupButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="초대 수락" />
+                android:text="그룹 가입" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/groupRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
+
 
         </LinearLayout>
 

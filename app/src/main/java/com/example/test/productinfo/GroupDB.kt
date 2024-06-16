@@ -5,4 +5,3 @@ data class GroupDB(
     val name: String = "",
     val members: MutableMap<String, Boolean> = mutableMapOf()
 )
-

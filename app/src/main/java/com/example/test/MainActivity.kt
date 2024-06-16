@@ -18,17 +18,34 @@ import android.app.NotificationManager
 import android.content.Context
 import android.util.Log
 import android.view.MotionEvent
+import android.widget.ImageButton
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.productinfo.ProductDB
+import androidx.recyclerview.widget.RecyclerView
 import com.example.test.productutils.ProductAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
+import com.example.test.productinfo.ProductDB as ProductDB
 
+@Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeFragment: HomeFragment
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var productAdapter: ProductAdapter
+    private lateinit var productList: ArrayList<ProductDB>
+    private lateinit var databaseReference: DatabaseReference
+    private var groupId: String? = null
+
     companion object {
         private const val REQUEST_NOTIFICATION_PERMISSION = 1
     }
@@ -37,6 +54,18 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        productList = ArrayList()
+        productAdapter = ProductAdapter(this, productList, "products")
+        recyclerView.adapter = productAdapter
+
+        databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("users")
+
+        groupId = intent.getStringExtra("GROUP_ID")
+        groupId?.let { loadGroupProducts(it) }
 
         homeFragment = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
@@ -55,11 +84,38 @@ class MainActivity : AppCompatActivity() {
         val product1 = Intent(this, ProductActivity::class.java)
         binding.add.setOnClickListener { startActivity(product1) }
 
+        val receivedProductList = intent.getParcelableArrayListExtra<ProductDB>("PRODUCT_LIST")
+        receivedProductList?.let {
+            productList.clear()
+            productList.addAll(it)
+            productAdapter.notifyDataSetChanged()
+        }
         //푸시알림
         createNotificationChannel()
         requestNotificationPermission()
     }
 
+    private fun loadGroupProducts(groupId: String) {
+        val groupProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("groups").child(groupId).child("products")
+
+        groupProductsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                productList.clear()
+                for (productSnapshot in snapshot.children) {
+                    val product = productSnapshot.getValue(ProductDB::class.java)
+                    if (product != null) {
+                        productList.add(product)
+                    }
+                }
+                productAdapter.updateList(productList)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity, "Failed to load group products: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
 
     private fun requestNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
@@ -83,7 +139,6 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
 
     private fun setOnQueryTextListener() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

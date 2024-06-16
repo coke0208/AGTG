@@ -43,11 +43,16 @@
         <activity
             android:name=".IntroActivity"
             android:exported="true">
+
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+
         </activity>
 
         <activity
@@ -58,6 +63,10 @@
             android:name="androidx.work.impl.background.systemjob.SystemJobService"
             android:permission="android.permission.BIND_JOB_SERVICE"
             tools:ignore="ExportedService" />
+        
+
+
+
     </application>
 
 </manifest>

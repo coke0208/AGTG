@@ -40,6 +40,8 @@ class ProductActivity : AppCompatActivity() {
         binding = ActivityProductBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+
         textViewName = findViewById<View>(R.id.textViewName) as TextView
         textViewAddress = findViewById<View>(R.id.imageViewAddress) as TextView
         Manufacturedate = findViewById<View>(R.id.Manufacturedate) as TextView
