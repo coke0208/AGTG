@@ -39,8 +39,6 @@ class ProductActivity : AppCompatActivity() {
     private var month = calender.get(Calendar.MONTH)
     private var day = calender.get(Calendar.DAY_OF_MONTH)
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProductBinding.inflate(layoutInflater)
@@ -87,14 +85,12 @@ class ProductActivity : AppCompatActivity() {
             saveProduct("RoomStorage", ProductDB(name, address,  Prod, UsebyDate, pinfo))
         }
 
-
         // QR Code Scanner
         qrScan = IntentIntegrator(this)
         binding.add.setOnClickListener {
             qrScan!!.setPrompt("Scanning...")
             qrScan!!.initiateScan()
         }
-
 
         binding.back.setOnClickListener {
             finish()
@@ -169,10 +165,4 @@ class ProductActivity : AppCompatActivity() {
             Toast.makeText(this, "예외 발생: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
-
-
-
-
-
-
 }
