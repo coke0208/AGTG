@@ -13,7 +13,7 @@ import com.example.test.productutils.ProductAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-@Suppress("DEPRECATION")
+
 class GroupActivity : AppCompatActivity() {
     private val binding by lazy { ActivityGroupBinding.inflate(layoutInflater) }
     private lateinit var auth: FirebaseAuth
@@ -140,7 +140,9 @@ class GroupActivity : AppCompatActivity() {
                 showProducts(productList)
             }
 
-            override fun onCancelled(error: DatabaseError) {}
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@GroupActivity, "Failed to load group products: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
         })
     }
 

@@ -44,6 +44,8 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
     }
 
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
         return ProductViewHolder(view)

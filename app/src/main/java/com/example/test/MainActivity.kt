@@ -86,13 +86,15 @@ class MainActivity : AppCompatActivity() {
 
         val receivedProductList = intent.getParcelableArrayListExtra<ProductDB>("PRODUCT_LIST")
         receivedProductList?.let {
-            productList.clear()
-            productList.addAll(it)
-            productAdapter.notifyDataSetChanged()
+            setupRecyclerView(it)
         }
         //푸시알림
         createNotificationChannel()
         requestNotificationPermission()
+    }
+
+    private fun setupRecyclerView(products: List<ProductDB>) {
+        productAdapter.updateList(products as ArrayList<ProductDB>)
     }
 
     private fun loadGroupProducts(groupId: String) {
