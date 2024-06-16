@@ -13,12 +13,6 @@
         android:background="?android:attr/selectableItemBackground"
         android:padding="10dp">
 
-        <CheckBox
-            android:id="@+id/move"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center" />
-
         <ImageView
             android:id="@+id/tvImage"
             android:layout_width="80dp"

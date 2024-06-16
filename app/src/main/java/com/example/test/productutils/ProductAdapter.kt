@@ -20,7 +20,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
-import com.example.test.WorkManager.NotificationHelper
 import com.example.test.productinfo.ProductDB
 import com.google.android.material.animation.AnimationUtils
 import com.google.firebase.auth.FirebaseAuth
@@ -105,8 +104,6 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                         )
                     }
                 }
-
-
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1
