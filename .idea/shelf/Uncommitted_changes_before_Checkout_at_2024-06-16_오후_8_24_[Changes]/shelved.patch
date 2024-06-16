@@ -1,0 +1,80 @@
+Index: app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test.productutils\r\n\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.graphics.PorterDuff\r\nimport android.view.LayoutInflater\r\nimport android.view.View\r\nimport android.view.View.GONE\r\nimport android.view.View.INVISIBLE\r\nimport android.view.ViewGroup\r\nimport android.view.animation.Animation\r\nimport android.widget.CheckBox\r\nimport android.widget.ImageButton\r\nimport android.widget.ImageView\r\nimport android.widget.ProgressBar\r\nimport android.widget.TextView\r\nimport android.widget.Toast\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.bumptech.glide.Glide\r\nimport com.example.test.ProductActivity\r\nimport com.example.test.R\r\nimport com.example.test.WorkManager.NotificationHelper\r\nimport com.example.test.productinfo.ProductDB\r\nimport com.google.android.material.animation.AnimationUtils\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport java.text.SimpleDateFormat\r\nimport java.util.Date\r\nimport java.util.Locale\r\nimport com.google.firebase.database.FirebaseDatabase\r\nimport com.google.firebase.database.DatabaseReference\r\nimport kotlinx.coroutines.CoroutineScope\r\nimport kotlinx.coroutines.Dispatchers\r\nimport kotlinx.coroutines.launch\r\nimport kotlinx.coroutines.tasks.await\r\nimport kotlinx.coroutines.withContext\r\nimport java.util.concurrent.TimeUnit\r\n\r\n@Suppress(\"DEPRECATION\")\r\nclass ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :\r\n    RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {\r\n\r\n    // RecyclerView 내 각 항목에 대한 뷰 홀더\r\n    class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {\r\n        val productName: TextView = view.findViewById(R.id.tvTitle) ?: throw NullPointerException(\"TextView tvTitle not found\")\r\n        val productImage: ImageView = view.findViewById(R.id.tvImage) ?: throw NullPointerException(\"ImageView tvImage not found\")\r\n        val progressBar: ProgressBar = view.findViewById(R.id.progress) ?: throw NullPointerException(\"ProgressBar progress not found\")\r\n        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete) ?: throw NullPointerException(\"ImageButton btnDelete not found\")\r\n        val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException(\"TextView d_day not found\")\r\n    }\r\n\r\n    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {\r\n        val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)\r\n        return ProductViewHolder(view)\r\n    }\r\n    // RecyclerView의 각 항목에 데이터를 바인딩\r\n    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {\r\n        val product = productList[position]\r\n        holder.productName.text = product.name\r\n\r\n        Glide.with(context)\r\n            .load(product.address)\r\n            .into(holder.productImage)\r\n\r\n        val dateFormat = SimpleDateFormat(\"yyyy-MM-dd\", Locale.getDefault())\r\n        val currentDate = Date()\r\n        val startDate: Date? = dateFormat.parse(product.PROD ?: \"\")\r\n        val endDate: Date? = dateFormat.parse(product.Usebydate ?: \"\")\r\n\r\n        if (startDate != null && endDate != null) {\r\n            val totalDuration = endDate.time - startDate.time\r\n            val elapsedTime = currentDate.time - startDate.time\r\n            val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()\r\n\r\n            holder.D_day.text=\"D-${remainingDays + 1}\"\r\n\r\n            if (totalDuration > 0) {\r\n                holder.progressBar.max = totalDuration.toInt()\r\n                holder.progressBar.progress = elapsedTime.toInt()\r\n\r\n                when {\r\n                    elapsedTime.toDouble() / totalDuration >= 1 -> {\r\n                        holder.progressBar.progressDrawable.setColorFilter(\r\n                            ContextCompat.getColor(context, R.color.black),\r\n                            PorterDuff.Mode.SRC_IN\r\n                        )\r\n                        holder.D_day.text=\"X\"\r\n                    }\r\n                    elapsedTime.toDouble() / totalDuration >= 0.9 -> {\r\n                        holder.progressBar.progressDrawable.setColorFilter(\r\n                            ContextCompat.getColor(context, R.color.red),\r\n                            PorterDuff.Mode.SRC_IN\r\n                        )\r\n                    }\r\n                    elapsedTime.toDouble() / totalDuration >= 0.5 -> {\r\n                        holder.progressBar.progressDrawable.setColorFilter(\r\n                            ContextCompat.getColor(context, R.color.orange),\r\n                            PorterDuff.Mode.SRC_IN\r\n                        )\r\n                    }\r\n                    else -> {\r\n                        holder.progressBar.progressDrawable.setColorFilter(\r\n                            ContextCompat.getColor(context, R.color.green),\r\n                            PorterDuff.Mode.SRC_IN\r\n                        )\r\n                    }\r\n                }\r\n\r\n                if (remainingDays == 6) {\r\n                    NotificationHelper.sendExpiryNotification(context, product.name ?: \"Unknown product\")\r\n                }\r\n            } else {\r\n                holder.progressBar.max = 1\r\n                holder.progressBar.progress = 1\r\n            }\r\n        }\r\n\r\n// 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동\r\n        holder.itemView.setOnClickListener {\r\n            val intent = Intent(context, ProductActivity::class.java).apply {\r\n                putExtra(\"name\", product.name)\r\n                putExtra(\"address\", product.address)\r\n                putExtra(\"PROD\", product.PROD)\r\n                putExtra(\"UsebyDate\", product.Usebydate)\r\n                putExtra(\"info\", product.info)\r\n            }\r\n            context.startActivity(intent)\r\n        }\r\n\r\n        holder.deleteButton.setOnClickListener {\r\n            // Handle delete button click\r\n            deleteProduct(product.id, position)\r\n        }\r\n    }\r\n\r\n    override fun getItemCount(): Int {\r\n        return productList.size\r\n    }\r\n    // Firebase에서 제품을 삭제하고 UI 업데이트\r\n    private fun deleteProduct(productId: String, position: Int) {\r\n        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance(\"https://sukbinggotest-default-rtdb.firebaseio.com/\")\r\n            .getReference(\"users\").child(FirebaseAuth.getInstance().currentUser!!.uid).child(\"products\").child(storageType).child(productId)\r\n\r\n        CoroutineScope(Dispatchers.IO).launch {\r\n            try {\r\n                databaseReference.removeValue().await()\r\n                withContext(Dispatchers.Main) {\r\n                    synchronized(productList) {\r\n                        if (position < productList.size) {\r\n                            productList.removeAt(position)\r\n                            notifyItemRemoved(position)\r\n                            notifyItemRangeChanged(position, productList.size)\r\n                            Toast.makeText(context, \"삭제 성공\", Toast.LENGTH_SHORT).show()\r\n                        } else {\r\n                            Toast.makeText(context, \"삭제 성공\", Toast.LENGTH_SHORT).show()\r\n                        }\r\n                    }\r\n                }\r\n            } catch (e: Exception) {\r\n                withContext(Dispatchers.Main) {\r\n                    Toast.makeText(context, \"삭제 실패: ${e.message}\", Toast.LENGTH_LONG).show()\r\n                }\r\n            }\r\n        }\r\n    }\r\n    fun updateList(newList: ArrayList<ProductDB>) {\r\n        productList = newList\r\n        notifyDataSetChanged()\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt
+--- a/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ b/app/src/main/java/com/example/test/productutils/ProductAdapter.kt	(date 1718536858599)
+@@ -20,7 +20,6 @@
+ import com.bumptech.glide.Glide
+ import com.example.test.ProductActivity
+ import com.example.test.R
+-import com.example.test.WorkManager.NotificationHelper
+ import com.example.test.productinfo.ProductDB
+ import com.google.android.material.animation.AnimationUtils
+ import com.google.firebase.auth.FirebaseAuth
+@@ -105,10 +104,6 @@
+                         )
+                     }
+                 }
+-
+-                if (remainingDays == 6) {
+-                    NotificationHelper.sendExpiryNotification(context, product.name ?: "Unknown product")
+-                }
+             } else {
+                 holder.progressBar.max = 1
+                 holder.progressBar.progress = 1
+Index: app/src/main/java/com/example/test/WorkManager/NotificationHelper.kt
+===================================================================
+diff --git a/app/src/main/java/com/example/test/WorkManager/NotificationHelper.kt b/app/src/main/java/com/example/test/WorkManager/NotificationHelper.kt
+deleted file mode 100644
+--- a/app/src/main/java/com/example/test/WorkManager/NotificationHelper.kt	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ /dev/null	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
+@@ -1,26 +0,0 @@
+-package com.example.test.WorkManager
+-
+-import android.app.NotificationChannel
+-import android.app.NotificationManager
+-import android.content.Context
+-import androidx.core.app.NotificationCompat
+-import com.example.test.R
+-
+-object NotificationHelper {
+-    fun sendExpiryNotification(context: Context, productName: String) {
+-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+-
+-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+-            val channel = NotificationChannel("expiry_channel", "Expiry Notifications", NotificationManager.IMPORTANCE_DEFAULT)
+-            notificationManager.createNotificationChannel(channel)
+-        }
+-
+-        val notification = NotificationCompat.Builder(context, "expiry_channel")
+-            .setContentTitle("석빙고")
+-            .setContentText("냉장고에 ${productName}의 남은 소비기한이 7일 남았습니다.")
+-            .setSmallIcon(R.drawable.logo)
+-            .build()
+-
+-        notificationManager.notify(System.currentTimeMillis().toInt(), notification)
+-    }
+-}
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Mon Apr 08 19:30:56 KST 2024\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-8.6-bin.zip\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ b/gradle/wrapper/gradle-wrapper.properties	(date 1718536858583)
+@@ -1,6 +1,6 @@
+ #Mon Apr 08 19:30:56 KST 2024
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+-distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip
++distributionUrl=https\://services.gradle.org/distributions/gradle-8.7-bin.zip
+ zipStoreBase=GRADLE_USER_HOME
+ zipStorePath=wrapper/dists
