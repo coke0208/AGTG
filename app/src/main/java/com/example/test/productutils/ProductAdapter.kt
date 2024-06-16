@@ -47,8 +47,6 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         val progressBar: ProgressBar = view.findViewById(R.id.progress) ?: throw NullPointerException("ProgressBar progress not found")
         val deleteButton: ImageButton = view.findViewById(R.id.btnDelete) ?: throw NullPointerException("ImageButton btnDelete not found")
         val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException("TextView d_day not found")
-        //val roomBtn: ImageButton = view.findViewById(R.id.room_btn) ?: throw NullPointerException("ImageButton room_btn not found")
-        //val itemCheckbox: CheckBox = view.findViewById(R.id.move) ?: throw NullPointerException("CheckBox move not found")
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
@@ -108,10 +106,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                     }
                 }
 
-                // 남은 기간이 7일일 때 알림 전송
-                /*if (remainingDays == 6) {
-                    NotificationHelper.sendExpiryNotification(context, product.name ?: "Unknown product")
-                }*/
+
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1
@@ -130,33 +125,11 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             context.startActivity(intent)
         }
 
-
         holder.deleteButton.setOnClickListener {
             // Handle delete button click
             deleteProduct(product.id, position)
         }
-
-        /*val moveAnim = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.trans)
-        val moveBackAnim = android.view.animation.AnimationUtils.loadAnimation(context, R.anim.trans).apply {
-            duration = 500
-            fillAfter = true
-            startOffset = 500
-            repeatMode = Animation.REVERSE
-            repeatCount = 1
-        }
-
-        holder.itemCheckbox.setOnClickListener() { _ ->
-            if (holder.itemCheckbox.isChecked) {
-                //holder.roomBtn.visibility = GONE
-                holder.roomBtn.startAnimation(moveAnim)
-            } else {
-                //holder.roomBtn.visibility = INVISIBLE
-                holder.roomBtn.startAnimation(moveBackAnim)
-
-            }
-        }*/
     }
-
 
     override fun getItemCount(): Int {
         return productList.size
