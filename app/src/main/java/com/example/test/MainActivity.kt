@@ -72,6 +72,7 @@ class MainActivity : AppCompatActivity() {
 
         setOnQueryTextListener()
 
+
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
 
