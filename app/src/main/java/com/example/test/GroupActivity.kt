@@ -3,33 +3,21 @@ package com.example.test
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
-import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityGroupBinding
-import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.SubPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-
+import com.google.firebase.database.*
 
 class GroupActivity : AppCompatActivity() {
     private val binding by lazy { ActivityGroupBinding.inflate(layoutInflater) }
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var currentUserUid: String
-    private lateinit var productList: ArrayList<ProductDB>
-    private lateinit var subPagerAdapter: SubPagerAdapter
-
-    private var targetUserIdEditText: EditText? = null
-    private var viewUserProductsButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,14 +26,13 @@ class GroupActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
         currentUserUid = auth.currentUser!!.uid
-        productList = ArrayList()
-
-
-        targetUserIdEditText = findViewById(R.id.targetUserIdEditText)
-        viewUserProductsButton = findViewById(R.id.viewUserProductsButton)
 
         binding.back.setOnClickListener {
             finish()
+        }
+
+        binding.add.setOnClickListener {
+            startActivity(Intent(this, ProductActivity::class.java))
         }
 
         binding.idcheck.setOnClickListener {
@@ -53,8 +40,8 @@ class GroupActivity : AppCompatActivity() {
             copyUidToClipboard()
         }
 
-        viewUserProductsButton?.setOnClickListener {
-            val targetUserId = targetUserIdEditText?.text.toString()
+        binding.viewUserProductsButton.setOnClickListener {
+            val targetUserId = binding.targetUserIdEditText.text.toString()
             if (targetUserId.isNotEmpty()) {
                 viewTargetUserProducts(targetUserId)
             } else {
@@ -71,17 +58,11 @@ class GroupActivity : AppCompatActivity() {
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                productList.clear()
-                for (storageSnapshot in snapshot.children) {
-                    for (productSnapshot in storageSnapshot.children) {
-                        val product = productSnapshot.getValue(ProductDB::class.java)
-                        if (product != null) {
-                            product.id = productSnapshot.key.toString() // Assign the key to the product's id
-                            product.let { productList.add(it) }
-                        }
-                    }
+                if (snapshot.exists()) {
+                    setupViewPager(targetUserId)
+                } else {
+                    Toast.makeText(this@GroupActivity, "No products found for this user", Toast.LENGTH_SHORT).show()
                 }
-                setupViewPager(targetUserId)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -91,7 +72,7 @@ class GroupActivity : AppCompatActivity() {
     }
 
     private fun setupViewPager(userId: String) {
-        subPagerAdapter = SubPagerAdapter(this, productList, userId)
+        val subPagerAdapter = SubPagerAdapter(this, userId)
         binding.viewPager2.adapter = subPagerAdapter
 
         TabLayoutMediator(binding.tabLayout, binding.viewPager2) { tab, position ->

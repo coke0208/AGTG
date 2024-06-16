@@ -10,7 +10,7 @@ data class ProductDB(
     var Usebydate: String? = null,
     var info: String? = null,
     var id: String = "",
-    var storageType: String? = null,
+    var storageType: String? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         name = parcel.readString(),
