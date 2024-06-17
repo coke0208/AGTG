@@ -46,9 +46,9 @@
                 style="?android:attr/borderlessButtonStyle"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
+                android:background="?android:attr/selectableItemBackground"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:background="#FFBE98"
                 android:src="@drawable/ic_action_file_upload"/>
 
             <ImageButton
@@ -58,7 +58,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:padding="10dp"
                 android:scaleType="fitXY"
-                android:background="#FFBE98"
+                android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_action_person"/>
         </LinearLayout>
 
@@ -79,19 +79,8 @@
                 android:iconifiedByDefault="false"
                 android:inputType="text"
                 android:queryHint="Search"
-
+                android:layout_marginRight="40dp"
                 android:queryBackground="@drawable/search"/>
-
-            <ImageButton
-                android:id="@+id/filter"
-                android:layout_width="?attr/actionBarSize"
-                android:layout_height="?attr/actionBarSize"
-                android:padding="10dp"
-                android:scaleType="fitXY"
-                android:layout_weight="0"
-                android:background="#FFBE98"
-                android:src="@drawable/ic_action_filter_list"
-                style="?android:attr/borderlessButtonStyle"/>
 
 
         </LinearLayout>
@@ -112,11 +101,6 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical" />
 
 
 
@@ -137,6 +121,8 @@
         android:src="@drawable/ic_action_add"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

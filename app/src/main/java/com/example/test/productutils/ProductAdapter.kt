@@ -3,7 +3,6 @@ package com.example.test.productutils
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
-import com.example.test.WorkManager.NotificationHelper
 import com.example.test.productinfo.ProductDB
-import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -37,19 +34,14 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                      private val targetUserUid: String ) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    fun updateList(newProductList: ArrayList<ProductDB>) {
-        productList.clear()
-        productList.addAll(newProductList)
-        notifyDataSetChanged()
-    }
-
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val productName: TextView = view.findViewById(R.id.tvTitle)
-        val productImage: ImageView = view.findViewById(R.id.tvImage)
-        val progressBar: ProgressBar = view.findViewById(R.id.progress)
-        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
+        val productName: TextView = view.findViewById(R.id.tvTitle) ?: throw NullPointerException("TextView tvTitle not found")
+        val productImage: ImageView = view.findViewById(R.id.tvImage) ?: throw NullPointerException("ImageView tvImage not found")
+        val progressBar: ProgressBar = view.findViewById(R.id.progress) ?: throw NullPointerException("ProgressBar progress not found")
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete) ?: throw NullPointerException("ImageButton btnDelete not found")
+        val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException("TextView d_day not found")
     }
 
 
@@ -60,69 +52,59 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
-
-        Log.d("ProductAdapter", "Binding product at position $position: ${product.name}")
         holder.productName.text = product.name
 
         Glide.with(context)
             .load(product.address)
             .into(holder.productImage)
 
-        try {
-            val currentDate = Date()
-            val startDate: Date? = dateFormat.parse(product.PROD ?: "")
-            val endDate: Date? = dateFormat.parse(product.Usebydate ?: "")
+        val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val currentDate = Date()
+        val startDate: Date? = dateFormat.parse(product.PROD ?: "")
+        val endDate: Date? = dateFormat.parse(product.Usebydate ?: "")
 
-            if (startDate != null && endDate != null) {
-                val totalDuration = endDate.time - startDate.time
-                val elapsedTime = currentDate.time - startDate.time
-                val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()
+        if (startDate != null && endDate != null) {
+            val totalDuration = endDate.time - startDate.time
+            val elapsedTime = currentDate.time - startDate.time
+            val remainingDays = TimeUnit.MILLISECONDS.toDays(endDate.time - currentDate.time).toInt()
 
-                if (totalDuration > 0) {
-                    holder.progressBar.max = totalDuration.toInt()
-                    holder.progressBar.progress = elapsedTime.toInt()
+            holder.D_day.text="D-${remainingDays + 1}"
 
-                    when {
-                        elapsedTime.toDouble() / totalDuration >= 1 -> {
-                            holder.progressBar.progressDrawable.setColorFilter(
-                                ContextCompat.getColor(context, R.color.black),
-                                PorterDuff.Mode.SRC_IN
-                            )
-                        }
-                        elapsedTime.toDouble() / totalDuration >= 0.9 -> {
-                            holder.progressBar.progressDrawable.setColorFilter(
-                                ContextCompat.getColor(context, R.color.red),
-                                PorterDuff.Mode.SRC_IN
-                            )
-                        }
-                        elapsedTime.toDouble() / totalDuration >= 0.5 -> {
-                            holder.progressBar.progressDrawable.setColorFilter(
-                                ContextCompat.getColor(context, R.color.orange),
-                                PorterDuff.Mode.SRC_IN
-                            )
-                        }
-                        else -> {
-                            holder.progressBar.progressDrawable.setColorFilter(
-                                ContextCompat.getColor(context, R.color.green),
-                                PorterDuff.Mode.SRC_IN
-                            )
-                        }
+            if (totalDuration > 0) {
+                holder.progressBar.max = totalDuration.toInt()
+                holder.progressBar.progress = elapsedTime.toInt()
+
+                when {
+                    elapsedTime.toDouble() / totalDuration >= 1 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.black),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                        holder.D_day.text="X"
                     }
-
-                    if (remainingDays == 6) {
-                        NotificationHelper.sendExpiryNotification(context, product.name ?: "Unknown product")
+                    elapsedTime.toDouble() / totalDuration >= 0.9 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.red),
+                            PorterDuff.Mode.SRC_IN
+                        )
                     }
-                } else {
-                    holder.progressBar.max = 1
-                    holder.progressBar.progress = 1
+                    elapsedTime.toDouble() / totalDuration >= 0.5 -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.orange),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
+                    else -> {
+                        holder.progressBar.progressDrawable.setColorFilter(
+                            ContextCompat.getColor(context, R.color.green),
+                            PorterDuff.Mode.SRC_IN
+                        )
+                    }
                 }
             } else {
                 holder.progressBar.max = 1
                 holder.progressBar.progress = 1
             }
-        } catch (e: Exception) {
-            holder.progressBar.max = 1
-            holder.progressBar.progress = 1
         }
 
         holder.itemView.setOnClickListener {
@@ -174,5 +156,9 @@ class ProductAdapter(private val context: Context, private var productList: Arra
     }
 
 
+    fun updateList(newList: ArrayList<ProductDB>) {
+        productList=newList
+        notifyDataSetChanged()
+    }
 
 }

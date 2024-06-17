@@ -1,6 +1,8 @@
 package com.example.test
 
+import android.app.DatePickerDialog
 import android.content.Intent
+import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -26,6 +28,10 @@ class ProductActivity : AppCompatActivity() {
     private var info: TextView? = null
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
+    private var calender = Calendar.getInstance()
+    private var year = calender.get(Calendar.YEAR)
+    private var month = calender.get(Calendar.MONTH)
+    private var day = calender.get(Calendar.DAY_OF_MONTH)
     private lateinit var targetUserUid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +53,6 @@ class ProductActivity : AppCompatActivity() {
             return
         }
 
-        // 타겟 사용자 UID를 Intent로 받기
         userUid = currentUser.uid
         targetUserUid = intent.getStringExtra("TARGET_USER_UID") ?: userUid
         val name = intent.getStringExtra("name") ?: ""
@@ -74,14 +79,30 @@ class ProductActivity : AppCompatActivity() {
             saveProduct("RoomStorage", ProductDB(name, address, Prod, UsebyDate, pinfo))
         }
 
+
         qrScan = IntentIntegrator(this)
         binding.add.setOnClickListener {
             qrScan!!.setPrompt("Scanning...")
             qrScan!!.initiateScan()
         }
 
+
         binding.back.setOnClickListener {
             finish()
+        }
+
+        binding.sCalendar.setOnClickListener(){
+            val datePickerDialog = DatePickerDialog(this, {_,year, month, day ->
+                binding.Manufacturedate.text = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+            }, year, month, day)
+            datePickerDialog.show()
+        }
+
+        binding.eCalendar.setOnClickListener(){
+            val datePickerDialog = DatePickerDialog(this, {_,year, month, day ->
+                binding.Usebydate.text = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
+            }, year, month, day)
+            datePickerDialog.show()
         }
     }
 
@@ -109,12 +130,13 @@ class ProductActivity : AppCompatActivity() {
         }
     }
 
+
     private fun saveProduct(storageType: String, product: ProductDB) {
         try {
             val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
                 .getReference("users").child(targetUserUid).child("products").child(storageType)
             val newProductRef = databaseReference.push()
-            product.id = newProductRef.key.toString()  // 제품 ID를 설정
+            product.id = newProductRef.key.toString()
 
             product.name = binding.textViewName.text.toString()
             product.address = binding.imageViewAddress.text.toString()
@@ -137,4 +159,10 @@ class ProductActivity : AppCompatActivity() {
             Toast.makeText(this, "예외 발생: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
+
+
 }

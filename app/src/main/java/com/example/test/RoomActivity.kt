@@ -69,7 +69,6 @@ class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors.
             }
         })
     }

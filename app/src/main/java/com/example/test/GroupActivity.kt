@@ -3,7 +3,6 @@ package com.example.test
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -64,7 +63,7 @@ class GroupActivity : AppCompatActivity() {
                     for (productSnapshot in storageSnapshot.children) {
                         val product = productSnapshot.getValue(ProductDB::class.java)
                         if (product != null) {
-                            product.id = productSnapshot.key.toString() // 제품 ID를 key로 설정
+                            product.id = productSnapshot.key.toString()
                             productList.add(product)
                         }
                     }
