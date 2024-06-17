@@ -2,6 +2,9 @@ package com.example.test
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.test.Fregment_Pages.ColdActivity
+import com.example.test.Fregment_Pages.FrozenActivity
+import com.example.test.Fregment_Pages.RoomActivity
 
 class ViewPagerAdapter(fragment: Fragment): FragmentStateAdapter(fragment) {
 

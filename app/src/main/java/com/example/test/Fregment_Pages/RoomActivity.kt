@@ -1,4 +1,4 @@
-package com.example.test
+package com.example.test.Fregment_Pages
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,14 +7,15 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.databinding.ActivityFrozenBinding
+import com.example.test.HomeFragment
+import com.example.test.databinding.ActivityRoomBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
-    private var _binding: ActivityFrozenBinding? = null
+class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
+    private var _binding: ActivityRoomBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ProductAdapter
     private var productList = ArrayList<ProductDB>()
@@ -24,8 +25,8 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
 
     companion object {
         private const val ARG_USER_ID = "user_id"
-        fun newInstance(userId: String): FrozenActivity {
-            val fragment = FrozenActivity()
+        fun newInstance(userId: String): RoomActivity {
+            val fragment = RoomActivity()
             val args = Bundle()
             args.putString(ARG_USER_ID, userId)
             fragment.arguments = args
@@ -34,7 +35,7 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = ActivityFrozenBinding.inflate(inflater, container, false)
+        _binding = ActivityRoomBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -45,12 +46,12 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
         targetUserId = arguments?.getString(ARG_USER_ID) ?: FirebaseAuth.getInstance().currentUser!!.uid
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("users").child(targetUserId).child("products").child("FrozenStorage")
+            .getReference("users").child(targetUserId).child("products").child("RoomStorage")
 
-        adapter = ProductAdapter(requireContext(), productList, "FrozenStorage",targetUserId)
+        adapter = ProductAdapter(requireContext(), productList, "RoomStorage",targetUserId)
 
-        binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
-        binding.frozenlist.adapter = adapter
+        binding.roomlist.layoutManager = LinearLayoutManager(requireContext())
+        binding.roomlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             @SuppressLint("NotifyDataSetChanged")
@@ -69,7 +70,6 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
             }
 
             override fun onCancelled(error: DatabaseError) {
-
             }
         })
     }

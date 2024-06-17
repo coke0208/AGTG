@@ -111,11 +111,10 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         holder.itemView.setOnClickListener {
             val intent = Intent(context, FoodActivity::class.java).apply {
                 putExtra("name", product.name)
-                putExtra("address", product.address)
+                putExtra("imageUrl", product.address) // 이미지 URL 전달
                 putExtra("PROD", product.PROD)
                 putExtra("UsebyDate", product.Usebydate)
                 putExtra("info", product.info)
-                //putExtra("nutrition",product.nutrition)
             }
             context.startActivity(intent)
         }
@@ -124,6 +123,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             deleteProduct(product.id, position)
         }
     }
+
 
     override fun getItemCount(): Int {
         return productList.size

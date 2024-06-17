@@ -1,4 +1,4 @@
-package com.example.test
+package com.example.test.Fregment_Pages
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,25 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.test.databinding.ActivityRoomBinding
+import com.example.test.HomeFragment
+import com.example.test.databinding.ActivityColdBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
-class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
-    private var _binding: ActivityRoomBinding? = null
+@Suppress("DEPRECATION")
+class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
+    private var _binding: ActivityColdBinding? = null
     private val binding get() = _binding!!
     private lateinit var adapter: ProductAdapter
+    private lateinit var auth: FirebaseAuth
     private var productList = ArrayList<ProductDB>()
     private var filteredList = ArrayList<ProductDB>()
     private var currentQuery: String = ""
     private lateinit var targetUserId: String
 
     companion object {
-        private const val ARG_USER_ID = "user_id"
-        fun newInstance(userId: String): RoomActivity {
-            val fragment = RoomActivity()
+        const val ARG_USER_ID = "user_id"
+        fun newInstance(userId: String): ColdActivity {
+            val fragment = ColdActivity()
             val args = Bundle()
             args.putString(ARG_USER_ID, userId)
             fragment.arguments = args
@@ -34,7 +37,7 @@ class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        _binding = ActivityRoomBinding.inflate(inflater, container, false)
+        _binding = ActivityColdBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
     }
@@ -45,12 +48,12 @@ class RoomActivity : Fragment(), HomeFragment.SearchableFragment {
         targetUserId = arguments?.getString(ARG_USER_ID) ?: FirebaseAuth.getInstance().currentUser!!.uid
 
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("users").child(targetUserId).child("products").child("RoomStorage")
+            .getReference("users").child(targetUserId).child("products").child("ColdStorage")
 
-        adapter = ProductAdapter(requireContext(), productList, "RoomStorage",targetUserId)
+        adapter = ProductAdapter(requireContext(), productList, "ColdStorage", targetUserId)
 
-        binding.roomlist.layoutManager = LinearLayoutManager(requireContext())
-        binding.roomlist.adapter = adapter
+        binding.coldlist.layoutManager = LinearLayoutManager(requireContext())
+        binding.coldlist.adapter = adapter
 
         databaseReference.addValueEventListener(object : ValueEventListener {
             @SuppressLint("NotifyDataSetChanged")
