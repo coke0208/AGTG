@@ -35,18 +35,6 @@ class GroupActivity : AppCompatActivity() {
             finish()
         }
 
-        binding.add.setOnClickListener {
-            val targetUserId = binding.targetUserIdEditText.text.toString()
-            if (targetUserId.isNotEmpty()) {
-                val intent = Intent(this, ProductActivity::class.java)
-                intent.putExtra("TARGET_USER_UID", targetUserId)
-                startActivity(intent)
-            } else {
-                Toast.makeText(this, "사용자 ID를 입력하세요.", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
 
         binding.idcheck.setOnClickListener {
             binding.targetUserIdEditText.setText(currentUserUid)
@@ -108,19 +96,7 @@ class GroupActivity : AppCompatActivity() {
             else -> null
         }
     }
-
-    private fun deleteUserProducts(userId: String) {
-        val userProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("users").child(userId).child("products")
-
-        userProductsReference.removeValue().addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(this, "제품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
-            } else {
-                Toast.makeText(this, "제품 삭제에 실패했습니다: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+    
 
     private fun copyUidToClipboard() {
         val clipboardManager = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
