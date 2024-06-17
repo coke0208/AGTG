@@ -18,7 +18,6 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.test.FoodActivity
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
@@ -113,7 +112,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
 // 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, FoodActivity::class.java).apply {
+            val intent = Intent(context, ProductActivity::class.java).apply {
                 putExtra("name", product.name)
                 putExtra("address", product.address)
                 putExtra("PROD", product.PROD)
