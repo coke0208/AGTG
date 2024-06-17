@@ -1,0 +1,36 @@
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
++++ /dev/null	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2024-06-09_오후_10_24_[Changes]" date="1717939467707" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09_오후_10_24_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2024-06-09 오후 10:24 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
++++ /dev/null	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_06_[Changes]" date="1717938393729" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_06_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024-06-09 오후 10:06 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
++++ /dev/null	(revision 946ac3fa806d9b755bc1e988eceec18731abdfb0)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_40_[Changes]" date="1717940442079" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_40_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024-06-09 오후 10:40 [Changes]" />
+-</changelist>
+\ No newline at end of file
