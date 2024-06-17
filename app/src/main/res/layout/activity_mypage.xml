@@ -25,7 +25,7 @@
                 android:id="@+id/back"
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="?attr/actionBarSize"
-                android:background="@color/main"
+                android:background="?android:attr/selectableItemBackground"
                 android:src="@drawable/ic_action_arrow_back"/>
 
             <TextView
@@ -41,21 +41,38 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/profileImage"
             android:layout_width="match_parent"
             android:layout_height="100dp"
             android:layout_gravity="center"
             android:layout_margin="40dp"
-            android:src="@drawable/my" />
+            tools:src="@drawable/my" />
+
+        <Button
+            android:id="@+id/defaultImage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:backgroundTint="@color/button"
+            android:text="기본이미지"/>
 
         <EditText
-            android:id="@+id/editTextText2"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="40dp"
             android:layout_marginRight="40dp"
             android:inputType="text"
             android:hint="이름" />
+
+        <EditText
+            android:id="@+id/email_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
+            android:inputType="text"
+            android:hint="이메일" />
 
         <EditText
             android:id="@+id/editTextTextPassword2"
@@ -81,7 +98,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/logout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -90,7 +107,7 @@
                 android:text="로그아웃" />
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

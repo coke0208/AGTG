@@ -5,9 +5,8 @@ import com.google.firebase.ktx.Firebase
 
 class FirebaseRF {
 
-    companion object{
+    companion object {
         val database = Firebase.database("https://sukbinggotest-default-rtdb.firebaseio.com/")
-        val productdb= database.getReference("ProductDB")
+        val productdb = database.getReference("ProductDB")
     }
-
 }

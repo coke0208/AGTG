@@ -1,0 +1,65 @@
+Index: app/src/main/res/layout/item_view.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:layout_width=\"match_parent\"\r\n    android:background=\"@color/button\"\r\n    android:layout_margin=\"20dp\"\r\n    android:layout_height=\"100dp\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:background=\"?android:attr/selectableItemBackground\"\r\n        android:padding=\"10dp\">\r\n\r\n        <CheckBox\r\n            android:id=\"@+id/move\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center\" />\r\n\r\n        <ImageView\r\n            android:id=\"@+id/tvImage\"\r\n            android:layout_width=\"80dp\"\r\n            android:layout_height=\"80dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:src=\"@drawable/logo\"/>\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"0dp\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:orientation=\"vertical\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_weight=\"1\">\r\n\r\n            <TextView\r\n                android:id=\"@+id/tvTitle\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:textSize=\"16sp\"\r\n                android:textStyle=\"bold\"\r\n                tools:text=\"음식이름\" />\r\n\r\n            <ProgressBar\r\n                android:id=\"@+id/progress\"\r\n                style=\"@style/Widget.AppCompat.ProgressBar.Horizontal\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\" />\r\n\r\n            <TextView\r\n                android:id=\"@+id/d_day\"\r\n                android:layout_width=\"match_parent\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:text=\"남은 소비기간\"/>\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageButton\r\n            android:id=\"@+id/btnDelete\"\r\n            android:layout_width=\"40dp\"\r\n            android:layout_height=\"40dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:backgroundTint=\"@color/main\"\r\n            android:src=\"@drawable/x\"/>\r\n\r\n    </LinearLayout>\r\n\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/item_view.xml b/app/src/main/res/layout/item_view.xml
+--- a/app/src/main/res/layout/item_view.xml	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ b/app/src/main/res/layout/item_view.xml	(date 1718528480140)
+@@ -13,12 +13,6 @@
+         android:background="?android:attr/selectableItemBackground"
+         android:padding="10dp">
+ 
+-        <CheckBox
+-            android:id="@+id/move"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_gravity="center" />
+-
+         <ImageView
+             android:id="@+id/tvImage"
+             android:layout_width="80dp"
+Index: app/src/main/res/layout/activity_mypage.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout xmlns:android=\"http://schemas.android.com/apk/res/android\"\r\n    xmlns:app=\"http://schemas.android.com/apk/res-auto\"\r\n    xmlns:tools=\"http://schemas.android.com/tools\"\r\n    android:id=\"@+id/main\"\r\n    android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\"\r\n    tools:context=\".MypageActivity\">\r\n\r\n    <LinearLayout\r\n        android:layout_width=\"match_parent\"\r\n        android:layout_height=\"match_parent\"\r\n        android:layout_weight=\"0\"\r\n        android:orientation=\"vertical\"\r\n        android:background=\"@color/submain\"\r\n        tools:layout_editor_absoluteX=\"60dp\">\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:background=\"@color/main\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <ImageButton\r\n                android:id=\"@+id/back\"\r\n                android:layout_width=\"?attr/actionBarSize\"\r\n                android:layout_height=\"?attr/actionBarSize\"\r\n                android:background=\"?android:attr/selectableItemBackground\"\r\n                android:src=\"@drawable/ic_action_arrow_back\"/>\r\n\r\n            <TextView\r\n                android:id=\"@+id/textView2\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_gravity=\"center\"\r\n                android:layout_weight=\"1\"\r\n                android:text=\"마이페이지\"\r\n                android:textColor=\"@color/white\"\r\n                android:textSize=\"20dp\" />\r\n\r\n        </LinearLayout>\r\n\r\n        <ImageView\r\n            android:id=\"@+id/profileImage\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"100dp\"\r\n            android:layout_gravity=\"center\"\r\n            android:layout_margin=\"40dp\"\r\n            tools:src=\"@drawable/my\" />\r\n\r\n        <Button\r\n            android:id=\"@+id/defaultImage\"\r\n            android:layout_width=\"wrap_content\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_gravity=\"center\"\r\n            android:backgroundTint=\"@color/button\"\r\n            android:text=\"기본이미지\"/>\r\n\r\n        <EditText\r\n            android:id=\"@+id/name\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"40dp\"\r\n            android:layout_marginRight=\"40dp\"\r\n            android:inputType=\"text\"\r\n            android:hint=\"이름\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/email_id\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"40dp\"\r\n            android:layout_marginRight=\"40dp\"\r\n            android:inputType=\"text\"\r\n            android:hint=\"이메일\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextTextPassword2\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"40dp\"\r\n            android:layout_marginRight=\"40dp\"\r\n            android:hint=\"비밀번호\"\r\n            android:inputType=\"textPassword\" />\r\n\r\n        <EditText\r\n            android:id=\"@+id/editTextTextPassword3\"\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"wrap_content\"\r\n            android:layout_marginLeft=\"40dp\"\r\n            android:layout_marginRight=\"40dp\"\r\n            android:hint=\"비밀번호 재입력\"\r\n            android:inputType=\"textPassword\" />\r\n\r\n        <LinearLayout\r\n            android:layout_width=\"match_parent\"\r\n            android:layout_height=\"match_parent\"\r\n            android:orientation=\"horizontal\">\r\n\r\n            <Button\r\n                android:id=\"@+id/logout\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\"\r\n                android:backgroundTint=\"@color/button\"\r\n                android:layout_marginLeft=\"40dp\"\r\n                android:text=\"로그아웃\" />\r\n\r\n            <Button\r\n                android:id=\"@+id/update\"\r\n                android:layout_width=\"wrap_content\"\r\n                android:layout_height=\"wrap_content\"\r\n                android:layout_weight=\"1\"\r\n                android:backgroundTint=\"@color/button\"\r\n                android:layout_marginRight=\"40dp\"\r\n                android:text=\"완료\" />\r\n        </LinearLayout>\r\n\r\n    </LinearLayout>\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/res/layout/activity_mypage.xml b/app/src/main/res/layout/activity_mypage.xml
+--- a/app/src/main/res/layout/activity_mypage.xml	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ b/app/src/main/res/layout/activity_mypage.xml	(date 1718528489811)
+@@ -43,10 +43,12 @@
+         <ImageView
+             android:id="@+id/profileImage"
+             android:layout_width="match_parent"
+-            android:layout_height="100dp"
++            android:layout_height="150dp"
+             android:layout_gravity="center"
+-            android:layout_margin="40dp"
+-            tools:src="@drawable/my" />
++            android:layout_marginTop="20dp"
++            android:layout_marginLeft="150dp"
++            android:layout_marginRight="150dp"
++            android:src="@drawable/my" />
+ 
+         <Button
+             android:id="@+id/defaultImage"
+Index: gradle/wrapper/gradle-wrapper.properties
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>#Mon Apr 08 19:30:56 KST 2024\r\ndistributionBase=GRADLE_USER_HOME\r\ndistributionPath=wrapper/dists\r\ndistributionUrl=https\\://services.gradle.org/distributions/gradle-8.6-bin.zip\r\nzipStoreBase=GRADLE_USER_HOME\r\nzipStorePath=wrapper/dists\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>ISO-8859-1
+===================================================================
+diff --git a/gradle/wrapper/gradle-wrapper.properties b/gradle/wrapper/gradle-wrapper.properties
+--- a/gradle/wrapper/gradle-wrapper.properties	(revision 5d1e81d142f27343c69616cec1b4bb83ca745dfc)
++++ b/gradle/wrapper/gradle-wrapper.properties	(date 1718528489832)
+@@ -1,4 +1,4 @@
+-#Mon Apr 08 19:30:56 KST 2024
++#Sun Jun 16 17:52:38 KST 2024
+ distributionBase=GRADLE_USER_HOME
+ distributionPath=wrapper/dists
+ distributionUrl=https\://services.gradle.org/distributions/gradle-8.6-bin.zip

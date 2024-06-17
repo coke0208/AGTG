@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.viewpager2.widget.ViewPager2
 import com.example.test.databinding.FragmentHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -27,10 +26,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //binding.vpTodo.adapter = activity?.let { ViewPagerAdapter(it) }
-        //binding.vpTodo.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
         viewPagerAdapter = ViewPagerAdapter(this)
         binding.vpTodo.adapter = viewPagerAdapter
 
@@ -52,12 +47,6 @@ class HomeFragment : Fragment() {
         fun updateSearchQuery(query: String)
     }
 
-    /*override fun updateSearchQuery(query: String) {
-        val currentFragment = childFragmentManager.findFragmentByTag("f" + binding.vpTodo.currentItem)
-        if (currentFragment is MainActivity.SearchableFragment) {
-            currentFragment.updateSearchQuery(query)
-        }
-    }*/
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
