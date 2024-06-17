@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.test.databinding.ActivityMainBinding
 import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var productAdapter: ProductAdapter
     private lateinit var productList: ArrayList<ProductDB>
     private lateinit var databaseReference: DatabaseReference
+    private lateinit var targetUserId: String
 
     companion object {
         private const val REQUEST_NOTIFICATION_PERMISSION = 1
@@ -42,10 +44,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        targetUserId = intent.getStringExtra("TARGET_USER_ID") ?: FirebaseAuth.getInstance().currentUser!!.uid
+
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
         productList = ArrayList()
-        productAdapter = ProductAdapter(this, productList, "products")
+        productAdapter = ProductAdapter(this, productList, "products",targetUserId)
         recyclerView.adapter = productAdapter
 
         databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
@@ -70,7 +74,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.add.setOnClickListener {
-            startActivity(Intent(this, ProductActivity::class.java))
+            val intent = Intent(this, ProductActivity::class.java)
+            intent.putExtra("TARGET_USER_UID", targetUserId)
+            startActivity(intent)
         }
 
 

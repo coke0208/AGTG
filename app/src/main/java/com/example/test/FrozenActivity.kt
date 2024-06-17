@@ -47,7 +47,7 @@ class FrozenActivity : Fragment(), HomeFragment.SearchableFragment {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("users").child(targetUserId).child("products").child("FrozenStorage")
 
-        adapter = ProductAdapter(requireContext(), productList, "FrozenStorage")
+        adapter = ProductAdapter(requireContext(), productList, "FrozenStorage",targetUserId)
 
         binding.frozenlist.layoutManager = LinearLayoutManager(requireContext())
         binding.frozenlist.adapter = adapter

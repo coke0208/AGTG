@@ -25,7 +25,7 @@ class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
     private lateinit var targetUserId: String
 
     companion object {
-        private const val ARG_USER_ID = "user_id"
+        const val ARG_USER_ID = "user_id"
         fun newInstance(userId: String): ColdActivity {
             val fragment = ColdActivity()
             val args = Bundle()
@@ -49,7 +49,7 @@ class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
         val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
             .getReference("users").child(targetUserId).child("products").child("ColdStorage")
 
-        adapter = ProductAdapter(requireContext(), productList, "ColdStorage")
+        adapter = ProductAdapter(requireContext(), productList, "ColdStorage", targetUserId)
 
         binding.coldlist.layoutManager = LinearLayoutManager(requireContext())
         binding.coldlist.adapter = adapter

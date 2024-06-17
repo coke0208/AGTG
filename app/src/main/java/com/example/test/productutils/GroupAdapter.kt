@@ -7,7 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
 
-class GroupAdapter(private val context: Context, private val productList: List<ProductDB>) :
+class GroupAdapter(private val context: Context, private val productList: List<ProductDB>,
+                   private val onDeleteClick: (String) -> Unit) :
     RecyclerView.Adapter<GroupAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

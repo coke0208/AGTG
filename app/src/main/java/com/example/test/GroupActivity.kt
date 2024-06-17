@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityGroupBinding
+import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.SubPagerAdapter
 import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
@@ -18,6 +19,8 @@ class GroupActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
     private lateinit var currentUserUid: String
+    private lateinit var productList: ArrayList<ProductDB>
+    private lateinit var subPagerAdapter: SubPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,14 +29,24 @@ class GroupActivity : AppCompatActivity() {
         auth = FirebaseAuth.getInstance()
         database = FirebaseDatabase.getInstance().reference
         currentUserUid = auth.currentUser!!.uid
+        productList = ArrayList()
 
         binding.back.setOnClickListener {
             finish()
         }
 
         binding.add.setOnClickListener {
-            startActivity(Intent(this, ProductActivity::class.java))
+            val targetUserId = binding.targetUserIdEditText.text.toString()
+            if (targetUserId.isNotEmpty()) {
+                val intent = Intent(this, ProductActivity::class.java)
+                intent.putExtra("TARGET_USER_UID", targetUserId)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "사용자 ID를 입력하세요.", Toast.LENGTH_SHORT).show()
+            }
         }
+
+
 
         binding.idcheck.setOnClickListener {
             binding.targetUserIdEditText.setText(currentUserUid)
@@ -45,7 +58,7 @@ class GroupActivity : AppCompatActivity() {
             if (targetUserId.isNotEmpty()) {
                 viewTargetUserProducts(targetUserId)
             } else {
-                Toast.makeText(this, "Please enter a valid user ID", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "유효한 사용자 ID를 입력하세요", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -58,18 +71,25 @@ class GroupActivity : AppCompatActivity() {
 
         databaseReference.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    setupViewPager(targetUserId)
-                } else {
-                    Toast.makeText(this@GroupActivity, "No products found for this user", Toast.LENGTH_SHORT).show()
+                productList.clear()
+                for (storageSnapshot in snapshot.children) {
+                    for (productSnapshot in storageSnapshot.children) {
+                        val product = productSnapshot.getValue(ProductDB::class.java)
+                        if (product != null) {
+                            product.id = productSnapshot.key.toString() // 제품 ID를 key로 설정
+                            productList.add(product)
+                        }
+                    }
                 }
+                setupViewPager(targetUserId)
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@GroupActivity, "Failed to load products: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@GroupActivity, "제품 로드 실패: ${error.message}", Toast.LENGTH_SHORT).show()
             }
         })
     }
+
 
     private fun setupViewPager(userId: String) {
         val subPagerAdapter = SubPagerAdapter(this, userId)
@@ -86,6 +106,19 @@ class GroupActivity : AppCompatActivity() {
             1 -> "냉동실"
             2 -> "실온"
             else -> null
+        }
+    }
+
+    private fun deleteUserProducts(userId: String) {
+        val userProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("users").child(userId).child("products")
+
+        userProductsReference.removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(this, "제품이 삭제되었습니다.", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "제품 삭제에 실패했습니다: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 

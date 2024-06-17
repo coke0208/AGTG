@@ -33,7 +33,8 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 @Suppress("DEPRECATION")
-class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
+class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String,
+                     private val targetUserUid: String ) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
     fun updateList(newProductList: ArrayList<ProductDB>) {
@@ -146,7 +147,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
 
     private fun deleteProduct(productId: String, position: Int) {
         val databaseReference: DatabaseReference = FirebaseDatabase.getInstance()
-            .getReference("users").child(FirebaseAuth.getInstance().currentUser!!.uid)
+            .getReference("users").child(targetUserUid)
             .child("products").child(storageType).child(productId)
 
         CoroutineScope(Dispatchers.IO).launch {
