@@ -56,14 +56,12 @@ android {
         implementation("com.google.gms:google-services:4.3.10")
         implementation ("com.google.zxing:core:3.4.1")
         implementation("com.journeyapps:zxing-android-embedded:4.2.0")
-
         implementation ("androidx.room:room-runtime:2.6.1")
         annotationProcessor ("androidx.room:room-compiler:2.6.1")
         implementation ("androidx.recyclerview:recyclerview:1.1.0")
         implementation("com.google.firebase:firebase-firestore")
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
         implementation ("androidx.work:work-runtime-ktx:2.8.1")
-            //ss
         implementation("com.github.bumptech.glide:glide:4.16.0")
         implementation ("com.google.zxing:core:3.4.1")
         implementation ("com.google.code.gson:gson:2.8.6")
@@ -74,9 +72,6 @@ android {
         implementation("androidx.activity:activity-compose:1.9.0")
         implementation("com.google.firebase:firebase-analytics-ktx")
         implementation("androidx.work:work-runtime-ktx:2.9.0")
-
-
-
 
 
         implementation ("com.google.firebase:firebase-messaging:23.0.0")
