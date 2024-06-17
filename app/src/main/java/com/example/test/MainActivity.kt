@@ -1,16 +1,23 @@
 package com.example.test
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.view.View
+import android.util.Log
+import android.view.MotionEvent
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.test.databinding.ActivityMainBinding
 import android.Manifest
 import android.app.NotificationChannel
@@ -33,11 +40,20 @@ import androidx.work.WorkManager
 import com.example.test.productutils.ProductAdapter
 import com.google.firebase.FirebaseApp
 import java.util.concurrent.TimeUnit
+import com.example.test.productinfo.ProductDB
+import com.example.test.productutils.ProductAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var homeFragment: HomeFragment
-    //private lateinit var adapter: ProductAdapter
+
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var productAdapter: ProductAdapter
+    private lateinit var productList: ArrayList<ProductDB>
+    private lateinit var databaseReference: DatabaseReference
+    private lateinit var targetUserId: String
 
     companion object {
         private const val REQUEST_NOTIFICATION_PERMISSION = 1
@@ -55,6 +71,19 @@ class MainActivity : AppCompatActivity() {
         Log.i("!!!!!!!!", token ?: "Token not found")
 
 
+
+        targetUserId = intent.getStringExtra("TARGET_USER_ID") ?: FirebaseAuth.getInstance().currentUser!!.uid
+
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        productList = ArrayList()
+        productAdapter = ProductAdapter(this, productList, "products",targetUserId)
+        recyclerView.adapter = productAdapter
+
+        databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("users")
+
+
         homeFragment = HomeFragment()
         supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
 
@@ -64,18 +93,84 @@ class MainActivity : AppCompatActivity() {
 
         val mypage = Intent(this, MypageActivity::class.java)
         binding.mypage.setOnClickListener { startActivity(mypage) }
+        binding.mypage.setOnClickListener {
+            startActivity(Intent(this, MypageActivity::class.java))
+        }
 
-        val upload = Intent(this, UploadActivity::class.java)
-        binding.upload.setOnClickListener { startActivity(upload) }
+        binding.upload.setOnClickListener {
+            startActivity(Intent(this, UploadActivity::class.java))
+        }
 
-        val group = Intent(this, GroupActivity::class.java)
-        binding.group.setOnClickListener { startActivity(group) }
+        binding.group.setOnClickListener {
+            startActivity(Intent(this, GroupActivity::class.java))
+        }
 
-        val product1 = Intent(this, ProductActivity::class.java)
-        binding.add.setOnClickListener { startActivity(product1) }
+        binding.add.setOnClickListener {
+            val intent = Intent(this, ProductActivity::class.java)
+            intent.putExtra("TARGET_USER_UID", targetUserId)
+            startActivity(intent)
+        }
 
+
+        val targetUserId = intent.getStringExtra("TARGET_USER_ID")
+        targetUserId?.let {
+            loadUserProducts(it)
+        }
+
+        createNotificationChannel()
+        requestNotificationPermission()
+    }
         FirebaseApp.initializeApp(this)
 
+    private fun loadUserProducts(userId: String) {
+        val userProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+            .getReference("users").child(userId).child("products")
+
+        userProductsReference.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val products = mutableListOf<ProductDB>()
+                for (storageSnapshot in snapshot.children) {
+                    for (productSnapshot in storageSnapshot.children) {
+                        val product = productSnapshot.getValue(ProductDB::class.java)
+                        product?.let { products.add(it) }
+                    }
+                }
+                setupRecyclerView(products)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@MainActivity, "Failed to load user products: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+
+    private fun setupRecyclerView(products: List<ProductDB>) {
+        productAdapter.updateList(products as ArrayList<ProductDB>)
+    }
+
+
+
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATION_PERMISSION)
+            }
+        }
+    }
+
+    private fun createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val name = "ExpiryNotificationChannel"
+            val descriptionText = "Channel for expiry notifications"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel("expiry_notification_channel", name, importance).apply {
+                description = descriptionText
+            }
+            val notificationManager: NotificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
     }
 
 
@@ -94,7 +189,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateItemCurrentFragment(newText: String?) {
-        val fragments = (homeFragment.childFragmentManager.fragments)
+        val fragments = homeFragment.childFragmentManager.fragments
         fragments.forEach { fragment ->
             if (fragment is HomeFragment.SearchableFragment) {
                 fragment.updateSearchQuery(newText ?: "")

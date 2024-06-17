@@ -1,0 +1,84 @@
+Index: app/src/main/java/com/example/test/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.annotation.SuppressLint\r\nimport android.content.Intent\r\nimport android.content.pm.PackageManager\r\nimport android.os.Build\r\nimport android.os.Bundle\r\nimport android.view.View\r\nimport android.widget.SearchView\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.app.ActivityCompat\r\nimport androidx.core.content.ContextCompat\r\nimport com.example.test.databinding.ActivityMainBinding\r\nimport android.Manifest\r\nimport android.app.NotificationChannel\r\nimport android.app.NotificationManager\r\nimport android.content.Context\r\nimport android.util.Log\r\nimport android.view.MotionEvent\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport com.example.test.productinfo.ProductDB\r\nimport com.example.test.productutils.ProductAdapter\r\nimport com.google.firebase.database.DataSnapshot\r\nimport com.google.firebase.database.DatabaseError\r\nimport com.google.firebase.database.DatabaseReference\r\nimport com.google.firebase.database.FirebaseDatabase\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    private lateinit var binding: ActivityMainBinding\r\n    private lateinit var homeFragment: HomeFragment\r\n    private lateinit var database: DatabaseReference\r\n    companion object {\r\n        private const val REQUEST_NOTIFICATION_PERMISSION = 1\r\n    }\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        binding = ActivityMainBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n        val groupId = intent.getStringExtra(\"groupId\")\r\n        if (groupId == null) {\r\n            Toast.makeText(this, \"그룹 ID가 전달되지 않았습니다.\", Toast.LENGTH_SHORT).show()\r\n            finish()\r\n            return\r\n        }\r\n\r\n        database = FirebaseDatabase.getInstance().reference\r\n\r\n\r\n        homeFragment = HomeFragment()\r\n        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()\r\n\r\n        setOnQueryTextListener()\r\n\r\n        val mypage = Intent(this, MypageActivity::class.java)\r\n        binding.mypage.setOnClickListener { startActivity(mypage) }\r\n\r\n        val upload = Intent(this, UploadActivity::class.java)\r\n        binding.upload.setOnClickListener { startActivity(upload) }\r\n\r\n        val group = Intent(this, GroupActivity::class.java)\r\n        binding.group.setOnClickListener { startActivity(group) }\r\n\r\n        val product1 = Intent(this, ProductActivity::class.java)\r\n        binding.add.setOnClickListener { startActivity(product1) }\r\n\r\n        //푸시알림\r\n        createNotificationChannel()\r\n        requestNotificationPermission()\r\n    }\r\n\r\n\r\n    private fun requestNotificationPermission() {\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {\r\n            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {\r\n                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATION_PERMISSION)\r\n            }\r\n        }\r\n    }\r\n\r\n    //푸시알림\r\n    private fun createNotificationChannel() {\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\r\n            val name = \"ExpiryNotificationChannel\"\r\n            val descriptionText = \"Channel for expiry notifications\"\r\n            val importance = NotificationManager.IMPORTANCE_DEFAULT\r\n            val channel = NotificationChannel(\"expiry_notification_channel\", name, importance).apply {\r\n                description = descriptionText\r\n            }\r\n            val notificationManager: NotificationManager =\r\n                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager\r\n            notificationManager.createNotificationChannel(channel)\r\n        }\r\n    }\r\n\r\n\r\n    private fun setOnQueryTextListener() {\r\n        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\r\n            override fun onQueryTextSubmit(query: String?): Boolean {\r\n                binding.search.clearFocus()\r\n                return false\r\n            }\r\n\r\n            override fun onQueryTextChange(newText: String?): Boolean {\r\n                updateItemCurrentFragment(newText)\r\n                return false\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun updateItemCurrentFragment(newText: String?) {\r\n        val fragments = (homeFragment.childFragmentManager.fragments)\r\n        fragments.forEach { fragment ->\r\n            if (fragment is HomeFragment.SearchableFragment) {\r\n                fragment.updateSearchQuery(newText ?: \"\")\r\n            }\r\n        }\r\n    }\r\n\r\n    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {\r\n        if (currentFocus != null) {\r\n            val outRect = android.graphics.Rect()\r\n            currentFocus?.getGlobalVisibleRect(outRect)\r\n            if (!outRect.contains(ev?.rawX?.toInt() ?: 0, ev?.rawY?.toInt() ?: 0)) {\r\n                currentFocus?.clearFocus()\r\n                binding.search.clearFocus()\r\n            }\r\n        }\r\n        return super.dispatchTouchEvent(ev)\r\n    }\r\n\r\n    var pressedTime: Long = 0\r\n\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    override fun onBackPressed() {\r\n        if (System.currentTimeMillis() - pressedTime <= 2000) {\r\n            finish()\r\n        } else {\r\n            pressedTime = System.currentTimeMillis()\r\n            Toast.makeText(this, \"한 번 더 누르면 종료됩니다.\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/MainActivity.kt b/app/src/main/java/com/example/test/MainActivity.kt
+--- a/app/src/main/java/com/example/test/MainActivity.kt	(revision b1435d2980a47a3b0ffaefc3a6c87838a22c61e7)
++++ b/app/src/main/java/com/example/test/MainActivity.kt	(date 1718378153891)
+@@ -11,25 +11,25 @@
+ import androidx.appcompat.app.AppCompatActivity
+ import androidx.core.app.ActivityCompat
+ import androidx.core.content.ContextCompat
++import androidx.recyclerview.widget.LinearLayoutManager
+ import com.example.test.databinding.ActivityMainBinding
++import com.example.test.productinfo.ProductDB
++import com.example.test.productutils.ProductAdapter
++import com.google.firebase.database.*
+ import android.Manifest
+ import android.app.NotificationChannel
+ import android.app.NotificationManager
+ import android.content.Context
+ import android.util.Log
+ import android.view.MotionEvent
+-import androidx.recyclerview.widget.LinearLayoutManager
+-import com.example.test.productinfo.ProductDB
+-import com.example.test.productutils.ProductAdapter
+-import com.google.firebase.database.DataSnapshot
+-import com.google.firebase.database.DatabaseError
+-import com.google.firebase.database.DatabaseReference
+-import com.google.firebase.database.FirebaseDatabase
+ 
+ class MainActivity : AppCompatActivity() {
+     private lateinit var binding: ActivityMainBinding
+     private lateinit var homeFragment: HomeFragment
+     private lateinit var database: DatabaseReference
++    private lateinit var productAdapter: ProductAdapter
++    private val productList = ArrayList<ProductDB>()
++
+     companion object {
+         private const val REQUEST_NOTIFICATION_PERMISSION = 1
+     }
+@@ -48,9 +48,9 @@
+ 
+         database = FirebaseDatabase.getInstance().reference
+ 
++        loadGroupProducts(groupId)
+ 
+         homeFragment = HomeFragment()
+-        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()
+ 
+         setOnQueryTextListener()
+ 
+@@ -71,7 +71,22 @@
+         requestNotificationPermission()
+     }
+ 
++    private fun loadGroupProducts(groupId: String) {
++        database.child("groups").child(groupId).child("products").addListenerForSingleValueEvent(object : ValueEventListener {
++            override fun onDataChange(snapshot: DataSnapshot) {
++                productList.clear()
++                for (productSnapshot in snapshot.children) {
++                    val product = productSnapshot.getValue(ProductDB::class.java)
++                    product?.let { productList.add(it) }
++                }
++                productAdapter.notifyDataSetChanged()
++            }
+ 
++            override fun onCancelled(error: DatabaseError) {
++                Log.e("MainActivity", "Failed to load products: ${error.message}")
++            }
++        })
++    }
+     private fun requestNotificationPermission() {
+         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+@@ -142,4 +157,4 @@
+             Toast.makeText(this, "한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+         }
+     }
+-}
+\ No newline at end of file
++}

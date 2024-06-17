@@ -3,6 +3,7 @@ package com.example.test.productutils
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -20,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
+import com.example.test.WorkManager.NotificationHelper
 import com.example.test.productinfo.ProductDB
 import com.google.android.material.animation.AnimationUtils
 import com.google.firebase.auth.FirebaseAuth
@@ -36,10 +38,18 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 @Suppress("DEPRECATION")
-class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String) :
+class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String,
+                     private val targetUserUid: String ) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
 
-    // RecyclerView 내 각 항목에 대한 뷰 홀더
+    fun updateList(newProductList: ArrayList<ProductDB>) {
+        productList.clear()
+        productList.addAll(newProductList)
+        notifyDataSetChanged()
+    }
+
+    private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val productName: TextView = view.findViewById(R.id.tvTitle) ?: throw NullPointerException("TextView tvTitle not found")
         val productImage: ImageView = view.findViewById(R.id.tvImage) ?: throw NullPointerException("ImageView tvImage not found")
@@ -48,11 +58,12 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException("TextView d_day not found")
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.item_view, parent, false)
         return ProductViewHolder(view)
     }
-    // RecyclerView의 각 항목에 데이터를 바인딩
+
     override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
         val product = productList[position]
         holder.productName.text = product.name
@@ -122,19 +133,22 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             context.startActivity(intent)
         }
 
+
         holder.deleteButton.setOnClickListener {
             // Handle delete button click
             deleteProduct(product.id, position)
         }
     }
 
+
     override fun getItemCount(): Int {
         return productList.size
     }
-    // Firebase에서 제품을 삭제하고 UI 업데이트
+
     private fun deleteProduct(productId: String, position: Int) {
-        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-            .getReference("users").child(FirebaseAuth.getInstance().currentUser!!.uid).child("products").child(storageType).child(productId)
+        val databaseReference: DatabaseReference = FirebaseDatabase.getInstance()
+            .getReference("users").child(targetUserUid)
+            .child("products").child(storageType).child(productId)
 
         CoroutineScope(Dispatchers.IO).launch {
             try {

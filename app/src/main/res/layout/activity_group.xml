@@ -50,29 +50,58 @@
         </LinearLayout>
 
         <LinearLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:padding="16dp">
 
             <EditText
-                android:id="@+id/inviteeIdEditText"
+                android:id="@+id/targetUserIdEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="초대할 사용자 ID 입력" />
+                android:hint="사용자 ID"
+                android:textSize="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
             <Button
-                android:id="@+id/inviteButton"
+                android:id="@+id/idcheck"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="초대 보내기" />
+                android:layout_weight="1"
+                android:text="본인 아이디 확인"
+                android:backgroundTint="@color/button"/>
 
             <Button
-                android:id="@+id/acceptInvitationButton"
+                android:id="@+id/viewUserProductsButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="초대 수락" />
+                android:layout_weight="1"
+                android:text="냉장고 보기"
+                android:backgroundTint="@color/button"/>
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:layout_marginTop="10dp"
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/main"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/white"
+                app:tabMode="fixed"
+                app:tabSelectedTextColor="@color/white"
+                app:tabTextColor="@color/white" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewPager2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
 
         </LinearLayout>
 

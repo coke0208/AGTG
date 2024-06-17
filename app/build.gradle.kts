@@ -62,7 +62,7 @@ android {
         implementation ("androidx.recyclerview:recyclerview:1.1.0")
         implementation("com.google.firebase:firebase-firestore")
         implementation ("com.google.firebase:firebase-database-ktx:20.0.4")
-        implementation ("androidx.work:work-runtime-ktx:2.9.0")
+        implementation ("androidx.work:work-runtime-ktx:2.8.1")
             //ss
         implementation("com.github.bumptech.glide:glide:4.16.0")
         implementation ("com.google.zxing:core:3.4.1")
@@ -79,6 +79,7 @@ android {
 
 
 
+        implementation ("com.google.firebase:firebase-messaging:23.0.0")
     }
 }
 

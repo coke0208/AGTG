@@ -38,6 +38,7 @@ class ProductActivity : AppCompatActivity() {
     private var year = calender.get(Calendar.YEAR)
     private var month = calender.get(Calendar.MONTH)
     private var day = calender.get(Calendar.DAY_OF_MONTH)
+    private lateinit var targetUserUid: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,13 +48,12 @@ class ProductActivity : AppCompatActivity() {
         textViewName = findViewById<View>(R.id.textViewName) as TextView
         textViewAddress = findViewById<View>(R.id.imageViewAddress) as TextView
         Manufacturedate = findViewById<View>(R.id.Manufacturedate) as TextView
-        Usebydate = findViewById<View>(R.id.Usebydate)as TextView
-        info=findViewById<View>(R.id.textViewinfo)as TextView
+        Usebydate = findViewById<View>(R.id.Usebydate) as TextView
+        info = findViewById<View>(R.id.textViewinfo) as TextView
 
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
         if (currentUser == null) {
-            // 사용자가 로그인되어 있지 않은 경우 처리
             Toast.makeText(this, "로그인이 필요합니다.", Toast.LENGTH_SHORT).show()
             finish()
             return
@@ -61,17 +61,18 @@ class ProductActivity : AppCompatActivity() {
 
         // 사용자의 제품 데이터베이스 참조
         userUid = currentUser.uid
-        val name=intent.getStringExtra("name")?:""
-        val address=intent.getStringExtra("address")?:""
-        val Prod=intent.getStringExtra("PROD")?:""
-        val UsebyDate=intent.getStringExtra("UsebyDate")?:""
-        val pinfo=intent.getStringExtra("info")?:""
+        targetUserUid = intent.getStringExtra("TARGET_USER_UID") ?: userUid
+        val name = intent.getStringExtra("name") ?: ""
+        val address = intent.getStringExtra("address") ?: ""
+        val Prod = intent.getStringExtra("PROD") ?: ""
+        val UsebyDate = intent.getStringExtra("UsebyDate") ?: ""
+        val pinfo = intent.getStringExtra("info") ?: ""
 
-        textViewName!!.text=name
-        textViewAddress!!.text=address
-        Manufacturedate!!.text=Prod
-        Usebydate!!.text=UsebyDate
-        info!!.text=pinfo
+        textViewName!!.text = name
+        textViewAddress!!.text = address
+        Manufacturedate!!.text = Prod
+        Usebydate!!.text = UsebyDate
+        info!!.text = pinfo
 
         binding.btnSave.setOnClickListener {
             saveProduct("ColdStorage", ProductDB(name, address, Prod, UsebyDate, pinfo))
@@ -82,8 +83,9 @@ class ProductActivity : AppCompatActivity() {
         }
 
         binding.btnRoomSave.setOnClickListener {
-            saveProduct("RoomStorage", ProductDB(name, address,  Prod, UsebyDate, pinfo))
+            saveProduct("RoomStorage", ProductDB(name, address, Prod, UsebyDate, pinfo))
         }
+
 
         // QR Code Scanner
         qrScan = IntentIntegrator(this)
@@ -91,6 +93,7 @@ class ProductActivity : AppCompatActivity() {
             qrScan!!.setPrompt("Scanning...")
             qrScan!!.initiateScan()
         }
+
 
         binding.back.setOnClickListener {
             finish()
@@ -139,9 +142,9 @@ class ProductActivity : AppCompatActivity() {
     private fun saveProduct(storageType: String, product: ProductDB) {
         try {
             val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
-                .getReference("users").child(userUid).child("products").child(storageType)
+                .getReference("users").child(targetUserUid).child("products").child(storageType)
             val newProductRef = databaseReference.push()
-            product.id = newProductRef.key.toString()  // Assigning ID to product
+            product.id = newProductRef.key.toString()  // 제품 ID를 설정
 
             // Ensure the product object is populated with data
             product.name = binding.textViewName.text.toString()
@@ -165,4 +168,10 @@ class ProductActivity : AppCompatActivity() {
             Toast.makeText(this, "예외 발생: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }
+
+
+
+
+
+
 }
