@@ -26,6 +26,7 @@ class ProductActivity : AppCompatActivity() {
     private var Manufacturedate: TextView? = null
     private var Usebydate: TextView? = null
     private var info: TextView? = null
+    private var nutrition:TextView?=null
     private lateinit var auth: FirebaseAuth
     private lateinit var userUid: String
     private var calender = Calendar.getInstance()
@@ -44,6 +45,7 @@ class ProductActivity : AppCompatActivity() {
         Manufacturedate = findViewById<View>(R.id.Manufacturedate) as TextView
         Usebydate = findViewById<View>(R.id.Usebydate) as TextView
         info = findViewById<View>(R.id.textViewinfo) as TextView
+        nutrition=findViewById<View>(R.id. nutrition) as TextView
 
         auth = FirebaseAuth.getInstance()
         val currentUser = auth.currentUser
@@ -60,12 +62,14 @@ class ProductActivity : AppCompatActivity() {
         val Prod = intent.getStringExtra("PROD") ?: ""
         val UsebyDate = intent.getStringExtra("UsebyDate") ?: ""
         val pinfo = intent.getStringExtra("info") ?: ""
+        val nutrinfo=intent.getStringExtra("nutrition")
 
         textViewName!!.text = name
         textViewAddress!!.text = address
         Manufacturedate!!.text = Prod
         Usebydate!!.text = UsebyDate
         info!!.text = pinfo
+        nutrition!!.text=nutrinfo
 
         binding.btnSave.setOnClickListener {
             saveProduct("ColdStorage", ProductDB(name, address, Prod, UsebyDate, pinfo))
@@ -121,6 +125,7 @@ class ProductActivity : AppCompatActivity() {
                     Manufacturedate!!.text = obj.getString("PROD")
                     Usebydate!!.text = obj.getString("Usebydate")
                     info!!.text = obj.getString("info")
+                    nutrition!!.text=obj.getString("nutrition")
                 } catch (e: JSONException) {
                     e.printStackTrace()
                 }
@@ -143,6 +148,7 @@ class ProductActivity : AppCompatActivity() {
             product.PROD = binding.Manufacturedate.text.toString()
             product.Usebydate = binding.Usebydate.text.toString()
             product.info = binding.textViewinfo.text.toString()
+            product.nutrition=binding.nutrition.text.toString()
 
             newProductRef.setValue(product).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -150,12 +156,10 @@ class ProductActivity : AppCompatActivity() {
                     setResult(RESULT_OK)
                     finish()
                 } else {
-                    Log.e("ProductActivity", "Firebase 저장 실패: ${task.exception}")
                     Toast.makeText(this, "저장 실패", Toast.LENGTH_SHORT).show()
                 }
             }
         } catch (e: Exception) {
-            Log.e("ProductActivity", "Exception: ${e.message}", e)
             Toast.makeText(this, "예외 발생: ${e.message}", Toast.LENGTH_SHORT).show()
         }
     }

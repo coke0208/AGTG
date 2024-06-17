@@ -14,6 +14,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.test.FoodActivity
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
@@ -37,11 +38,11 @@ class ProductAdapter(private val context: Context, private var productList: Arra
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
     class ProductViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val productName: TextView = view.findViewById(R.id.tvTitle) ?: throw NullPointerException("TextView tvTitle not found")
-        val productImage: ImageView = view.findViewById(R.id.tvImage) ?: throw NullPointerException("ImageView tvImage not found")
-        val progressBar: ProgressBar = view.findViewById(R.id.progress) ?: throw NullPointerException("ProgressBar progress not found")
-        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete) ?: throw NullPointerException("ImageButton btnDelete not found")
-        val D_day: TextView = view.findViewById(R.id.d_day) ?: throw NullPointerException("TextView d_day not found")
+        val productName: TextView = view.findViewById(R.id.tvTitle)
+        val productImage: ImageView = view.findViewById(R.id.tvImage)
+        val progressBar: ProgressBar = view.findViewById(R.id.progress)
+        val deleteButton: ImageButton = view.findViewById(R.id.btnDelete)
+        val D_day: TextView = view.findViewById(R.id.d_day)
     }
 
 
@@ -108,12 +109,13 @@ class ProductAdapter(private val context: Context, private var productList: Arra
         }
 
         holder.itemView.setOnClickListener {
-            val intent = Intent(context, ProductActivity::class.java).apply {
+            val intent = Intent(context, FoodActivity::class.java).apply {
                 putExtra("name", product.name)
                 putExtra("address", product.address)
                 putExtra("PROD", product.PROD)
                 putExtra("UsebyDate", product.Usebydate)
                 putExtra("info", product.info)
+                putExtra("nutrition",product.nutrition)
             }
             context.startActivity(intent)
         }

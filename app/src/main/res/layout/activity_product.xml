@@ -179,6 +179,8 @@
             android:text="영양정보"
             android:textSize="20dp"/>
 
+
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -190,11 +192,22 @@
             android:layout_weight="1"
             android:gravity="top"/>
 
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nutrition"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="textMultiLine"
+            android:background="@drawable/border_line"
+            android:layout_weight="1"
+            android:gravity="top"/>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="170dp"
+            android:layout_marginBottom="100dp"
             android:orientation="horizontal">
 
         <Button

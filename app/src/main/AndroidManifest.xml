@@ -16,6 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Test.NoActionBar"
         tools:targetApi="33">
+        <activity
+            android:name=".FoodActivity"
+            android:exported="false" />
+
         <service
             android:name=".MyFirebaseMessagingService"
             android:exported="false">

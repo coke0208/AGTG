@@ -4,11 +4,12 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ProductDB(
-    var name: String? = null,
-    var address: String? = null,
-    var PROD: String? = null,
-    var Usebydate: String? = null,
-    var info: String? = null,
+    var name: String? = "",
+    var address: String? = "",
+    var PROD: String? = "",
+    var Usebydate: String? = "",
+    var info: String? = "",
+    var nutrition:String?="",
     var id: String = "",
     var storageType: String? = null
 ) : Parcelable {
