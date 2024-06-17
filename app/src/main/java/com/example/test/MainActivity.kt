@@ -18,22 +18,17 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.test.databinding.ActivityMainBinding
-import android.view.animation.Animation
-import android.view.animation.AnimationUtils
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.ImageButton
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.test.databinding.ActivityMainBinding
+import com.example.test.productinfo.ProductDB
 import com.example.test.productutils.ProductAdapter
 import com.google.firebase.FirebaseApp
-import java.util.concurrent.TimeUnit
-import com.example.test.productinfo.ProductDB
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import java.util.concurrent.TimeUnit
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -81,8 +76,7 @@ class MainActivity : AppCompatActivity() {
 
         scheduleExpiryCheckWork()
 
-        val mypage = Intent(this, MypageActivity::class.java)
-        binding.mypage.setOnClickListener { startActivity(mypage) }
+
         binding.mypage.setOnClickListener {
             startActivity(Intent(this, MypageActivity::class.java))
         }
@@ -109,8 +103,8 @@ class MainActivity : AppCompatActivity() {
 
         createNotificationChannel()
         requestNotificationPermission()
-    }
         FirebaseApp.initializeApp(this)
+    }
 
     private fun loadUserProducts(userId: String) {
         val userProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
@@ -162,7 +156,6 @@ class MainActivity : AppCompatActivity() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
 
     private fun setOnQueryTextListener() {
         binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {

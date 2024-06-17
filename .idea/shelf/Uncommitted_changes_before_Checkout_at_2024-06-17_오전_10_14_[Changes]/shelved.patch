@@ -1,0 +1,81 @@
+Index: app/src/main/java/com/example/test/MainActivity.kt
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.example.test\r\n\r\nimport android.Manifest\r\nimport android.annotation.SuppressLint\r\nimport android.app.NotificationChannel\r\nimport android.app.NotificationManager\r\nimport android.content.Context\r\nimport android.content.Intent\r\nimport android.content.pm.PackageManager\r\nimport android.os.Build\r\nimport android.os.Bundle\r\nimport android.util.Log\r\nimport android.view.MotionEvent\r\nimport android.widget.SearchView\r\nimport android.widget.Toast\r\nimport androidx.appcompat.app.AppCompatActivity\r\nimport androidx.core.app.ActivityCompat\r\nimport androidx.core.content.ContextCompat\r\nimport androidx.recyclerview.widget.LinearLayoutManager\r\nimport androidx.recyclerview.widget.RecyclerView\r\nimport com.example.test.databinding.ActivityMainBinding\r\nimport android.view.animation.Animation\r\nimport android.view.animation.AnimationUtils\r\nimport android.widget.Button\r\nimport android.widget.CheckBox\r\nimport android.widget.ImageButton\r\nimport androidx.work.ExistingPeriodicWorkPolicy\r\nimport androidx.work.OneTimeWorkRequestBuilder\r\nimport androidx.work.PeriodicWorkRequestBuilder\r\nimport androidx.work.WorkManager\r\nimport com.example.test.productutils.ProductAdapter\r\nimport com.google.firebase.FirebaseApp\r\nimport java.util.concurrent.TimeUnit\r\nimport com.example.test.productinfo.ProductDB\r\nimport com.google.firebase.auth.FirebaseAuth\r\nimport com.google.firebase.database.*\r\n\r\nclass MainActivity : AppCompatActivity() {\r\n    private lateinit var binding: ActivityMainBinding\r\n    private lateinit var homeFragment: HomeFragment\r\n\r\n    private lateinit var recyclerView: RecyclerView\r\n    private lateinit var productAdapter: ProductAdapter\r\n    private lateinit var productList: ArrayList<ProductDB>\r\n    private lateinit var databaseReference: DatabaseReference\r\n    private lateinit var targetUserId: String\r\n\r\n    companion object {\r\n        private const val REQUEST_NOTIFICATION_PERMISSION = 1\r\n    }\r\n\r\n    override fun onCreate(savedInstanceState: Bundle?) {\r\n        super.onCreate(savedInstanceState)\r\n        binding = ActivityMainBinding.inflate(layoutInflater)\r\n        setContentView(binding.root)\r\n\r\n        val pref = getSharedPreferences(\"token\", Context.MODE_PRIVATE)\r\n        val token = pref.getString(\"token\", \"\")\r\n\r\n        // 로그로 토큰 출력\r\n        Log.i(\"!!!!!!!!\", token ?: \"Token not found\")\r\n\r\n\r\n\r\n        targetUserId = intent.getStringExtra(\"TARGET_USER_ID\") ?: FirebaseAuth.getInstance().currentUser!!.uid\r\n\r\n        recyclerView = binding.recyclerView\r\n        recyclerView.layoutManager = LinearLayoutManager(this)\r\n        productList = ArrayList()\r\n        productAdapter = ProductAdapter(this, productList, \"products\",targetUserId)\r\n        recyclerView.adapter = productAdapter\r\n\r\n        databaseReference = FirebaseDatabase.getInstance(\"https://sukbinggotest-default-rtdb.firebaseio.com/\")\r\n            .getReference(\"users\")\r\n\r\n\r\n        homeFragment = HomeFragment()\r\n        supportFragmentManager.beginTransaction().replace(R.id.frameLayout, homeFragment).commit()\r\n\r\n        setOnQueryTextListener()\r\n\r\n        scheduleExpiryCheckWork()\r\n\r\n        val mypage = Intent(this, MypageActivity::class.java)\r\n        binding.mypage.setOnClickListener { startActivity(mypage) }\r\n        binding.mypage.setOnClickListener {\r\n            startActivity(Intent(this, MypageActivity::class.java))\r\n        }\r\n\r\n        binding.upload.setOnClickListener {\r\n            startActivity(Intent(this, UploadActivity::class.java))\r\n        }\r\n\r\n        binding.group.setOnClickListener {\r\n            startActivity(Intent(this, GroupActivity::class.java))\r\n        }\r\n\r\n        binding.add.setOnClickListener {\r\n            val intent = Intent(this, ProductActivity::class.java)\r\n            intent.putExtra(\"TARGET_USER_UID\", targetUserId)\r\n            startActivity(intent)\r\n        }\r\n\r\n\r\n        val targetUserId = intent.getStringExtra(\"TARGET_USER_ID\")\r\n        targetUserId?.let {\r\n            loadUserProducts(it)\r\n        }\r\n\r\n        createNotificationChannel()\r\n        requestNotificationPermission()\r\n    }\r\n        FirebaseApp.initializeApp(this)\r\n\r\n    private fun loadUserProducts(userId: String) {\r\n        val userProductsReference = FirebaseDatabase.getInstance(\"https://sukbinggotest-default-rtdb.firebaseio.com/\")\r\n            .getReference(\"users\").child(userId).child(\"products\")\r\n\r\n        userProductsReference.addListenerForSingleValueEvent(object : ValueEventListener {\r\n            override fun onDataChange(snapshot: DataSnapshot) {\r\n                val products = mutableListOf<ProductDB>()\r\n                for (storageSnapshot in snapshot.children) {\r\n                    for (productSnapshot in storageSnapshot.children) {\r\n                        val product = productSnapshot.getValue(ProductDB::class.java)\r\n                        product?.let { products.add(it) }\r\n                    }\r\n                }\r\n                setupRecyclerView(products)\r\n            }\r\n\r\n            override fun onCancelled(error: DatabaseError) {\r\n                Toast.makeText(this@MainActivity, \"Failed to load user products: ${error.message}\", Toast.LENGTH_SHORT).show()\r\n            }\r\n        })\r\n    }\r\n\r\n\r\n    private fun setupRecyclerView(products: List<ProductDB>) {\r\n        productAdapter.updateList(products as ArrayList<ProductDB>)\r\n    }\r\n\r\n\r\n\r\n    private fun requestNotificationPermission() {\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\r\n            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {\r\n                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATION_PERMISSION)\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun createNotificationChannel() {\r\n        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {\r\n            val name = \"ExpiryNotificationChannel\"\r\n            val descriptionText = \"Channel for expiry notifications\"\r\n            val importance = NotificationManager.IMPORTANCE_DEFAULT\r\n            val channel = NotificationChannel(\"expiry_notification_channel\", name, importance).apply {\r\n                description = descriptionText\r\n            }\r\n            val notificationManager: NotificationManager =\r\n                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager\r\n            notificationManager.createNotificationChannel(channel)\r\n        }\r\n    }\r\n\r\n\r\n    private fun setOnQueryTextListener() {\r\n        binding.search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {\r\n            override fun onQueryTextSubmit(query: String?): Boolean {\r\n                binding.search.clearFocus()\r\n                return false\r\n            }\r\n\r\n            override fun onQueryTextChange(newText: String?): Boolean {\r\n                updateItemCurrentFragment(newText)\r\n                return false\r\n            }\r\n        })\r\n    }\r\n\r\n    private fun updateItemCurrentFragment(newText: String?) {\r\n        val fragments = homeFragment.childFragmentManager.fragments\r\n        fragments.forEach { fragment ->\r\n            if (fragment is HomeFragment.SearchableFragment) {\r\n                fragment.updateSearchQuery(newText ?: \"\")\r\n            }\r\n        }\r\n    }\r\n\r\n    private fun scheduleExpiryCheckWork() {\r\n        val periodicWorkRequest = PeriodicWorkRequestBuilder<ExpiryCheckWorker>(1, TimeUnit.DAYS)\r\n            //.setInitialDelay(30, TimeUnit.SECONDS) // 처음 1분 후 실행\r\n            .build()\r\n\r\n        val oneTimeWorkRequest = OneTimeWorkRequestBuilder<ExpiryCheckWorker>().build()\r\n\r\n        WorkManager.getInstance(this).enqueueUniquePeriodicWork(\r\n            \"expiryCheckWork\",\r\n            ExistingPeriodicWorkPolicy.REPLACE,\r\n            periodicWorkRequest\r\n        )\r\n\r\n        WorkManager.getInstance(this).enqueue(oneTimeWorkRequest)\r\n    }\r\n\r\n\r\n\r\n    override fun dispatchTouchEvent(ev: MotionEvent?): Boolean {\r\n        if (currentFocus != null) {\r\n            val outRect = android.graphics.Rect()\r\n            currentFocus?.getGlobalVisibleRect(outRect)\r\n            if (!outRect.contains(ev?.rawX?.toInt() ?: 0, ev?.rawY?.toInt() ?: 0)) {\r\n                currentFocus?.clearFocus()\r\n                binding.search.clearFocus()\r\n            }\r\n        }\r\n        return super.dispatchTouchEvent(ev)\r\n    }\r\n\r\n    var pressedTime: Long = 0\r\n\r\n    @SuppressLint(\"MissingSuperCall\")\r\n    override fun onBackPressed() {\r\n        if (System.currentTimeMillis() - pressedTime <= 2000) {\r\n            finish()\r\n        } else {\r\n            pressedTime = System.currentTimeMillis()\r\n            Toast.makeText(this, \"한 번 더 누르면 종료됩니다.\", Toast.LENGTH_SHORT).show()\r\n        }\r\n    }\r\n}\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/app/src/main/java/com/example/test/MainActivity.kt b/app/src/main/java/com/example/test/MainActivity.kt
+--- a/app/src/main/java/com/example/test/MainActivity.kt	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ b/app/src/main/java/com/example/test/MainActivity.kt	(date 1718586894344)
+@@ -109,8 +109,9 @@
+ 
+         createNotificationChannel()
+         requestNotificationPermission()
+-    }
+         FirebaseApp.initializeApp(this)
++    }
++
+ 
+     private fun loadUserProducts(userId: String) {
+         val userProductsReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_06__Changes_.xml	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ /dev/null	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_06_[Changes]" date="1717938393729" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_06_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024-06-09 오후 10:06 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_35__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_35__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_35__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_35__Changes_.xml	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ /dev/null	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_35_[Changes]" date="1717940106534" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_35_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024-06-09 오후 10:35 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__11_25__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__11_25__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__11_25__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__11_25__Changes_.xml	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ /dev/null	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2024-06-09_오후_11_25_[Changes]" date="1717943149181" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09_오후_11_25_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2024-06-09 오후 11:25 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09__10_24__Changes_.xml	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ /dev/null	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Update_at_2024-06-09_오후_10_24_[Changes]" date="1717939467707" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_2024-06-09_오후_10_24_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Update at 2024-06-09 오후 10:24 [Changes]" />
+-</changelist>
+\ No newline at end of file
+Index: .idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml
+===================================================================
+diff --git a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml b/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml
+deleted file mode 100644
+--- a/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09__10_40__Changes_.xml	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
++++ /dev/null	(revision b0f4b758fb2f80e2af2986cf614606c62c98c844)
+@@ -1,4 +0,0 @@
+-<changelist name="Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_40_[Changes]" date="1717940442079" recycled="true" deleted="true">
+-  <option name="PATH" value="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_2024-06-09_오후_10_40_[Changes]/shelved.patch" />
+-  <option name="DESCRIPTION" value="Uncommitted changes before Checkout at 2024-06-09 오후 10:40 [Changes]" />
+-</changelist>
+\ No newline at end of file
