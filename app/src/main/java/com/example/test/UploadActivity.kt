@@ -23,7 +23,6 @@ import java.io.IOException
 import java.io.OutputStream
 
 class UploadActivity : AppCompatActivity() {
-    //달력 날짜 선택
     private var calender = Calendar.getInstance()
     private var year = calender.get(Calendar.YEAR)
     private var month = calender.get(Calendar.MONTH)
@@ -60,27 +59,24 @@ class UploadActivity : AppCompatActivity() {
 
             val jsonData = mapOf(
                 "name" to makeName,
-                "addres" to makeAddres,
-                "cdate" to makeSdate,
-                "edate" to makeEdate,
+                "address" to makeAddres,
+                "PROD" to makeSdate,
+                "Usebydate" to makeEdate,
                 "info" to makeInfo
             )
 
             val jsonString = Gson().toJson(jsonData)
             qrCodeBitmap = generateQRCode(jsonString)
             binding.qrCodeImageView.setImageBitmap(qrCodeBitmap)
-            Log.d("UploadActivity", "QR 코드 생성 완료")
         }
 
         binding.qrCodeImageView.setOnClickListener {
-            Log.d("UploadActivity", "이미지 뷰 클릭됨")
             if (qrCodeBitmap != null) {
                 checkAndRequestPermissions()
             } else {
                 Toast.makeText(this, "먼저 QR 코드를 생성하세요", Toast.LENGTH_SHORT).show()
             }
         }
-        //달력날짜 선택
         binding.sCalendar.setOnClickListener(){
             val datePickerDialog = DatePickerDialog(this, {_,year, month, day ->
                 binding.makeSdate.text = year.toString() + "-" + (month+1).toString() + "-" + day.toString()
@@ -121,7 +117,6 @@ class UploadActivity : AppCompatActivity() {
     }
 
     private fun saveImageToGallery(bitmap: Bitmap) {
-        Log.d("UploadActivity", "이미지 저장 시작")
         val contentValues = ContentValues().apply {
             put(MediaStore.MediaColumns.DISPLAY_NAME, "QRCode_${System.currentTimeMillis()}.jpg")
             put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
@@ -136,15 +131,12 @@ class UploadActivity : AppCompatActivity() {
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
                 outputStream.close()
                 Toast.makeText(this, "이미지가 갤러리에 저장되었습니다", Toast.LENGTH_SHORT).show()
-                Log.d("UploadActivity", "이미지 저장 완료")
             } catch (e: IOException) {
                 e.printStackTrace()
                 Toast.makeText(this, "이미지 저장에 실패했습니다", Toast.LENGTH_SHORT).show()
-                Log.e("UploadActivity", "이미지 저장 실패", e)
             }
         } else {
             Toast.makeText(this, "이미지 저장에 실패했습니다", Toast.LENGTH_SHORT).show()
-            Log.e("UploadActivity", "uri가 null입니다.")
         }
     }
 }

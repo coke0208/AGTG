@@ -177,7 +177,7 @@
             <EditText
                 android:id="@+id/make_info"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="190dp"
                 android:inputType="textMultiLine"
                 android:background="@drawable/border_line"
                 android:gravity="top"/>

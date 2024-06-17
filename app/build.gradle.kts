@@ -80,7 +80,6 @@ android {
 
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -99,10 +98,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
-//푸시알림
 buildscript {
     dependencies {
-        classpath ("com.google.gms:google-services:4.3.15") // Add this line
+        classpath ("com.google.gms:google-services:4.3.15")
     }
 }
 apply(plugin = "com.google.gms.google-services")

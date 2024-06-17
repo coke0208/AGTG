@@ -32,7 +32,7 @@ class RegsiterActivity : AppCompatActivity() {
     private lateinit var db: FirebaseFirestore
     private lateinit var storage: FirebaseStorage
     private var imageUri: Uri? = null
-    private var isDefaultImage = false // 기본 이미지 여부를 나타내는 변수 추가
+    private var isDefaultImage = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,7 +89,7 @@ class RegsiterActivity : AppCompatActivity() {
 
         binding.defaultImage.setOnClickListener {
             imageView.setImageResource(R.drawable.my)
-            isDefaultImage = true // 기본 이미지 설정 시 true로 설정
+            isDefaultImage = true
         }
     }
 
@@ -99,7 +99,7 @@ class RegsiterActivity : AppCompatActivity() {
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
             imageUri = data.data
             imageView.setImageURI(imageUri)
-            isDefaultImage = false // 선택한 이미지가 있을 때 false로 설정
+            isDefaultImage = false
         }
     }
 
@@ -180,13 +180,11 @@ class RegsiterActivity : AppCompatActivity() {
         }
     }
 
-    //사용자별 데이터
     private fun initializeStorageCollections(userId: String){
         val storageCollections= listOf("ColdStorage","FrozenStorage","RoomStorage")
         storageCollections.forEach{collection->
             db.collection("users").document(userId).collection(collection).add(hashMapOf("initialized" to true))
                 .addOnSuccessListener {
-                    Log.d("RegisterActivity", "$collection 초기화 완료")
                 }
                 .addOnFailureListener{e->
                     Toast.makeText(this, "$collection 초기화 실패: ${e.message}", Toast.LENGTH_SHORT).show()

@@ -26,10 +26,6 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        //binding.vpTodo.adapter = activity?.let { ViewPagerAdapter(it) }
-        //binding.vpTodo.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-
         viewPagerAdapter = ViewPagerAdapter(this)
         binding.vpTodo.adapter = viewPagerAdapter
 

@@ -20,45 +20,21 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
         saveTokenToFirebase(token)
-
-        Log.i("로그: ", "성공적으로 토큰을 저장함:$token")
     }
-
     override fun onMessageReceived(message: RemoteMessage) {
-        Log.d(TAG, "From: ${message.from}")
-
-        Log.d(TAG, "From: ${message.from}")
 
         if (message.data.isNotEmpty()) {
-            Log.i("바디: ", message.data["body"].toString())
-            Log.i("타이틀: ", message.data["title"].toString())
             sendNotification(message.data["title"].toString(), message.data["body"].toString())
         } else if (message.notification != null) {
-            // notification 필드가 비어 있지 않으면, 이를 사용하여 알림을 보냅니다.
-            Log.i("바디: ", message.notification?.body.toString())
-            Log.i("타이틀: ", message.notification?.title.toString())
             sendNotification(message.notification?.title.toString(), message.notification?.body.toString())
         } else {
-            Log.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
             Log.i("data값", message.data.toString())
         }
 
-        /*if(message.data.isNotEmpty()){
-            Log.i("바디: ", message.data["body"].toString())
-            Log.i("타이틀: ", message.data["title"].toString())
-            sendNotification(message)
-        }
-        else{
-            Log.i("수신에러: ", "data가 비어있습니다. 메시지를 수신하지 못했습니다.")
-            Log.i("data값", message.data.toString())
-        }*/
     }
 
     private fun saveTokenToFirebase(token: String) {
-        // 사용자 ID를 가져온다고 가정하고 여기에 사용자 ID를 넣어서 사용
-        val userId = "user123" // 예시로 고정된 사용자 ID
-
-        // 파이어베이스 데이터베이스에 사용자의 토큰을 저장
+        val userId = "user123"
         val database = Firebase.database
         val tokenRef = database.getReference("tokens").child(userId)
         tokenRef.setValue(token)
@@ -70,7 +46,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
             }
     }
 
-    private fun sendNotification(title: String?, body: String?) {//remoteMessage: String, toString: String){
+    private fun sendNotification(title: String?, body: String?) {
         val uniID: Int = (System.currentTimeMillis() / 7).toInt()
 
         val intent = Intent(this, MainActivity::class.java)
@@ -81,8 +57,8 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         val notificationBuilder = NotificationCompat.Builder(this, channelID)
             .setSmallIcon(R.drawable.intro)
-            .setContentTitle(title)//.data["body"].toString())
-            .setContentText(body)//.data["title"].toString())
+            .setContentTitle(title)
+            .setContentText(body)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)
 
@@ -90,8 +66,6 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager, channelID)
-            //val channel = NotificationChannel(channelID, "Notice", NotificationManager.IMPORTANCE_DEFAULT)
-            //notificationManager.createNotificationChannel(channel)
         }
         notificationManager.notify(uniID, notificationBuilder.build())
     }

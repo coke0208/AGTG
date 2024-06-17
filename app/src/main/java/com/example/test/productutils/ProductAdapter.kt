@@ -3,14 +3,9 @@ package com.example.test.productutils
 import android.content.Context
 import android.content.Intent
 import android.graphics.PorterDuff
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.INVISIBLE
 import android.view.ViewGroup
-import android.view.animation.Animation
-import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -22,8 +17,6 @@ import com.bumptech.glide.Glide
 import com.example.test.ProductActivity
 import com.example.test.R
 import com.example.test.productinfo.ProductDB
-import com.google.android.material.animation.AnimationUtils
-import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -40,12 +33,6 @@ import java.util.concurrent.TimeUnit
 class ProductAdapter(private val context: Context, private var productList: ArrayList<ProductDB>, private val storageType: String,
                      private val targetUserUid: String ) :
     RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
-
-    fun updateList(newProductList: ArrayList<ProductDB>) {
-        productList.clear()
-        productList.addAll(newProductList)
-        notifyDataSetChanged()
-    }
 
     private val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
@@ -120,7 +107,6 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             }
         }
 
-// 아이템을 클릭하면 제품 상세 정보를 표시하는 ProductActivity로 이동
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductActivity::class.java).apply {
                 putExtra("name", product.name)
@@ -132,13 +118,10 @@ class ProductAdapter(private val context: Context, private var productList: Arra
             context.startActivity(intent)
         }
 
-
         holder.deleteButton.setOnClickListener {
-            // Handle delete button click
             deleteProduct(product.id, position)
         }
     }
-
 
     override fun getItemCount(): Int {
         return productList.size
@@ -170,6 +153,12 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                 }
             }
         }
+    }
+
+
+    fun updateList(newList: ArrayList<ProductDB>) {
+        productList=newList
+        notifyDataSetChanged()
     }
 
 }

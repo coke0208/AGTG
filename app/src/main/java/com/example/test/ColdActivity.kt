@@ -71,7 +71,6 @@ class ColdActivity : Fragment(), HomeFragment.SearchableFragment {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                // Handle possible errors.
             }
         })
     }

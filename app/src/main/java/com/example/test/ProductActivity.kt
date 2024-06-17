@@ -6,19 +6,13 @@ import android.icu.util.Calendar
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityProductBinding
 import com.example.test.productinfo.ProductDB
-import com.example.test.productutils.ProductAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.google.zxing.integration.android.IntentIntegrator
 import com.google.zxing.integration.android.IntentResult
 import org.json.JSONException
@@ -59,7 +53,6 @@ class ProductActivity : AppCompatActivity() {
             return
         }
 
-        // 사용자의 제품 데이터베이스 참조
         userUid = currentUser.uid
         targetUserUid = intent.getStringExtra("TARGET_USER_UID") ?: userUid
         val name = intent.getStringExtra("name") ?: ""
@@ -87,7 +80,6 @@ class ProductActivity : AppCompatActivity() {
         }
 
 
-        // QR Code Scanner
         qrScan = IntentIntegrator(this)
         binding.add.setOnClickListener {
             qrScan!!.setPrompt("Scanning...")
@@ -144,9 +136,8 @@ class ProductActivity : AppCompatActivity() {
             val databaseReference = FirebaseDatabase.getInstance("https://sukbinggotest-default-rtdb.firebaseio.com/")
                 .getReference("users").child(targetUserUid).child("products").child(storageType)
             val newProductRef = databaseReference.push()
-            product.id = newProductRef.key.toString()  // 제품 ID를 설정
+            product.id = newProductRef.key.toString()
 
-            // Ensure the product object is populated with data
             product.name = binding.textViewName.text.toString()
             product.address = binding.imageViewAddress.text.toString()
             product.PROD = binding.Manufacturedate.text.toString()

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.test.databinding.ActivityMypageBinding
 import com.google.firebase.auth.FirebaseAuth
