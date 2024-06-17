@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProductActivity">
+    tools:context=".FoodActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -85,42 +85,35 @@
             android:orientation="horizontal"
             android:layout_margin="20dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="제조일자" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/Manufacturedate"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:textSize="20dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="wrap_content"
+                    android:text="제조일자" />
 
-                <ImageButton
-                    android:id="@+id/sCalendar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="@color/button"
-                    android:src="@drawable/calender"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Manufacturedate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="20dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
-
-
-
-        </LinearLayout>
 
 
 
@@ -131,42 +124,35 @@
                 android:text="~"
                 android:textSize="50dp"/>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="소비기한" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/Usebydate"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center"
-                    android:textSize="20dp"
-                    android:layout_weight="1"/>
+                    android:layout_height="wrap_content"
+                    android:text="소비기한" />
 
-                <ImageButton
-                    android:id="@+id/eCalendar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:backgroundTint="@color/button"
-                    android:src="@drawable/calender"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Usebydate"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:textSize="20dp"
+                        android:layout_weight="1"/>
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
-
-
-
-        </LinearLayout>
 
 
         </LinearLayout>
@@ -179,8 +165,6 @@
             android:text="영양정보"
             android:textSize="20dp"/>
 
-
-
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -189,64 +173,27 @@
             android:layout_marginRight="20dp"
             android:inputType="textMultiLine"
             android:background="@drawable/border_line"
-            android:layout_weight="1"
             android:gravity="top"/>
 
-
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/nutrition"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:inputType="textMultiLine"
+            android:background="@drawable/border_line"
+            android:gravity="top"
+            />
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="100dp"
-            android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btnSave"
-            android:text="냉장"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:backgroundTint="@color/button"/>
-
-        <Button
-            android:id="@+id/btnFrozenSave"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="냉동"
-            android:backgroundTint="@color/button"/>
-
-            <Button
-                android:id="@+id/btnRoomSave"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="실온"
-                android:backgroundTint="@color/button"/>
-
-
-        </LinearLayout>
+            android:layout_marginBottom="70dp"
+            android:orientation="horizontal"/>
 
     </LinearLayout>
 
-
-
-
-
-
-    <ImageButton
-        android:id="@+id/add"
-        android:onClick="start"
-        android:layout_width="?attr/actionBarSize"
-        android:layout_height="?attr/actionBarSize"
-        android:layout_marginEnd="?attr/actionBarSize"
-        android:layout_marginBottom="?attr/actionBarSize"
-        android:padding="10dp"
-        android:scaleType="fitXY"
-        android:background="@drawable/circle"
-        android:src="@drawable/ic_action_filter_center_focus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -115,7 +115,7 @@ class ProductAdapter(private val context: Context, private var productList: Arra
                 putExtra("PROD", product.PROD)
                 putExtra("UsebyDate", product.Usebydate)
                 putExtra("info", product.info)
-                putExtra("nutrition",product.nutrition)
+                //putExtra("nutrition",product.nutrition)
             }
             context.startActivity(intent)
         }
